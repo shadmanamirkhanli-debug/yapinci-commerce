@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: yapinci-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: yapinci_commerce
+    volumes:
+      - yapinci_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d yapinci_commerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-shadow:
+    image: postgres:17-alpine
+    container_name: yapinci-postgres-shadow
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: yapinci_commerce_shadow
+    volumes:
+      - yapinci_postgres_shadow_data:/var/lib/postgresql/data
+
+volumes:
+  yapinci_postgres_data:
+  yapinci_postgres_shadow_data:

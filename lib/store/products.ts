@@ -200,8 +200,7 @@ export async function getPublishedProductSlugs() {
 }
 
 export async function getHomePageData() {
-  const [featured, allPublished, categories] = await Promise.all([
-    getStoreProducts({ featured: true, limit: 8 }),
+  const [allPublished, categories] = await Promise.all([
     prisma.product.findMany({
       where: { published: true },
       include: productInclude,
@@ -211,17 +210,18 @@ export async function getHomePageData() {
   ]);
 
   const allProducts = allPublished.map(formatStoreProduct);
+  const featured = allProducts.filter((product) => product.featured).slice(0, 8);
   const newArrivals = allProducts.slice(0, 4);
-  const bestSellers =
-    allProducts.filter((product) => product.bestSeller || product.featured).slice(0, 4) ||
-    allProducts.slice(0, 4);
+  const bestSellers = allProducts
+    .filter((product) => product.bestSeller || product.featured)
+    .slice(0, 4);
 
   const collections = [...new Set(allProducts.map((p) => p.collection).filter(Boolean))];
 
   return {
-    featured: featured.items,
-    newArrivals,
-    bestSellers,
+    featured,
+    newArrivals: newArrivals.length ? newArrivals : allProducts.slice(0, 4),
+    bestSellers: bestSellers.length ? bestSellers : allProducts.slice(0, 4),
     collections,
     categories,
   };
@@ -278,13 +278,12 @@ export async function getStoreCategoryBySlug(slug: string) {
 }
 
 export async function getFilterOptions(): Promise<FilterOptions> {
-  const [categories, products] = await Promise.all([
-    getStoreCategories(),
-    prisma.product.findMany({
-      where: { published: true },
-      include: productInclude,
-    }),
-  ]);
+  // Sequential queries: Prisma Dev only allows one concurrent connection.
+  const categories = await getStoreCategories();
+  const products = await prisma.product.findMany({
+    where: { published: true },
+    include: productInclude,
+  });
 
   const formatted = products.map(formatStoreProduct);
   const variantValues = formatted.reduce(
