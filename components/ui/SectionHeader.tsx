@@ -22,10 +22,8 @@ export default function SectionHeader({
         className
       )}
     >
-      <p className="text-xs font-medium tracking-[0.3em] uppercase text-muted">
-        {eyebrow}
-      </p>
-      <h2 className="mt-3 text-2xl font-light tracking-tight text-primary sm:text-3xl lg:text-4xl">
+      <p className="text-eyebrow text-muted">{eyebrow}</p>
+      <h2 className="text-display mt-4 text-2xl text-primary sm:text-3xl lg:text-4xl">
         {title}
       </h2>
       {description && (

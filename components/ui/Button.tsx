@@ -49,7 +49,7 @@ type ButtonAsLink = ButtonBaseProps & {
 type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const baseStyles = cn(
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-[0.2em] uppercase",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-[0.2em] uppercase shadow-sm",
   transition,
   focusRing,
   disabledStyles

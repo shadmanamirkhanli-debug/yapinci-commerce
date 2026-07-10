@@ -10,26 +10,25 @@ export default function NewsletterSection() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <section className="border-t border-border bg-primary text-white">
-      <Container as="section" className="py-20 lg:py-24">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-medium tracking-[0.3em] uppercase text-accent">
-            Newsletter
-          </p>
-          <h2 className="mt-4 text-3xl font-light tracking-tight">
-            Yeni Kolleksiyalardan Xəbərdar Olun
+    <section className="border-t border-border bg-secondary section-padding">
+      <Container as="section">
+        <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-background px-8 py-14 text-center lg:px-16 lg:py-16">
+          <p className="text-eyebrow text-accent">Newsletter</p>
+          <h2 className="text-display mt-4 text-2xl text-primary sm:text-3xl">
+            Be First to New Collections
           </h2>
-          <p className="mt-4 text-sm text-white/70">
-            Ekskluziv təkliflər və yeni məhsullar birbaşa e-poçtunuza gəlsin.
+          <p className="mt-4 text-sm leading-relaxed text-muted">
+            Exclusive previews, early access, and stories from the atelier —
+            delivered with intention.
           </p>
 
           {submitted ? (
-            <p className="mt-8 text-sm text-accent">
-              Abunəliyiniz qeydə alındı. Təşəkkür edirik!
+            <p className="mt-8 text-sm text-accent" role="status">
+              Thank you. You are subscribed.
             </p>
           ) : (
             <form
-              className="mt-8 flex flex-col gap-3 sm:flex-row"
+              className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-end"
               onSubmit={(event) => {
                 event.preventDefault();
                 if (email) setSubmitted(true);
@@ -37,15 +36,15 @@ export default function NewsletterSection() {
             >
               <Input
                 type="email"
-                label="E-poçt"
-                placeholder="E-poçt ünvanınız"
+                label="Email"
+                placeholder="your@email.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="border-white/20 bg-white/10 text-white placeholder:text-white/50"
+                className="flex-1"
                 required
               />
-              <Button type="submit" variant="accent">
-                Abunə Ol
+              <Button type="submit" variant="primary" className="shrink-0">
+                Subscribe
               </Button>
             </form>
           )}

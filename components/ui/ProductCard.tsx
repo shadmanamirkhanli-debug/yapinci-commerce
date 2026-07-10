@@ -27,7 +27,7 @@ export default function ProductCard({
       <Link
         href={`/product/${product.slug}`}
         className={cn(
-          "block overflow-hidden rounded-2xl",
+          "card-lift block overflow-hidden rounded-2xl border border-transparent bg-background",
           transition,
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2"
         )}
@@ -38,10 +38,7 @@ export default function ProductCard({
               src={product.primaryImage}
               alt={product.name}
               fill
-              className={cn(
-                transition,
-                "group-hover:scale-105"
-              )}
+              className="image-zoom"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -60,12 +57,12 @@ export default function ProductCard({
           <div className="absolute left-4 top-4 flex flex-col gap-2">
             {showFeatured && (
               <Badge variant="accent" size="sm">
-                Seçilmiş
+                Featured
               </Badge>
             )}
             {showNew && (
               <Badge variant="default" size="sm">
-                Yeni
+                New
               </Badge>
             )}
             {showBest && (
@@ -77,31 +74,31 @@ export default function ProductCard({
           {product.available <= 0 && (
             <div className="absolute right-4 top-4">
               <Badge variant="default" size="sm">
-                Stokda yoxdur
+                Sold Out
               </Badge>
             </div>
           )}
           <div
             className={cn(
-              "absolute bottom-4 left-4 rounded-full bg-background/90 px-3 py-1 text-[10px] font-medium tracking-[0.15em] uppercase text-foreground opacity-0 backdrop-blur-sm",
+              "absolute inset-x-4 bottom-4 translate-y-2 rounded-full bg-background/95 px-4 py-2.5 text-center text-[10px] font-medium tracking-[0.2em] uppercase text-foreground opacity-0 backdrop-blur-sm",
               transition,
-              "group-hover:opacity-100"
+              "group-hover:translate-y-0 group-hover:opacity-100"
             )}
           >
-            Bax
+            View Product
           </div>
         </div>
       </Link>
 
-      <div className="mt-5 flex flex-col gap-3 px-1">
+      <div className="mt-5 flex flex-col gap-2.5 px-0.5">
         <div className="flex items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             {product.category && (
-              <p className="text-[10px] uppercase tracking-[0.15em] text-muted">
+              <p className="text-eyebrow text-muted">
                 {product.category.name}
               </p>
             )}
-            <h3 className="text-sm font-medium uppercase tracking-wide text-foreground">
+            <h3 className="mt-1 truncate text-sm font-medium tracking-wide text-foreground">
               {product.name}
             </h3>
           </div>
@@ -110,22 +107,12 @@ export default function ProductCard({
             currency={product.currency}
             compareAt={product.comparePrice}
             size="sm"
+            className="shrink-0"
           />
         </div>
         {showRating && product.reviewCount > 0 && (
           <Rating value={product.averageRating} size="sm" showValue />
         )}
-        <Link
-          href={`/product/${product.slug}`}
-          className={cn(
-            "inline-flex w-fit text-xs font-medium tracking-[0.15em] uppercase text-muted",
-            transition,
-            "hover:text-accent active:text-foreground",
-            "focus-visible:outline-none focus-visible:underline"
-          )}
-        >
-          Ətraflı Bax →
-        </Link>
       </div>
     </article>
   );

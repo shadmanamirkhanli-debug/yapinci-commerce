@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { brand, navLinks } from "@/lib/constants";
 import { cn } from "@/lib/utils/cn";
+import YapinciLogo from "@/components/brand/YapinciLogo";
 import NavbarAuth from "@/components/layout/NavbarAuth";
 import { useCart } from "@/components/providers/CartProvider";
 
@@ -32,19 +33,41 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const { count: cartCount } = useCart();
 
+  const isHome = pathname === "/";
+  const transparent = isHome && !scrolled && !mobileOpen;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 48);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-white/80 backdrop-blur-xl">
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        transparent
+          ? "border-transparent bg-transparent"
+          : "border-b border-border/60 bg-background/85 backdrop-blur-xl"
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:h-20 lg:px-10">
         <Link
           href="/"
-          className="text-lg font-medium tracking-[0.35em] uppercase text-primary transition-opacity duration-300 hover:opacity-70 lg:text-xl"
+          aria-label={`${brand.wordmark} home`}
+          className="transition-opacity duration-300 hover:opacity-70"
         >
-          {brand.name}
+          <YapinciLogo
+            variant={transparent ? "light" : "dark"}
+            size="md"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-10 md:flex" aria-label="Main">
           {navLinks.map((link) => {
             const isActive =
               link.href === "/"
@@ -56,22 +79,31 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 className={cn(
-                  "relative text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300",
-                  isActive
-                    ? "text-primary"
-                    : "text-muted hover:text-primary"
+                  "relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300",
+                  transparent
+                    ? isActive
+                      ? "text-white"
+                      : "text-white/70 hover:text-white"
+                    : isActive
+                      ? "text-primary"
+                      : "text-muted hover:text-primary"
                 )}
               >
                 {link.label}
                 {isActive && (
-                  <span className="absolute -bottom-1 left-0 h-px w-full bg-accent" />
+                  <span
+                    className={cn(
+                      "absolute -bottom-1.5 left-0 h-px w-full",
+                      transparent ? "bg-accent" : "bg-accent"
+                    )}
+                  />
                 )}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4 lg:gap-5">
           <form
             className="hidden lg:block"
             onSubmit={(event) => {
@@ -85,18 +117,33 @@ export default function Navbar() {
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Axtar..."
-              aria-label="Məhsul axtar"
-              className="h-10 w-44 rounded-full border border-border bg-background px-4 text-xs tracking-wide outline-none transition-colors focus:border-accent xl:w-52"
+              placeholder="Search"
+              aria-label="Search products"
+              className={cn(
+                "h-10 w-40 rounded-full border px-4 text-xs tracking-wide outline-none transition-colors xl:w-48",
+                transparent
+                  ? "border-white/25 bg-white/10 text-white placeholder:text-white/50 focus:border-accent"
+                  : "border-border bg-background text-foreground placeholder:text-muted/60 focus:border-accent"
+              )}
             />
           </form>
 
-          <NavbarAuth className="hidden md:inline-flex" />
+          <NavbarAuth
+            className={cn(
+              "hidden md:inline-flex",
+              transparent && "text-white [&_a]:text-white/80 [&_a:hover]:text-white"
+            )}
+          />
 
           <Link
             href="/cart"
-            aria-label="Səbət"
-            className="relative rounded-full p-2 text-primary transition-all duration-300 hover:bg-secondary"
+            aria-label="Cart"
+            className={cn(
+              "relative rounded-full p-2 transition-all duration-300",
+              transparent
+                ? "text-white hover:bg-white/10"
+                : "text-primary hover:bg-secondary"
+            )}
           >
             <CartIcon />
             {cartCount > 0 && (
@@ -108,27 +155,33 @@ export default function Navbar() {
 
           <button
             type="button"
-            aria-label={mobileOpen ? "Menyunu bağla" : "Menyunu aç"}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((prev) => !prev)}
-            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 hover:bg-secondary md:hidden"
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 md:hidden",
+              transparent ? "hover:bg-white/10" : "hover:bg-secondary"
+            )}
           >
             <span className="relative h-3 w-5">
               <span
                 className={cn(
-                  "absolute left-0 block h-px w-5 bg-primary transition-all duration-300",
+                  "absolute left-0 block h-px w-5 transition-all duration-300",
+                  transparent ? "bg-white" : "bg-primary",
                   mobileOpen ? "top-1.5 rotate-45" : "top-0"
                 )}
               />
               <span
                 className={cn(
-                  "absolute left-0 top-1.5 block h-px w-5 bg-primary transition-all duration-300",
+                  "absolute left-0 top-1.5 block h-px w-5 transition-all duration-300",
+                  transparent ? "bg-white" : "bg-primary",
                   mobileOpen ? "opacity-0" : "opacity-100"
                 )}
               />
               <span
                 className={cn(
-                  "absolute left-0 block h-px w-5 bg-primary transition-all duration-300",
+                  "absolute left-0 block h-px w-5 transition-all duration-300",
+                  transparent ? "bg-white" : "bg-primary",
                   mobileOpen ? "top-1.5 -rotate-45" : "top-3"
                 )}
               />
@@ -139,11 +192,32 @@ export default function Navbar() {
 
       <nav
         className={cn(
-          "overflow-hidden border-t border-border/60 transition-all duration-300 md:hidden",
-          mobileOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+          "overflow-hidden border-t transition-all duration-300 md:hidden",
+          transparent ? "border-white/15 bg-primary/95" : "border-border/60 bg-background",
+          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         )}
+        aria-label="Mobile"
       >
         <div className="flex flex-col gap-1 px-6 py-4">
+          <form
+            className="mb-2 lg:hidden"
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (searchQuery.trim()) {
+                window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
+                setMobileOpen(false);
+              }
+            }}
+          >
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search"
+              aria-label="Search products"
+              className="h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus:border-accent"
+            />
+          </form>
           <div className="mb-2 px-4">
             <NavbarAuth />
           </div>
@@ -161,8 +235,12 @@ export default function Navbar() {
                 className={cn(
                   "rounded-xl px-4 py-3 text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-300",
                   isActive
-                    ? "bg-secondary text-primary"
-                    : "text-muted hover:bg-secondary hover:text-primary"
+                    ? transparent
+                      ? "bg-white/10 text-white"
+                      : "bg-secondary text-primary"
+                    : transparent
+                      ? "text-white/70 hover:bg-white/10 hover:text-white"
+                      : "text-muted hover:bg-secondary hover:text-primary"
                 )}
               >
                 {link.label}

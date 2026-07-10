@@ -7,6 +7,10 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
+function withMeta(meta: Record<string, unknown>, body: string) {
+  return `---meta\n${JSON.stringify(meta)}\n---\n${body}`;
+}
+
 async function main() {
   console.log("🌱 Seeding Yapinci Commerce database...\n");
 
@@ -82,89 +86,64 @@ async function main() {
     },
   });
 
-  const outerwear = await prisma.category.create({
+  const tshirts = await prisma.category.create({
     data: {
-      name: "Xarici Geyim",
-      slug: "outerwear",
-      description: "Premium palto və kaftanlar",
+      name: "Futbolkalar",
+      slug: "t-shirts",
+      description: withMeta(
+        { imageUrl: "/images/products/baku-skyline-tee.png" },
+        "Premium oversized və embroidered futbolkalar"
+      ),
     },
   });
 
-  const sets = await prisma.category.create({
+  const accessories = await prisma.category.create({
     data: {
-      name: "Setlər",
-      slug: "sets",
-      description: "İki parçalı minimalist setlər",
+      name: "Aksesuarlar",
+      slug: "accessories",
+      description: withMeta(
+        { imageUrl: "/images/products/dragon-baseball-cap.png" },
+        "Papaq, bandana və şəhər aksesuarları"
+      ),
     },
   });
 
-  const shirvanPalto = await prisma.product.create({
+  const bags = await prisma.category.create({
     data: {
-      name: "Şirvan Palto",
-      slug: "shirvan-palto",
-      description:
-        "Şirvan regionunun ənənəvi naxışlarından ilham alan, premium yun parçadan hazırlanmış palto.",
-      price: 289,
+      name: "Çantalar",
+      slug: "bags",
+      description: withMeta(
+        { imageUrl: "/images/products/dragon-recon-backpack.png" },
+        "Funksional və hekayə daşıyan çantalar"
+      ),
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "Dragon Recon Backpack",
+      slug: "dragon-recon-backpack",
+      description: withMeta(
+        {
+          collection: "Dragon",
+          brand: "Yapinci",
+          newArrival: true,
+          bestSeller: true,
+          shortDescription:
+            "The Dragon: an ancient talisman of protection — technical recon backpack.",
+        },
+        "Ripstop parça, çoxlu bölmə və qədim Azərbaycan əjdaha motivi ilə bəzədilmiş premium sırt çantası. RECON modeli şəhər və səyahət üçün hazırlanıb."
+      ),
+      price: 189,
       currency: "AZN",
       published: true,
       featured: true,
-      categoryId: outerwear.id,
+      categoryId: bags.id,
       images: {
         create: [
           {
-            url: "/images/products/shirvan-palto-01.jpg",
-            alt: "Şirvan Palto — ön görünüş",
-            sortOrder: 0,
-            isPrimary: true,
-          },
-          {
-            url: "/images/products/shirvan-palto-02.jpg",
-            alt: "Şirvan Palto — detal",
-            sortOrder: 1,
-          },
-        ],
-      },
-      variants: {
-        create: [
-          {
-            sku: "YP-SHRV-S-BLK",
-            size: "S",
-            color: "Qara",
-            inventory: { create: { quantity: 12, lowStockAt: 3 } },
-          },
-          {
-            sku: "YP-SHRV-M-BLK",
-            size: "M",
-            color: "Qara",
-            inventory: { create: { quantity: 18, lowStockAt: 5 } },
-          },
-          {
-            sku: "YP-SHRV-L-BLK",
-            size: "L",
-            color: "Qara",
-            inventory: { create: { quantity: 8, lowStockAt: 3 } },
-          },
-        ],
-      },
-    },
-  });
-
-  const qarabagKaftan = await prisma.product.create({
-    data: {
-      name: "Qarabağ Kaftan",
-      slug: "qarabag-kaftan",
-      description:
-        "Qarabağ mədəniyyətinin zəngin rəng palitrasını əks etdirən, əl işi detallı kaftan.",
-      price: 349,
-      currency: "AZN",
-      published: true,
-      featured: true,
-      categoryId: outerwear.id,
-      images: {
-        create: [
-          {
-            url: "/images/products/qarabag-kaftan-01.jpg",
-            alt: "Qarabağ Kaftan",
+            url: "/images/products/dragon-recon-backpack.png",
+            alt: "Dragon Recon Backpack",
             sortOrder: 0,
             isPrimary: true,
           },
@@ -173,17 +152,92 @@ async function main() {
       variants: {
         create: [
           {
-            sku: "YP-QRB-M-GLD",
-            size: "M",
-            color: "Qızılı",
-            inventory: { create: { quantity: 6, lowStockAt: 2 } },
+            sku: "YP-DRG-BPK-SLATE",
+            size: "One Size",
+            color: "Göy-boz",
+            inventory: { create: { quantity: 24, lowStockAt: 5 } },
           },
+        ],
+      },
+    },
+  });
+
+  const dragonTeeMaroon = await prisma.product.create({
+    data: {
+      name: "Dragon Talisman Tee — Maroon",
+      slug: "dragon-talisman-tee-maroon",
+      description: withMeta(
+        {
+          collection: "Dragon",
+          brand: "Yapinci",
+          newArrival: true,
+          bestSeller: true,
+          shortDescription:
+            "Ancient Azerbaijani carpet element — oversized maroon tee.",
+        },
+        "Ağır çəkili oversized parçadan hazırlanmış bordó futbolka. Mərkəzdə əjdaha motivi, qol və etiket detalları ilə tamamlanmış Dragon kolleksiyasının əsas parçasıdır."
+      ),
+      price: 129,
+      currency: "AZN",
+      published: true,
+      featured: true,
+      categoryId: tshirts.id,
+      images: {
+        create: [
           {
-            sku: "YP-QRB-L-GLD",
-            size: "L",
-            color: "Qızılı",
-            inventory: { create: { quantity: 4, lowStockAt: 2 } },
+            url: "/images/products/dragon-talisman-tee-maroon.png",
+            alt: "Dragon Talisman Tee Maroon",
+            sortOrder: 0,
+            isPrimary: true,
           },
+        ],
+      },
+      variants: {
+        create: [
+          { sku: "YP-DRG-MRN-S", size: "S", color: "Bordó", inventory: { create: { quantity: 18, lowStockAt: 4 } } },
+          { sku: "YP-DRG-MRN-M", size: "M", color: "Bordó", inventory: { create: { quantity: 22, lowStockAt: 5 } } },
+          { sku: "YP-DRG-MRN-L", size: "L", color: "Bordó", inventory: { create: { quantity: 16, lowStockAt: 4 } } },
+          { sku: "YP-DRG-MRN-XL", size: "XL", color: "Bordó", inventory: { create: { quantity: 10, lowStockAt: 3 } } },
+        ],
+      },
+    },
+  });
+
+  const dragonTeeBlack = await prisma.product.create({
+    data: {
+      name: "Dragon Talisman Tee — Black",
+      slug: "dragon-talisman-tee-black",
+      description: withMeta(
+        {
+          collection: "Dragon",
+          brand: "Yapinci",
+          newArrival: true,
+          shortDescription:
+            "Shielding the soul through geometric symbolism — black oversized tee.",
+        },
+        "Qara oversized futbolka. Sinə hissəsində qədim talisman motivi və The Dragon hekayəsi ilə tamamlanmış, premium street-luxury görünüş."
+      ),
+      price: 129,
+      currency: "AZN",
+      published: true,
+      featured: true,
+      categoryId: tshirts.id,
+      images: {
+        create: [
+          {
+            url: "/images/products/dragon-talisman-tee-black.png",
+            alt: "Dragon Talisman Tee Black",
+            sortOrder: 0,
+            isPrimary: true,
+          },
+        ],
+      },
+      variants: {
+        create: [
+          { sku: "YP-DRG-BLK-S", size: "S", color: "Qara", inventory: { create: { quantity: 20, lowStockAt: 5 } } },
+          { sku: "YP-DRG-BLK-M", size: "M", color: "Qara", inventory: { create: { quantity: 24, lowStockAt: 5 } } },
+          { sku: "YP-DRG-BLK-L", size: "L", color: "Qara", inventory: { create: { quantity: 18, lowStockAt: 4 } } },
+          { sku: "YP-DRG-BLK-XL", size: "XL", color: "Qara", inventory: { create: { quantity: 12, lowStockAt: 3 } } },
         ],
       },
     },
@@ -191,20 +245,27 @@ async function main() {
 
   await prisma.product.create({
     data: {
-      name: "Bakı Linen Set",
-      slug: "baki-linen-set",
-      description:
-        "Yay kolleksiyası üçün ideal, təbii linendən hazırlanmış minimalist iki parçalı set.",
-      price: 219,
+      name: "Dragon Carpet Bucket Hat",
+      slug: "dragon-bucket-hat",
+      description: withMeta(
+        {
+          collection: "Dragon",
+          brand: "Yapinci",
+          newArrival: true,
+          shortDescription: "Ancient Azerbaijani carpet element bucket hat.",
+        },
+        "Kanvas toxuma bucket hat. Əjdaha motivi, chovkan brend detalı və Azərbaycan bayrağı ilə tamamlanmış üç rəng variantı."
+      ),
+      price: 79,
       currency: "AZN",
       published: true,
       featured: true,
-      categoryId: sets.id,
+      categoryId: accessories.id,
       images: {
         create: [
           {
-            url: "/images/products/baki-linen-set-01.jpg",
-            alt: "Bakı Linen Set",
+            url: "/images/products/dragon-bucket-hat.png",
+            alt: "Dragon Carpet Bucket Hat",
             sortOrder: 0,
             isPrimary: true,
           },
@@ -212,18 +273,128 @@ async function main() {
       },
       variants: {
         create: [
+          { sku: "YP-DRG-BKT-GRN", size: "One Size", color: "Yaşıl", inventory: { create: { quantity: 15, lowStockAt: 4 } } },
+          { sku: "YP-DRG-BKT-BLU", size: "One Size", color: "Mavi", inventory: { create: { quantity: 14, lowStockAt: 4 } } },
+          { sku: "YP-DRG-BKT-BRD", size: "One Size", color: "Bordó", inventory: { create: { quantity: 12, lowStockAt: 3 } } },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "Baku Skyline Embroidered Tee",
+      slug: "baku-skyline-tee",
+      description: withMeta(
+        {
+          collection: "Baku",
+          brand: "Yapinci",
+          newArrival: true,
+          bestSeller: true,
+          shortDescription: "Hand-embroidered Baku skyline on premium white cotton.",
+        },
+        "Ağ premium parça üzərində əl tikməsi Bakı panoraması — Flame Towers, TV qülləsi və Xəzər sahil xətti. Baku kolleksiyasının şəhər hekayəsini daşıyan əsas parça."
+      ),
+      price: 149,
+      currency: "AZN",
+      published: true,
+      featured: true,
+      categoryId: tshirts.id,
+      images: {
+        create: [
           {
-            sku: "YP-BKI-S-NAT",
-            size: "S",
-            color: "Təbii",
-            inventory: { create: { quantity: 20, lowStockAt: 5 } },
+            url: "/images/products/baku-skyline-tee.png",
+            alt: "Baku Skyline Embroidered Tee",
+            sortOrder: 0,
+            isPrimary: true,
           },
           {
-            sku: "YP-BKI-M-NAT",
-            size: "M",
-            color: "Təbii",
-            inventory: { create: { quantity: 15, lowStockAt: 5 } },
+            url: "/images/products/baku-skyline-tee-lifestyle.png",
+            alt: "Baku Skyline Tee lifestyle",
+            sortOrder: 1,
           },
+        ],
+      },
+      variants: {
+        create: [
+          { sku: "YP-BKU-SKY-S", size: "S", color: "Ağ", inventory: { create: { quantity: 16, lowStockAt: 4 } } },
+          { sku: "YP-BKU-SKY-M", size: "M", color: "Ağ", inventory: { create: { quantity: 20, lowStockAt: 5 } } },
+          { sku: "YP-BKU-SKY-L", size: "L", color: "Ağ", inventory: { create: { quantity: 14, lowStockAt: 4 } } },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "Dragon Carpet Baseball Cap",
+      slug: "dragon-baseball-cap",
+      description: withMeta(
+        {
+          collection: "Dragon",
+          brand: "Yapinci",
+          bestSeller: true,
+          shortDescription: "Six-panel cap with ancient carpet dragon motif.",
+        },
+        "Premium papaq — ön hissədə əjdaha xalçası elementi, yanda chovkan və Azərbaycan bayrağı detalları."
+      ),
+      price: 69,
+      currency: "AZN",
+      published: true,
+      featured: true,
+      categoryId: accessories.id,
+      images: {
+        create: [
+          {
+            url: "/images/products/dragon-baseball-cap.png",
+            alt: "Dragon Carpet Baseball Cap",
+            sortOrder: 0,
+            isPrimary: true,
+          },
+        ],
+      },
+      variants: {
+        create: [
+          { sku: "YP-DRG-CAP-GRN", size: "One Size", color: "Yaşıl", inventory: { create: { quantity: 20, lowStockAt: 5 } } },
+          { sku: "YP-DRG-CAP-BRD", size: "One Size", color: "Bordó", inventory: { create: { quantity: 18, lowStockAt: 4 } } },
+          { sku: "YP-DRG-CAP-NVY", size: "One Size", color: "Tünd Mavi", inventory: { create: { quantity: 16, lowStockAt: 4 } } },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "Azərbaycan Script Vintage Cap",
+      slug: "azerbaijan-vintage-cap",
+      description: withMeta(
+        {
+          collection: "Heritage",
+          brand: "Yapinci",
+          newArrival: true,
+          shortDescription: "Distressed vintage cap with script Azərbaycan embroidery.",
+        },
+        "Yuyulmuş vintage effektli papaq. Ön hissədə krem rəngli əlyazma Azərbaycan yazısı — Heritage Symbols kolleksiyasının şəhər və mədəniyyət ifadəsi."
+      ),
+      price: 59,
+      currency: "AZN",
+      published: true,
+      featured: true,
+      categoryId: accessories.id,
+      images: {
+        create: [
+          {
+            url: "/images/products/azerbaijan-vintage-cap.png",
+            alt: "Azərbaycan Script Vintage Cap",
+            sortOrder: 0,
+            isPrimary: true,
+          },
+        ],
+      },
+      variants: {
+        create: [
+          { sku: "YP-HRT-CAP-BRD", size: "One Size", color: "Bordó", inventory: { create: { quantity: 14, lowStockAt: 4 } } },
+          { sku: "YP-HRT-CAP-GRY", size: "One Size", color: "Boz", inventory: { create: { quantity: 12, lowStockAt: 3 } } },
         ],
       },
     },
@@ -261,24 +432,24 @@ async function main() {
   await prisma.wishlist.create({
     data: {
       userId: customerUser.id,
-      productId: qarabagKaftan.id,
+      productId: dragonTeeBlack.id,
     },
   });
 
   await prisma.review.create({
     data: {
       userId: customerUser.id,
-      productId: shirvanPalto.id,
+      productId: dragonTeeMaroon.id,
       rating: 5,
-      title: "Mükəmməl keyfiyyət",
+      title: "Əla keyfiyyət",
       comment:
-        "Parça keyfiyyəti və tikmə detalları gözləntilərimdən çox yuxarıdır. Premium hiss olunur.",
+        "Parça ağırlığı və tikmə detalları gözləntilərimdən çox yuxarıdır. Dragon kolleksiyası premium hiss olunur.",
       published: true,
     },
   });
 
-  const shirvanVariant = await prisma.productVariant.findFirst({
-    where: { productId: shirvanPalto.id, size: "M" },
+  const orderVariant = await prisma.productVariant.findFirst({
+    where: { productId: dragonTeeMaroon.id, size: "M" },
   });
 
   const order = await prisma.order.create({
@@ -288,26 +459,26 @@ async function main() {
       couponId: welcomeCoupon.id,
       shippingAddressId: shippingAddress.id,
       status: OrderStatus.PAID,
-      subtotal: 289,
-      discount: 28.9,
+      subtotal: 129,
+      discount: 12.9,
       shipping: 0,
       tax: 0,
-      total: 260.1,
+      total: 116.1,
       currency: "AZN",
       items: {
         create: [
           {
-            productId: shirvanPalto.id,
-            variantId: shirvanVariant?.id,
+            productId: dragonTeeMaroon.id,
+            variantId: orderVariant?.id,
             quantity: 1,
-            unitPrice: 289,
-            total: 289,
+            unitPrice: 129,
+            total: 129,
           },
         ],
       },
       payment: {
         create: {
-          amount: 260.1,
+          amount: 116.1,
           currency: "AZN",
           status: PaymentStatus.COMPLETED,
           provider: "stripe",
@@ -327,8 +498,8 @@ async function main() {
   console.log(
     `   Users:      3 (superadmin@yapinci.az, admin@yapinci.az, customer@yapinci.az)`
   );
-  console.log(`   Categories: 2`);
-  console.log(`   Products:   3`);
+  console.log(`   Categories: 3`);
+  console.log(`   Products:   7`);
   console.log(`   Coupons:    1 (YAPINCI10)`);
   console.log(`   Orders:     1 (${order.orderNumber})`);
   console.log(`   Password:   Password123!`);
