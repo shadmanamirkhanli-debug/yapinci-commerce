@@ -4,12 +4,12 @@ import { brand } from "@/lib/constants";
 import type { StoreCategory } from "@/lib/store/types";
 
 const galleryImages = [
-  "/images/products/dragon-talisman-tee-black.png",
   "/images/products/baku-skyline-tee.png",
-  "/images/products/dragon-recon-backpack.png",
-  "/images/products/dragon-bucket-hat.png",
-  "/images/products/dragon-baseball-cap.png",
   "/images/products/baku-skyline-tee-lifestyle.png",
+  "/images/products/azerbaijan-vintage-cap.png",
+  "/images/products/dragon-baseball-cap.png",
+  "/images/products/dragon-bucket-hat.png",
+  "/images/products/dragon-talisman-tee-black.png",
 ];
 
 type InstagramGalleryProps = {
