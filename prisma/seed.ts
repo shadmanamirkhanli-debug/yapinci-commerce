@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
-
 function withMeta(meta: Record<string, unknown>, body: string) {
   return `---meta\n${JSON.stringify(meta)}\n---\n${body}`;
 }
