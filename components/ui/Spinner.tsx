@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 
 type SpinnerProps = {
@@ -15,12 +16,15 @@ const sizes = {
 export default function Spinner({
   size = "md",
   className,
-  label = "Yüklənir...",
+  label,
 }: SpinnerProps) {
+  const t = useTranslations("Common");
+  const resolvedLabel = label ?? t("loading");
+
   return (
     <div
       role="status"
-      aria-label={label}
+      aria-label={resolvedLabel}
       className={cn("inline-flex items-center justify-center", className)}
     >
       <span
@@ -29,7 +33,7 @@ export default function Spinner({
           sizes[size]
         )}
       />
-      <span className="sr-only">{label}</span>
+      <span className="sr-only">{resolvedLabel}</span>
     </div>
   );
 }

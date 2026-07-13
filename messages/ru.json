@@ -419,6 +419,22 @@
   "ProductGallery": {
     "thumbnailAria": "Изображение {index}"
   },
+  "ProductCard": {
+    "featured": "Рекомендуем",
+    "new": "Новинка",
+    "bestSeller": "Хит продаж",
+    "soldOut": "Распродано"
+  },
+  "Rating": {
+    "starsAria": "{value} из {max} звёзд",
+    "starAria": "{star} звезда"
+  },
+  "Pagination": {
+    "navAria": "Пагинация",
+    "previous": "Назад",
+    "next": "Вперёд",
+    "pageAria": "Страница {page}"
+  },
   "RecentlyViewed": {
     "eyebrow": "История",
     "title": "Недавно просмотренные"

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 
@@ -26,13 +27,14 @@ export default function Rating({
   onChange,
   className,
 }: RatingProps) {
+  const t = useTranslations("Rating");
   const stars = Array.from({ length: max }, (_, index) => index + 1);
 
   return (
     <div
       className={cn("inline-flex items-center gap-2", className)}
       role={interactive ? "radiogroup" : "img"}
-      aria-label={`${value} out of ${max} stars`}
+      aria-label={t("starsAria", { value, max })}
     >
       <div className="inline-flex items-center gap-0.5">
         {stars.map((star) => {
@@ -45,7 +47,7 @@ export default function Rating({
                 type="button"
                 role="radio"
                 aria-checked={star === Math.round(value)}
-                aria-label={`${star} star`}
+                aria-label={t("starAria", { star })}
                 onClick={() => onChange(star)}
                 className={cn(
                   transition,

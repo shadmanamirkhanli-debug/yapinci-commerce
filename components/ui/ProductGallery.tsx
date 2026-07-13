@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 
@@ -21,6 +22,7 @@ export default function ProductGallery({
   className,
 }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const t = useTranslations("ProductGallery");
   const activeImage = images[activeIndex] ?? images[0];
 
   if (!activeImage) return null;
@@ -53,7 +55,7 @@ export default function ProductGallery({
               <button
                 key={image.id}
                 type="button"
-                aria-label={`Şəkil ${index + 1}`}
+                aria-label={t("thumbnailAria", { index: index + 1 })}
                 aria-current={isActive}
                 onClick={() => setActiveIndex(index)}
                 className={cn(

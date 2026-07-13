@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 
@@ -16,15 +17,16 @@ export default function Pagination({
   onPageChange,
   className,
 }: PaginationProps) {
+  const t = useTranslations("Pagination");
   const pages = getVisiblePages(currentPage, totalPages);
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label={t("navAria")}
       className={cn("flex items-center justify-center gap-2", className)}
     >
       <PaginationButton
-        label="Əvvəlki"
+        label={t("previous")}
         disabled={currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
       >
@@ -39,7 +41,7 @@ export default function Pagination({
         ) : (
           <PaginationButton
             key={page}
-            label={`Səhifə ${page}`}
+            label={t("pageAria", { page })}
             active={page === currentPage}
             onClick={() => onPageChange(page)}
           >
@@ -49,7 +51,7 @@ export default function Pagination({
       )}
 
       <PaginationButton
-        label="Növbəti"
+        label={t("next")}
         disabled={currentPage >= totalPages}
         onClick={() => onPageChange(currentPage + 1)}
       >

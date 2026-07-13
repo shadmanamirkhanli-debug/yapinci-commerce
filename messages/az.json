@@ -52,7 +52,7 @@
     "description": "Azərbaycan mədəniyyətindən ilham alan premium geyim brendi.",
     "tagline": "Premium Moda",
     "hero": {
-      "headline": "Azərbaycanın Hekayəsini Geyin",
+      "headline": "Ruhu Azərbaycandan Geyin",
       "cta": "Kolleksiyaya Bax",
       "imageAlt": "Yapinci kolleksiyası"
     },
@@ -418,6 +418,22 @@
   },
   "ProductGallery": {
     "thumbnailAria": "Şəkil {index}"
+  },
+  "ProductCard": {
+    "featured": "Seçilmiş",
+    "new": "Yeni",
+    "bestSeller": "Ən Çox Satılan",
+    "soldOut": "Satılıb"
+  },
+  "Rating": {
+    "starsAria": "{max} ulduzdan {value}",
+    "starAria": "{star} ulduz"
+  },
+  "Pagination": {
+    "navAria": "Səhifələmə",
+    "previous": "Əvvəlki",
+    "next": "Növbəti",
+    "pageAria": "Səhifə {page}"
   },
   "RecentlyViewed": {
     "eyebrow": "Tarixçə",

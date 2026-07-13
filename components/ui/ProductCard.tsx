@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { StoreProduct } from "@/lib/store/types";
 import Badge from "@/components/ui/Badge";
 import OptimizedImage from "@/components/ui/OptimizedImage";
@@ -18,6 +19,8 @@ export default function ProductCard({
   className,
   showRating = true,
 }: ProductCardProps) {
+  const t = useTranslations("ProductCard");
+  const tCommon = useTranslations("Common");
   const showFeatured = product.featured;
   const showNew = product.newArrival;
   const showBest = product.bestSeller;
@@ -57,24 +60,24 @@ export default function ProductCard({
           <div className="absolute left-4 top-4 flex flex-col gap-2">
             {showFeatured && (
               <Badge variant="accent" size="sm">
-                Featured
+                {t("featured")}
               </Badge>
             )}
             {showNew && (
               <Badge variant="default" size="sm">
-                New
+                {t("new")}
               </Badge>
             )}
             {showBest && (
               <Badge variant="outline" size="sm">
-                Best Seller
+                {t("bestSeller")}
               </Badge>
             )}
           </div>
           {product.available <= 0 && (
             <div className="absolute right-4 top-4">
               <Badge variant="default" size="sm">
-                Sold Out
+                {t("soldOut")}
               </Badge>
             </div>
           )}
@@ -85,7 +88,7 @@ export default function ProductCard({
               "group-hover:translate-y-0 group-hover:opacity-100"
             )}
           >
-            View Product
+            {tCommon("viewProduct")}
           </div>
         </div>
       </Link>

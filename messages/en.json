@@ -419,6 +419,22 @@
   "ProductGallery": {
     "thumbnailAria": "Image {index}"
   },
+  "ProductCard": {
+    "featured": "Featured",
+    "new": "New",
+    "bestSeller": "Best Seller",
+    "soldOut": "Sold Out"
+  },
+  "Rating": {
+    "starsAria": "{value} out of {max} stars",
+    "starAria": "{star} star"
+  },
+  "Pagination": {
+    "navAria": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "pageAria": "Page {page}"
+  },
   "RecentlyViewed": {
     "eyebrow": "History",
     "title": "Recently Viewed"
