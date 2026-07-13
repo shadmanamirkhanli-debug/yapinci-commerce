@@ -7,6 +7,19 @@ import { toNumber } from "@/lib/admin/serialize";
 import type { Prisma } from "@prisma/client";
 import type { StoreProduct, StoreReview, StoreVariant } from "@/lib/store/types";
 
+export type StoreLocale = "az" | "en" | "ru";
+
+function localize(
+  locale: StoreLocale,
+  base: string,
+  en?: string | null,
+  ru?: string | null
+): string {
+  if (locale === "en" && en) return en;
+  if (locale === "ru" && ru) return ru;
+  return base;
+}
+
 export const productInclude = {
   category: true,
   images: true,
@@ -22,8 +35,13 @@ type ProductWithRelations = Prisma.ProductGetPayload<{
   include: typeof productInclude;
 }>;
 
-export function formatStoreProduct(product: ProductWithRelations): StoreProduct {
+export function formatStoreProduct(
+  product: ProductWithRelations,
+  locale: StoreLocale = "az"
+): StoreProduct {
   const { meta, body } = parseContentMeta<ProductMeta>(product.description);
+  const localizedBody = localize(locale, body, product.descriptionEn, product.descriptionRu);
+  const localizedName = localize(locale, product.name, product.nameEn, product.nameRu);
 
   const variants: StoreVariant[] = product.variants.map((variant) => {
     const { color, material } = parseVariantColor(variant.color);
@@ -62,15 +80,22 @@ export function formatStoreProduct(product: ProductWithRelations): StoreProduct 
       ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
       : 0;
 
+  const hasTranslatedBody =
+    (locale === "en" && !!product.descriptionEn) ||
+    (locale === "ru" && !!product.descriptionRu);
+  const shortDescription = hasTranslatedBody
+    ? localizedBody.slice(0, 160)
+    : meta.shortDescription ?? body.slice(0, 160);
+
   return {
     id: product.id,
     slug: product.slug,
-    name: product.name,
+    name: localizedName,
     price: toNumber(product.price),
     comparePrice: meta.comparePrice,
     currency: product.currency,
-    description: body,
-    shortDescription: meta.shortDescription ?? body.slice(0, 160),
+    description: localizedBody,
+    shortDescription,
     brand: meta.brand ?? "Yapinci",
     collection: meta.collection ?? "",
     featured: product.featured,
@@ -79,7 +104,7 @@ export function formatStoreProduct(product: ProductWithRelations): StoreProduct 
     category: product.category
       ? {
           id: product.category.id,
-          name: product.category.name,
+          name: localize(locale, product.category.name, product.category.nameEn, product.category.nameRu),
           slug: product.category.slug,
         }
       : null,
@@ -89,8 +114,11 @@ export function formatStoreProduct(product: ProductWithRelations): StoreProduct 
     available,
     averageRating,
     reviewCount: product.reviews.length,
-    seoTitle: meta.seoTitle ?? product.name,
-    seoDescription: meta.seoDescription ?? meta.shortDescription ?? body.slice(0, 160),
+    seoTitle: locale === "az" ? meta.seoTitle ?? product.name : localizedName,
+    seoDescription:
+      locale === "az"
+        ? meta.seoDescription ?? meta.shortDescription ?? body.slice(0, 160)
+        : shortDescription,
     createdAt: product.createdAt.toISOString(),
   };
 }

@@ -3,6 +3,7 @@ import {
   formatStoreProduct,
   formatStoreReviews,
   productInclude,
+  type StoreLocale,
 } from "@/lib/store/format";
 import type {
   FilterOptions,
@@ -78,7 +79,10 @@ function productMatchesFilters(
   return true;
 }
 
-export async function getStoreProducts(filters: ProductFilters = {}) {
+export async function getStoreProducts(
+  filters: ProductFilters = {},
+  locale: StoreLocale = "az"
+) {
   const page = filters.page ?? 1;
   const limit = filters.limit ?? DEFAULT_LIMIT;
 
@@ -103,7 +107,7 @@ export async function getStoreProducts(filters: ProductFilters = {}) {
     orderBy: getOrderBy(filters.sort),
   });
 
-  let formatted = products.map(formatStoreProduct);
+  let formatted = products.map((product) => formatStoreProduct(product, locale));
 
   if (filters.newArrival || filters.bestSeller || filters.collection) {
     const rawProducts = await prisma.product.findMany({
@@ -144,7 +148,7 @@ export async function getStoreProducts(filters: ProductFilters = {}) {
   };
 }
 
-export async function getStoreProductBySlug(slug: string) {
+export async function getStoreProductBySlug(slug: string, locale: StoreLocale = "az") {
   const product = await prisma.product.findFirst({
     where: { slug, published: true },
     include: productInclude,
@@ -153,7 +157,7 @@ export async function getStoreProductBySlug(slug: string) {
   if (!product) return null;
 
   return {
-    product: formatStoreProduct(product),
+    product: formatStoreProduct(product, locale),
     reviews: formatStoreReviews(product),
   };
 }
@@ -161,7 +165,8 @@ export async function getStoreProductBySlug(slug: string) {
 export async function getRelatedProducts(
   productId: string,
   categoryId?: string | null,
-  limit = 4
+  limit = 4,
+  locale: StoreLocale = "az"
 ) {
   const products = await prisma.product.findMany({
     where: {
@@ -174,10 +179,10 @@ export async function getRelatedProducts(
     orderBy: { createdAt: "desc" },
   });
 
-  return products.map(formatStoreProduct);
+  return products.map((product) => formatStoreProduct(product, locale));
 }
 
-export async function getProductsBySlugs(slugs: string[]) {
+export async function getProductsBySlugs(slugs: string[], locale: StoreLocale = "az") {
   if (!slugs.length) return [];
 
   const products = await prisma.product.findMany({
@@ -185,7 +190,9 @@ export async function getProductsBySlugs(slugs: string[]) {
     include: productInclude,
   });
 
-  const map = new Map(products.map((product) => [product.slug, formatStoreProduct(product)]));
+  const map = new Map(
+    products.map((product) => [product.slug, formatStoreProduct(product, locale)])
+  );
   return slugs
     .map((slug) => map.get(slug))
     .filter((product): product is StoreProduct => !!product);
@@ -199,17 +206,17 @@ export async function getPublishedProductSlugs() {
   return products.map((product) => product.slug);
 }
 
-export async function getHomePageData() {
+export async function getHomePageData(locale: StoreLocale = "az") {
   const [allPublished, categories] = await Promise.all([
     prisma.product.findMany({
       where: { published: true },
       include: productInclude,
       orderBy: { createdAt: "desc" },
     }),
-    getStoreCategories(),
+    getStoreCategories(locale),
   ]);
 
-  const allProducts = allPublished.map(formatStoreProduct);
+  const allProducts = allPublished.map((product) => formatStoreProduct(product, locale));
   const featured = allProducts.filter((product) => product.featured).slice(0, 8);
   const newArrivals = allProducts.slice(0, 4);
   const bestSellers = allProducts
@@ -227,7 +234,9 @@ export async function getHomePageData() {
   };
 }
 
-export async function getStoreCategories(): Promise<StoreCategory[]> {
+export async function getStoreCategories(
+  locale: StoreLocale = "az"
+): Promise<StoreCategory[]> {
   const categories = await prisma.category.findMany({
     include: { _count: { select: { products: true } } },
     orderBy: { name: "asc" },
@@ -247,20 +256,32 @@ export async function getStoreCategories(): Promise<StoreCategory[]> {
       }
     }
 
+    const bodyDescription = description.startsWith("---meta\n")
+      ? description.slice(description.indexOf("\n---\n") + 5)
+      : description;
+
     return {
       id: category.id,
       slug: category.slug,
-      name: category.name,
-      description: description.startsWith("---meta\n")
-        ? description.slice(description.indexOf("\n---\n") + 5)
-        : description,
+      name:
+        locale === "en" && category.nameEn
+          ? category.nameEn
+          : locale === "ru" && category.nameRu
+            ? category.nameRu
+            : category.name,
+      description:
+        locale === "en" && category.descriptionEn
+          ? category.descriptionEn
+          : locale === "ru" && category.descriptionRu
+            ? category.descriptionRu
+            : bodyDescription,
       imageUrl,
       productCount: category._count.products,
     };
   });
 }
 
-export async function getStoreCategoryBySlug(slug: string) {
+export async function getStoreCategoryBySlug(slug: string, locale: StoreLocale = "az") {
   const category = await prisma.category.findUnique({
     where: { slug },
     include: { _count: { select: { products: true } } },
@@ -271,21 +292,31 @@ export async function getStoreCategoryBySlug(slug: string) {
   return {
     id: category.id,
     slug: category.slug,
-    name: category.name,
-    description: category.description ?? "",
+    name:
+      locale === "en" && category.nameEn
+        ? category.nameEn
+        : locale === "ru" && category.nameRu
+          ? category.nameRu
+          : category.name,
+    description:
+      locale === "en" && category.descriptionEn
+        ? category.descriptionEn
+        : locale === "ru" && category.descriptionRu
+          ? category.descriptionRu
+          : category.description ?? "",
     productCount: category._count.products,
   };
 }
 
-export async function getFilterOptions(): Promise<FilterOptions> {
+export async function getFilterOptions(locale: StoreLocale = "az"): Promise<FilterOptions> {
   // Sequential queries: Prisma Dev only allows one concurrent connection.
-  const categories = await getStoreCategories();
+  const categories = await getStoreCategories(locale);
   const products = await prisma.product.findMany({
     where: { published: true },
     include: productInclude,
   });
 
-  const formatted = products.map(formatStoreProduct);
+  const formatted = products.map((product) => formatStoreProduct(product, locale));
   const variantValues = formatted.reduce(
     (acc, product) => {
       if (product.collection) acc.collections.add(product.collection);

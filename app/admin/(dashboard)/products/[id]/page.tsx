@@ -43,8 +43,12 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         categories={categories}
         initialData={{
           name: formatted.name,
+          nameEn: formatted.nameEn,
+          nameRu: formatted.nameRu,
           slug: formatted.slug,
           description: formatted.description,
+          descriptionEn: formatted.descriptionEn,
+          descriptionRu: formatted.descriptionRu,
           shortDescription: formatted.shortDescription,
           brand: formatted.brand,
           collection: formatted.collection,

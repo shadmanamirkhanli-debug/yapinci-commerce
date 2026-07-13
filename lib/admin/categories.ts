@@ -12,8 +12,12 @@ export function formatAdminCategory(category: Category & { parent?: Category | n
   return {
     id: category.id,
     name: category.name,
+    nameEn: category.nameEn ?? "",
+    nameRu: category.nameRu ?? "",
     slug: category.slug,
     description: body,
+    descriptionEn: category.descriptionEn ?? "",
+    descriptionRu: category.descriptionRu ?? "",
     parentId: category.parentId,
     parent: category.parent,
     imageUrl: meta.imageUrl ?? "",
@@ -35,8 +39,12 @@ export function buildCategoryWriteData(input: CategoryInput) {
 
   return {
     name: input.name,
+    nameEn: input.nameEn || null,
+    nameRu: input.nameRu || null,
     slug: input.slug,
     description: serializeContentMeta(meta, input.description ?? ""),
+    descriptionEn: input.descriptionEn || null,
+    descriptionRu: input.descriptionRu || null,
     parentId: input.parentId ?? null,
   };
 }

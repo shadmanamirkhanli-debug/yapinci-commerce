@@ -43,8 +43,12 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
         parents={parents}
         initialData={{
           name: formatted.name,
+          nameEn: formatted.nameEn,
+          nameRu: formatted.nameRu,
           slug: formatted.slug,
           description: formatted.description,
+          descriptionEn: formatted.descriptionEn,
+          descriptionRu: formatted.descriptionRu,
           parentId: formatted.parentId,
           imageUrl: formatted.imageUrl,
           seoTitle: formatted.seoTitle,

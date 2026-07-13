@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import ProductDetailView from "@/components/store/ProductDetailView";
 import ProductJsonLd from "@/components/seo/ProductJsonLd";
@@ -9,6 +9,7 @@ import {
   getRelatedProducts,
   getStoreProductBySlug,
 } from "@/lib/store/products";
+import type { StoreLocale } from "@/lib/store/format";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,8 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const data = await getStoreProductBySlug(slug);
+  const locale = (await getLocale()) as StoreLocale;
+  const data = await getStoreProductBySlug(slug, locale);
 
   if (!data) {
     const t = await getTranslations("Product");
@@ -46,7 +48,8 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const data = await getStoreProductBySlug(slug);
+  const locale = (await getLocale()) as StoreLocale;
+  const data = await getStoreProductBySlug(slug, locale);
 
   if (!data) {
     notFound();
@@ -54,7 +57,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const relatedProducts = await getRelatedProducts(
     data.product.id,
-    data.product.category?.id
+    data.product.category?.id,
+    4,
+    locale
   );
 
   return (

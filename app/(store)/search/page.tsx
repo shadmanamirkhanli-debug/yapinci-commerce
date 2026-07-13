@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Spinner from "@/components/ui/Spinner";
 import ShopExperience from "@/components/store/ShopExperience";
@@ -9,6 +9,7 @@ import {
   getStoreProducts,
   parseProductFilters,
 } from "@/lib/store/products";
+import type { StoreLocale } from "@/lib/store/format";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +28,12 @@ type SearchPageProps = {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = typeof params.q === "string" ? params.q : "";
+  const locale = (await getLocale()) as StoreLocale;
   const filters = parseProductFilters(params);
   const t = await getTranslations("Search");
   const [result, filterOptions] = await Promise.all([
-    getStoreProducts(filters),
-    getFilterOptions(),
+    getStoreProducts(filters, locale),
+    getFilterOptions(locale),
   ]);
 
   return (

@@ -22,8 +22,12 @@ type CategoryFormProps = {
 
 const defaultValues: CategoryInput = {
   name: "",
+  nameEn: "",
+  nameRu: "",
   slug: "",
   description: "",
+  descriptionEn: "",
+  descriptionRu: "",
   parentId: null,
   imageUrl: "",
   seoTitle: "",
@@ -128,6 +132,40 @@ export default function CategoryForm({
             rows={5}
             className={adminFieldClass}
             {...register("description")}
+          />
+        </div>
+      </div>
+
+      <div className={`${adminCardClass} p-6`}>
+        <h3 className="mb-4 text-sm font-medium uppercase tracking-[0.15em]">
+          Translations
+        </h3>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Input
+            label="Name (English)"
+            helperText="Falls back to Name if left empty"
+            className={adminFieldClass}
+            {...register("nameEn")}
+          />
+          <Input
+            label="Name (Russian)"
+            helperText="Falls back to Name if left empty"
+            className={adminFieldClass}
+            {...register("nameRu")}
+          />
+          <Textarea
+            label="Description (English)"
+            rows={4}
+            helperText="Falls back to Description if left empty"
+            className={adminFieldClass}
+            {...register("descriptionEn")}
+          />
+          <Textarea
+            label="Description (Russian)"
+            rows={4}
+            helperText="Falls back to Description if left empty"
+            className={adminFieldClass}
+            {...register("descriptionRu")}
           />
         </div>
       </div>

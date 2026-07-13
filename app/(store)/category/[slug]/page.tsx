@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Spinner from "@/components/ui/Spinner";
 import ShopExperience from "@/components/store/ShopExperience";
@@ -11,6 +11,7 @@ import {
   getStoreProducts,
   parseProductFilters,
 } from "@/lib/store/products";
+import type { StoreLocale } from "@/lib/store/format";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,8 @@ export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = await getStoreCategoryBySlug(slug);
+  const locale = (await getLocale()) as StoreLocale;
+  const category = await getStoreCategoryBySlug(slug, locale);
   const t = await getTranslations("Category");
 
   if (!category) {
@@ -42,7 +44,8 @@ export default async function CategoryPage({
 }: CategoryPageProps) {
   const { slug } = await params;
   const query = await searchParams;
-  const category = await getStoreCategoryBySlug(slug);
+  const locale = (await getLocale()) as StoreLocale;
+  const category = await getStoreCategoryBySlug(slug, locale);
 
   if (!category) {
     notFound();
@@ -51,8 +54,8 @@ export default async function CategoryPage({
   const t = await getTranslations("Category");
   const filters = parseProductFilters({ ...query, category: slug });
   const [result, filterOptions] = await Promise.all([
-    getStoreProducts(filters),
-    getFilterOptions(),
+    getStoreProducts(filters, locale),
+    getFilterOptions(locale),
   ]);
 
   return (

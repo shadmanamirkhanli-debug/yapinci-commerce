@@ -30,8 +30,12 @@ export function formatAdminProduct(product: ProductWithRelations) {
   return {
     id: product.id,
     name: product.name,
+    nameEn: product.nameEn ?? "",
+    nameRu: product.nameRu ?? "",
     slug: product.slug,
     description: body,
+    descriptionEn: product.descriptionEn ?? "",
+    descriptionRu: product.descriptionRu ?? "",
     shortDescription: meta.shortDescription ?? "",
     brand: meta.brand ?? "",
     collection: meta.collection ?? "",
@@ -103,8 +107,12 @@ export function buildProductWriteData(input: ProductInput) {
 
   return {
     name: input.name,
+    nameEn: input.nameEn || null,
+    nameRu: input.nameRu || null,
     slug: input.slug,
     description: serializeContentMeta(meta, input.description ?? ""),
+    descriptionEn: input.descriptionEn || null,
+    descriptionRu: input.descriptionRu || null,
     price: input.price,
     currency: input.currency,
     published: input.published,

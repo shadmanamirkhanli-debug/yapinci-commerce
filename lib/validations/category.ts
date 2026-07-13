@@ -2,8 +2,12 @@ import { z } from "zod";
 
 export const categorySchema = z.object({
   name: z.string().min(1, "Ad tələb olunur"),
+  nameEn: z.string().optional(),
+  nameRu: z.string().optional(),
   slug: z.string().min(1, "Slug tələb olunur"),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
+  descriptionRu: z.string().optional(),
   parentId: z.string().uuid().nullable().optional(),
   imageUrl: z.string().optional(),
   seoTitle: z.string().optional(),

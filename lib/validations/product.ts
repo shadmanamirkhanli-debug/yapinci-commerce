@@ -40,8 +40,12 @@ export const productImageSchema = z.object({
 
 export const productSchema = z.object({
   name: z.string().min(1, "Ad tələb olunur"),
+  nameEn: z.string().optional(),
+  nameRu: z.string().optional(),
   slug: z.string().min(1, "Slug tələb olunur"),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
+  descriptionRu: z.string().optional(),
   shortDescription: z.string().optional(),
   brand: z.string().optional(),
   collection: z.string().optional(),

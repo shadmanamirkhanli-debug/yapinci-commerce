@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import BrandStorySection from "@/components/store/home/BrandStorySection";
 import CollectionSpotlightSection from "@/components/store/home/CollectionSpotlightSection";
 import HeroSection from "@/components/store/home/HeroSection";
@@ -8,6 +8,7 @@ import ProductShowcaseSection from "@/components/store/home/ProductShowcaseSecti
 import { brand, homeCollections } from "@/lib/constants";
 import { getHomePageData } from "@/lib/store/products";
 import type { StoreProduct } from "@/lib/store/types";
+import type { StoreLocale } from "@/lib/store/format";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,8 @@ function findProductBySlug(
 }
 
 export default async function HomePage() {
-  const { featured, newArrivals, bestSellers } = await getHomePageData();
+  const locale = (await getLocale()) as StoreLocale;
+  const { featured, newArrivals, bestSellers } = await getHomePageData(locale);
   const t = await getTranslations("Home");
 
   const allProducts = [...featured, ...newArrivals, ...bestSellers];

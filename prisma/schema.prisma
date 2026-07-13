@@ -128,13 +128,17 @@ model PasswordResetToken {
 }
 
 model Category {
-  id          String     @id @default(uuid()) @db.Uuid
-  name        String
-  slug        String     @unique
-  description String?
-  parentId    String?    @db.Uuid
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id            String     @id @default(uuid()) @db.Uuid
+  name          String
+  slug          String     @unique
+  description   String?
+  nameEn        String?
+  nameRu        String?
+  descriptionEn String?
+  descriptionRu String?
+  parentId      String?    @db.Uuid
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
   children Category[] @relation("CategoryHierarchy")
@@ -145,17 +149,21 @@ model Category {
 }
 
 model Product {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String
-  slug        String   @unique
-  description String?  @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  currency    String   @default("AZN")
-  published   Boolean  @default(false)
-  featured    Boolean  @default(false)
-  categoryId  String?  @db.Uuid
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String
+  slug          String   @unique
+  description   String?  @db.Text
+  nameEn        String?
+  nameRu        String?
+  descriptionEn String?  @db.Text
+  descriptionRu String?  @db.Text
+  price         Decimal  @db.Decimal(10, 2)
+  currency      String   @default("AZN")
+  published     Boolean  @default(false)
+  featured      Boolean  @default(false)
+  categoryId    String?  @db.Uuid
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   category   Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   variants   ProductVariant[]
