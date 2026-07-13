@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resolver } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
@@ -33,16 +34,19 @@ type Totals = {
   freeShipping?: boolean;
 };
 
-const STEPS = [
-  "Customer Information",
-  "Shipping Address",
-  "Shipping Method",
-  "Order Summary",
-];
-
 export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
   const router = useRouter();
   const { items, subtotal, clearCart } = useCart();
+  const t = useTranslations("CheckoutWizard");
+  const tCart = useTranslations("Cart");
+  const tSummary = useTranslations("OrderSummary");
+
+  const STEPS = [
+    t("stepCustomerInfo"),
+    t("stepShippingAddress"),
+    t("stepShippingMethod"),
+    t("stepOrderSummary"),
+  ];
   const [step, setStep] = useState(0);
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
@@ -165,7 +169,7 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
     setLoading(false);
 
     if (!result.success) {
-      setServerError(result.error ?? "Sifariş yaradıla bilmədi");
+      setServerError(result.error ?? t("orderError"));
       return;
     }
 
@@ -179,9 +183,9 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
   if (!items.length) {
     return (
       <div className="rounded-3xl border border-border bg-secondary p-16 text-center">
-        <p className="text-sm text-muted">Səbətiniz boşdur.</p>
+        <p className="text-sm text-muted">{tCart("empty")}</p>
         <Button href="/shop" variant="ghost" size="sm" className="mt-6">
-          Mağazaya Keç
+          {tCart("browseShop")}
         </Button>
       </div>
     );
@@ -216,33 +220,33 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
             onSubmit={customerForm.handleSubmit(() => setStep(1))}
           >
             <h2 className="text-sm font-medium uppercase tracking-[0.2em]">
-              Customer Information
+              {t("stepCustomerInfo")}
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input
-                label="First Name"
+                label={t("firstNameLabel")}
                 error={customerForm.formState.errors.firstName?.message}
                 {...customerForm.register("firstName")}
               />
               <Input
-                label="Last Name"
+                label={t("lastNameLabel")}
                 error={customerForm.formState.errors.lastName?.message}
                 {...customerForm.register("lastName")}
               />
             </div>
             <Input
-              label="Email"
+              label={t("emailLabel")}
               type="email"
               error={customerForm.formState.errors.email?.message}
               {...customerForm.register("email")}
             />
             <Input
-              label="Phone"
+              label={t("phoneLabel")}
               type="tel"
               error={customerForm.formState.errors.phone?.message}
               {...customerForm.register("phone")}
             />
-            <Button type="submit">Continue</Button>
+            <Button type="submit">{t("continueCta")}</Button>
           </form>
         )}
 
@@ -252,33 +256,33 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
             onSubmit={addressForm.handleSubmit(() => setStep(2))}
           >
             <h2 className="text-sm font-medium uppercase tracking-[0.2em]">
-              Shipping Address
+              {t("stepShippingAddress")}
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input
-                label="Country"
+                label={t("countryLabel")}
                 error={addressForm.formState.errors.country?.message}
                 {...addressForm.register("country")}
               />
               <Input
-                label="City"
+                label={t("cityLabel")}
                 error={addressForm.formState.errors.city?.message}
                 {...addressForm.register("city")}
               />
-              <Input label="Region" {...addressForm.register("region")} />
-              <Input label="Postal Code" {...addressForm.register("postalCode")} />
+              <Input label={t("regionLabel")} {...addressForm.register("region")} />
+              <Input label={t("postalCodeLabel")} {...addressForm.register("postalCode")} />
             </div>
             <Textarea
-              label="Address"
+              label={t("addressLabel")}
               rows={3}
               error={addressForm.formState.errors.address?.message}
               {...addressForm.register("address")}
             />
             <div className="flex gap-3">
               <Button type="button" variant="secondary" onClick={() => setStep(0)}>
-                Back
+                {t("backCta")}
               </Button>
-              <Button type="submit">Continue</Button>
+              <Button type="submit">{t("continueCta")}</Button>
             </div>
           </form>
         )}
@@ -289,7 +293,7 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
             onSubmit={shippingForm.handleSubmit(() => setStep(3))}
           >
             <h2 className="text-sm font-medium uppercase tracking-[0.2em]">
-              Shipping Method
+              {t("stepShippingMethod")}
             </h2>
             <div className="space-y-3">
               {shippingMethods.map((method) => (
@@ -321,9 +325,9 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
             </div>
             <div className="flex gap-3">
               <Button type="button" variant="secondary" onClick={() => setStep(1)}>
-                Back
+                {t("backCta")}
               </Button>
-              <Button type="submit">Continue</Button>
+              <Button type="submit">{t("continueCta")}</Button>
             </div>
           </form>
         )}
@@ -331,17 +335,17 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
         {step === 3 && (
           <div className="space-y-5 rounded-2xl border border-border p-6 lg:p-8">
             <h2 className="text-sm font-medium uppercase tracking-[0.2em]">
-              Order Summary
+              {t("stepOrderSummary")}
             </h2>
 
             <div className="flex gap-3">
               <Input
-                placeholder="Kupon kodu"
+                placeholder={t("couponPlaceholder")}
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
               />
               <Button type="button" variant="secondary" onClick={applyCoupon}>
-                Tətbiq et
+                {t("applyCouponCta")}
               </Button>
             </div>
             {couponError && (
@@ -349,13 +353,12 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
             )}
             {appliedCoupon && (
               <p className="text-sm text-accent">
-                Kupon tətbiq edildi: {appliedCoupon}
+                {t("couponApplied", { code: appliedCoupon })}
               </p>
             )}
 
             <p className="text-sm text-muted">
-              Ödəniş PASHA Bank inteqrasiyası ilə tamamlanacaq. Sifarişiniz
-              hazırda &quot;Awaiting Payment&quot; statusunda yaradılacaq.
+              {t("paymentNotice")}
             </p>
 
             {serverError && (
@@ -366,10 +369,10 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
 
             <div className="flex gap-3">
               <Button type="button" variant="secondary" onClick={() => setStep(2)}>
-                Back
+                {t("backCta")}
               </Button>
               <Button type="button" loading={loading} onClick={placeOrder}>
-                Place Order
+                {t("placeOrderCta")}
               </Button>
             </div>
           </div>
@@ -378,7 +381,7 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
 
       <aside className="h-fit rounded-3xl border border-border bg-secondary p-8">
         <h2 className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
-          Order Summary
+          {t("stepOrderSummary")}
         </h2>
         <ul className="mt-6 space-y-4">
           {items.map((item) => (
@@ -392,27 +395,27 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
         </ul>
         <dl className="mt-6 space-y-2 border-t border-border pt-4 text-sm">
           <div className="flex justify-between">
-            <dt className="text-muted">Subtotal</dt>
+            <dt className="text-muted">{tSummary("subtotal")}</dt>
             <dd>{formatAmount(totals?.subtotal ?? subtotal, currency)}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-muted">Discount</dt>
+            <dt className="text-muted">{tSummary("discount")}</dt>
             <dd>-{formatAmount(totals?.discount ?? 0, currency)}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-muted">Shipping</dt>
+            <dt className="text-muted">{tSummary("shipping")}</dt>
             <dd>
               {totals?.freeShipping
-                ? "Free"
+                ? tSummary("free")
                 : formatAmount(totals?.shipping ?? 0, currency)}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-muted">Tax</dt>
+            <dt className="text-muted">{tSummary("tax")}</dt>
             <dd>{formatAmount(totals?.tax ?? 0, currency)}</dd>
           </div>
           <div className="flex justify-between border-t border-border pt-3 font-medium text-primary">
-            <dt>Grand Total</dt>
+            <dt>{tSummary("total")}</dt>
             <dd>{formatAmount(totals?.total ?? subtotal, currency)}</dd>
           </div>
         </dl>

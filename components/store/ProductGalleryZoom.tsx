@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 import type { GalleryImage } from "@/components/ui/ProductGallery";
@@ -19,6 +20,7 @@ export default function ProductGalleryZoom({
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const imageRef = useRef<HTMLDivElement>(null);
   const activeImage = images[activeIndex] ?? images[0];
+  const t = useTranslations("ProductGallery");
 
   if (!activeImage) return null;
 
@@ -74,7 +76,7 @@ export default function ProductGalleryZoom({
               <button
                 key={image.id}
                 type="button"
-                aria-label={`Şəkil ${index + 1}`}
+                aria-label={t("thumbnailAria", { index: index + 1 })}
                 aria-current={isActive}
                 onClick={() => setActiveIndex(index)}
                 className={cn(

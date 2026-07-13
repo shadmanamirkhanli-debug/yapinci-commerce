@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -25,19 +26,22 @@ export default async function AccountOrderDetailPage({
 
   if (!order) notFound();
 
+  const t = await getTranslations("AccountOrderDetail");
+  const tSummary = await getTranslations("OrderSummary");
+
   return (
     <Container as="section" className="py-20 lg:py-28">
       <SectionHeader
-        eyebrow="Sifariş"
+        eyebrow={t("eyebrow")}
         title={order.orderNumber}
-        description={`Status: ${order.status}`}
+        description={`${t("statusLabel")}: ${order.status}`}
         className="mb-10"
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card variant="elevated" padding="lg" className="lg:col-span-2">
           <h2 className="text-sm font-medium uppercase tracking-[0.15em]">
-            Məhsullar
+            {tSummary("productsHeading")}
           </h2>
           <ul className="mt-6 space-y-4">
             {order.items.map((item) => (
@@ -60,34 +64,34 @@ export default async function AccountOrderDetailPage({
 
         <Card variant="filled" padding="lg">
           <h2 className="text-sm font-medium uppercase tracking-[0.15em]">
-            Invoice
+            {tSummary("invoiceHeading")}
           </h2>
           <dl className="mt-6 space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-muted">Subtotal</dt>
+              <dt className="text-muted">{tSummary("subtotal")}</dt>
               <dd>{formatAmount(order.subtotal, order.currency)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-muted">Discount</dt>
+              <dt className="text-muted">{tSummary("discount")}</dt>
               <dd>-{formatAmount(order.discount, order.currency)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-muted">Shipping</dt>
+              <dt className="text-muted">{tSummary("shipping")}</dt>
               <dd>{formatAmount(order.shipping, order.currency)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-muted">Tax</dt>
+              <dt className="text-muted">{tSummary("tax")}</dt>
               <dd>{formatAmount(order.tax, order.currency)}</dd>
             </div>
             <div className="flex justify-between border-t border-border pt-3 font-medium">
-              <dt>Total</dt>
+              <dt>{tSummary("total")}</dt>
               <dd>{formatAmount(order.total, order.currency)}</dd>
             </div>
           </dl>
 
           {order.trackingNumber && (
             <p className="mt-4 text-xs text-muted">
-              Tracking: {order.trackingNumber}
+              {tSummary("tracking", { number: order.trackingNumber })}
             </p>
           )}
 
@@ -96,13 +100,13 @@ export default async function AccountOrderDetailPage({
             variant="secondary"
             className="mt-6 w-full"
           >
-            Download Invoice PDF
+            {tSummary("downloadInvoice")}
           </Button>
           <Link
             href="/account/orders"
             className="mt-4 block text-center text-xs uppercase tracking-[0.15em] text-muted hover:text-accent"
           >
-            ← Sifarişlər
+            ← {t("backToOrders")}
           </Link>
         </Card>
       </div>

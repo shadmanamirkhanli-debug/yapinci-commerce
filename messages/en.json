@@ -20,6 +20,362 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "returns": "Return Policy",
-    "copyright": "All rights reserved"
+    "copyright": "All rights reserved",
+    "shopHeading": "Shop",
+    "companyHeading": "Company",
+    "contactHeading": "Contact",
+    "shopLinks": {
+      "allProducts": "All Products",
+      "newCollection": "New Collection",
+      "cart": "Cart"
+    },
+    "companyLinks": {
+      "about": "About Us",
+      "contact": "Contact",
+      "stores": "Stores"
+    }
+  },
+  "StoreLayout": {
+    "skipToContent": "Skip to main content"
+  },
+  "Home": {
+    "bestSellers": "Best Sellers",
+    "newArrivals": "New Arrivals",
+    "shopAllCta": "Shop All",
+    "viewAllCta": "View All"
+  },
+  "AccountLayout": {
+    "profile": "Profile",
+    "orders": "Orders"
+  },
+  "Account": {
+    "metaTitle": "My Account",
+    "eyebrow": "Account",
+    "title": "My Account",
+    "description": "Manage your personal information and orders",
+    "profileHeading": "Profile Information",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "roleLabel": "Role",
+    "ordersHeading": "Orders",
+    "ordersDescription": "View your order history and invoices.",
+    "myOrders": "My Orders",
+    "sessionHeading": "Session",
+    "sessionDescription": "Securely sign out of your account."
+  },
+  "AccountOrders": {
+    "metaTitle": "Order History",
+    "eyebrow": "Account",
+    "title": "Order History",
+    "description": "Track your past orders",
+    "empty": "You have no orders yet.",
+    "browseShop": "Go to shop",
+    "details": "Details"
+  },
+  "AccountOrderDetail": {
+    "eyebrow": "Order",
+    "statusLabel": "Status",
+    "backToOrders": "Orders"
+  },
+  "About": {
+    "metaDescription": "About Yapinci — a premium apparel brand inspired by Azerbaijani culture.",
+    "eyebrow": "About",
+    "title": "About Yapinci",
+    "paragraph1": "Yapinci is a premium apparel brand that honors Azerbaijan's rich cultural heritage while meeting the demands of the modern world. Every collection reflects a harmony of traditional motifs, natural fabrics, and minimalist aesthetics.",
+    "paragraph2": "We believe clothing is more than functional — it is an expression of identity and culture. Every piece is made with carefully selected fabrics, handcrafted details, and sustainable production principles.",
+    "paragraph3": "The Yapinci Commerce platform is the digital face of our brand — discover our collections, place your order, and enjoy a premium shopping experience.",
+    "officialInfoLabel": "Official Information",
+    "legalStatusLabel": "Legal status",
+    "legalStatusValue": "Sole Proprietor",
+    "voenLabel": "VÖEN",
+    "addressLabel": "Address",
+    "addressFull": "Baku, Surakhani district, Yeni Surakhani settlement, 14 Iyul street 6",
+    "addressShort": "Baku, Surakhani dist., Yeni Surakhani sett., 14 Iyul str. 6",
+    "ctaShop": "View Collection",
+    "valuesEyebrow": "Our Values",
+    "valuesTitle": "Why Yapinci",
+    "values": [
+      {
+        "title": "Quality",
+        "description": "Every piece is crafted to the highest standard, using natural fabrics and handcrafted details."
+      },
+      {
+        "title": "Culture",
+        "description": "Azerbaijan's rich cultural heritage is reinterpreted through a modern design language."
+      },
+      {
+        "title": "Sustainability",
+        "description": "We create garments built to last — timeless pieces beyond fleeting trends."
+      }
+    ]
+  },
+  "Cart": {
+    "metaDescription": "Your Yapinci shopping cart.",
+    "eyebrow": "Cart",
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty.",
+    "browseShop": "Go to Shop",
+    "decreaseAria": "Decrease",
+    "increaseAria": "Increase",
+    "remove": "Remove",
+    "summaryHeading": "Summary",
+    "checkoutCta": "Proceed to Checkout"
+  },
+  "Category": {
+    "notFoundTitle": "Category not found",
+    "metaDescription": "{name} — Yapinci premium collection",
+    "productCount": "{count, plural, one {# product} other {# products}} in this category"
+  },
+  "CheckoutConfirmation": {
+    "metaTitle": "Order Confirmation",
+    "metaDescription": "Your order has been successfully placed.",
+    "eyebrow": "Order Confirmed",
+    "heading": "Thank you!",
+    "message": "Your order <strong>{orderNumber}</strong> has been placed. Status: <strong>{status}</strong>.",
+    "totalLine": "Total: {amount}",
+    "paymentNotice": "Once the PASHA Bank integration is active, you will be redirected to the payment page at this step.",
+    "viewOrderCta": "Order Details"
+  },
+  "Checkout": {
+    "metaTitle": "Checkout",
+    "metaDescription": "Complete your Yapinci order.",
+    "eyebrow": "Checkout",
+    "title": "Checkout",
+    "description": "A secure 4-step ordering process"
+  },
+  "CheckoutWizard": {
+    "stepCustomerInfo": "Customer Information",
+    "stepShippingAddress": "Shipping Address",
+    "stepShippingMethod": "Shipping Method",
+    "stepOrderSummary": "Order Summary",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "continueCta": "Continue",
+    "countryLabel": "Country",
+    "cityLabel": "City",
+    "regionLabel": "Region",
+    "postalCodeLabel": "Postal Code",
+    "addressLabel": "Address",
+    "backCta": "Back",
+    "couponPlaceholder": "Coupon code",
+    "applyCouponCta": "Apply",
+    "couponApplied": "Coupon applied: {code}",
+    "paymentNotice": "Payment will be completed via the PASHA Bank integration. Your order will currently be created with the status \"Awaiting Payment\".",
+    "placeOrderCta": "Place Order",
+    "orderError": "Failed to create the order"
+  },
+  "Contact": {
+    "metaDescription": "Get in touch with Yapinci — questions, suggestions, and partnerships.",
+    "eyebrow": "Contact",
+    "title": "Contact Us",
+    "description": "Reach out to us with your questions, suggestions, or partnership inquiries.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address",
+    "hoursHeading": "Business Hours",
+    "hoursWeekday": "Monday – Friday: 10:00 AM – 7:00 PM",
+    "hoursSaturday": "Saturday: 11:00 AM – 5:00 PM",
+    "formHeading": "Send a Message",
+    "nameFieldLabel": "Full Name",
+    "namePlaceholder": "Enter your name",
+    "messageFieldLabel": "Message",
+    "messagePlaceholder": "Write your message...",
+    "submitCta": "Send"
+  },
+  "Privacy": {
+    "metaTitle": "Privacy Policy",
+    "metaDescription": "Yapinci's policy on the protection of user data.",
+    "eyebrow": "Legal",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: [date]",
+    "intro": "At Yapinci, we place great importance on protecting our customers' personal information. This document explains what information is collected and how it is used.",
+    "sections": [
+      {
+        "title": "1. Information We Collect",
+        "body": "The following information is collected during the ordering process:",
+        "list": ["Full name", "Email address", "Contact phone number (for delivery)", "Delivery address"]
+      },
+      {
+        "title": "2. Card Information",
+        "highlight": true,
+        "body": "Bank card details (card number, expiry date, CVV code) are never stored on our servers. Payments are processed directly through the secure system of a licensed payment provider, and Yapinci does not access or store this information."
+      },
+      {
+        "title": "3. Use of Information",
+        "body": "The information collected is used solely for the following purposes:",
+        "list": ["Order fulfillment and delivery", "Communicating with the customer", "Sending notifications about order status"]
+      },
+      {
+        "title": "4. Sharing Information with Third Parties",
+        "body": "Customer information is not shared with or sold to third parties, except for the courier service that carries out delivery."
+      },
+      {
+        "title": "5. Data Protection",
+        "body": "All personal information collected is protected by appropriate technical measures and retained only for as long as necessary."
+      },
+      {
+        "title": "6. User Rights",
+        "body": "Any customer may request the deletion or correction of their personal information by contacting info@yapinci.az."
+      }
+    ]
+  },
+  "Terms": {
+    "metaTitle": "Terms of Service",
+    "metaDescription": "Terms and rules for using the Yapinci website.",
+    "eyebrow": "Legal",
+    "title": "Terms and Conditions of Use",
+    "lastUpdated": "Last updated: [date]",
+    "intro": "These terms apply to all customers using the website operated by \"Yapinci\" (Sole Proprietor, VÖEN: 6701935972). By using the website, you are deemed to have accepted the following terms.",
+    "sections": [
+      {
+        "title": "1. Product Purchase",
+        "body": "All products (clothing and accessories) offered on our website can be purchased through the online order form. To place an order, the customer adds the product to the cart, enters delivery details, and completes payment. Once the order is confirmed, a confirmation notice is sent to the customer by email."
+      },
+      {
+        "title": "2. Delivery Terms",
+        "list": [
+          "Delivery is carried out via courier service.",
+          "Delivery time is 1-3 business days from order confirmation.",
+          "Delivery within Baku city costs 3 AZN.",
+          "Delivery is free for orders of 100 AZN or more.",
+          "Delivery time may vary depending on region or special circumstances."
+        ]
+      },
+      {
+        "title": "3. Payment",
+        "body": "Payments are made on the website via bank card or other available payment methods. All payments are processed through a secure payment system."
+      },
+      {
+        "title": "4. Pricing",
+        "body": "All prices shown on the website are in Azerbaijani manat (AZN) and include applicable taxes. Prices may be changed without prior notice."
+      },
+      {
+        "title": "5. Limitation of Liability",
+        "body": "Yapinci is not liable for losses arising from technical failures, interruptions in third-party services, or the user's own errors."
+      }
+    ]
+  },
+  "Return": {
+    "metaTitle": "Return and Cancellation Policy",
+    "metaDescription": "Terms for returning Yapinci products and cancelling orders.",
+    "eyebrow": "Legal",
+    "title": "Return and Cancellation Policy",
+    "lastUpdated": "Last updated: [date]",
+    "sections": [
+      {
+        "title": "1. Return Conditions",
+        "list": [
+          "Products may be returned within 14 days of the delivery date.",
+          "Returned products must be unused, in their original tags and packaging, and in the condition they were sold.",
+          "To initiate a return, customers must contact us at info@yapinci.az or +994 50 869 47 74."
+        ]
+      },
+      {
+        "title": "2. Return Process",
+        "body": "Once a return request is approved, the product is sent back by the customer or collected by courier. After inspection, the refund is issued within 5-7 business days."
+      },
+      {
+        "title": "3. Order Cancellation",
+        "body": "An order may be cancelled by the customer before it is handed over to the courier (i.e., before the delivery process begins). Once an order has been handed over to the courier, it can no longer be cancelled and the product can only be returned under the return policy."
+      },
+      {
+        "title": "4. Exceptions",
+        "body": "Custom-made products (discounted or special orders) and products used for hygiene reasons are not eligible for return."
+      }
+    ]
+  },
+  "Product": {
+    "notFoundTitle": "Product not found"
+  },
+  "ProductDetail": {
+    "outOfStock": "This variant is currently out of stock.",
+    "addedToCart": "Product added to cart.",
+    "removedFromWishlist": "Removed from wishlist.",
+    "addedToWishlist": "Added to wishlist.",
+    "reviewsCount": "{count, plural, one {(# review)} other {(# reviews)}}",
+    "sizeLabel": "Size",
+    "sizeAria": "Size {size}",
+    "colorLabel": "Color",
+    "colorAria": "Color {color}",
+    "quantityLabel": "Quantity",
+    "decreaseAria": "Decrease quantity",
+    "increaseAria": "Increase quantity",
+    "availableCount": "{count, plural, one {# item in stock} other {# items in stock}}",
+    "addToCartCta": "Add to Cart",
+    "wishlistAddCta": "Add to Wishlist",
+    "wishlistAdded": "In Wishlist",
+    "brandLabel": "Brand",
+    "collectionLabel": "Collection",
+    "aboutHeading": "About the Product",
+    "shippingInfoHeading": "Shipping Information",
+    "shippingBaku": "1-2 business days within Baku",
+    "shippingCountry": "3-5 business days across Azerbaijan",
+    "freeShippingNote": "Free shipping on orders over 100 AZN",
+    "returnWindow": "Returns accepted within 14 days",
+    "reviewsHeading": "Reviews",
+    "relatedHeading": "Related Products"
+  },
+  "ProductGallery": {
+    "thumbnailAria": "Image {index}"
+  },
+  "RecentlyViewed": {
+    "eyebrow": "History",
+    "title": "Recently Viewed"
+  },
+  "Search": {
+    "metaDescription": "Search Yapinci products",
+    "resultsForQuery": "Results for \"{query}\"",
+    "resultsTitle": "Search Results",
+    "resultsCount": "{count, plural, one {# product found} other {# products found}}",
+    "prompt": "Enter the product you're looking for"
+  },
+  "Shop": {
+    "metaDescription": "Yapinci premium apparel collection — all products."
+  },
+  "ShopExperience": {
+    "defaultTitle": "Full Collection",
+    "defaultDescription": "Premium quality, minimalist design, and inspiration drawn from Azerbaijani culture.",
+    "eyebrow": "Shop",
+    "searchHeading": "Search",
+    "searchPlaceholder": "Search products...",
+    "categoryHeading": "Category",
+    "all": "All",
+    "priceHeading": "Price",
+    "minPlaceholder": "Min",
+    "maxPlaceholder": "Max",
+    "colorHeading": "Color",
+    "sizeHeading": "Size",
+    "materialHeading": "Material",
+    "inStockOnly": "In stock only",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
+    "sortName": "Name",
+    "viewGrid": "Grid",
+    "viewList": "List",
+    "resultsCount": "{count, plural, one {# product} other {# products}}",
+    "updating": "Updating...",
+    "noResults": "No matching products found.",
+    "clearFilters": "Clear filters",
+    "viewCta": "View"
+  },
+  "NavbarAuth": {
+    "login": "Sign In",
+    "account": "Account",
+    "admin": "Admin"
+  },
+  "OrderSummary": {
+    "productsHeading": "Products",
+    "invoiceHeading": "Invoice",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "free": "Free",
+    "tracking": "Tracking number: {number}",
+    "downloadInvoice": "Download Invoice (PDF)"
   }
 }

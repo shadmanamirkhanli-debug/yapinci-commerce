@@ -1,10 +1,29 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import YapinciLogo from "@/components/brand/YapinciLogo";
-import { brand, footerLinks, navLinks } from "@/lib/constants";
+import { brand, navLinks } from "@/lib/constants";
 import { getStoreSettings } from "@/lib/settings";
 
 export default async function Footer() {
   const settings = await getStoreSettings();
+  const t = await getTranslations("Footer");
+  const tNav = await getTranslations("Navigation");
+
+  const shopLinks = [
+    { key: "allProducts", href: "/shop", label: t("shopLinks.allProducts") },
+    { key: "newCollection", href: "/shop", label: t("shopLinks.newCollection") },
+    { key: "cart", href: "/cart", label: t("shopLinks.cart") },
+  ];
+  const companyLinks = [
+    { key: "about", href: "/about", label: t("companyLinks.about") },
+    { key: "contact", href: "/contact", label: t("companyLinks.contact") },
+    { key: "stores", href: "/contact", label: t("companyLinks.stores") },
+  ];
+  const legalLinks = [
+    { key: "terms", href: "/terms", label: t("terms") },
+    { key: "privacy", href: "/privacy", label: t("privacy") },
+    { key: "returns", href: "/return", label: t("returns") },
+  ];
 
   const socialLinks = [
     settings.instagram && { label: "Instagram", href: `https://instagram.com/${settings.instagram.replace(/^@/, "")}` },
@@ -33,10 +52,10 @@ export default async function Footer() {
           </div>
 
           <div className="lg:col-span-2">
-            <p className="text-eyebrow text-white/50">Shop</p>
+            <p className="text-eyebrow text-white/50">{t("shopHeading")}</p>
             <ul className="mt-6 space-y-3">
-              {footerLinks.shop.map((link) => (
-                <li key={link.label}>
+              {shopLinks.map((link) => (
+                <li key={link.key}>
                   <Link href={link.href} className="text-sm text-white/65 transition-colors duration-300 hover:text-accent">
                     {link.label}
                   </Link>
@@ -46,10 +65,10 @@ export default async function Footer() {
           </div>
 
           <div className="lg:col-span-2">
-            <p className="text-eyebrow text-white/50">Company</p>
+            <p className="text-eyebrow text-white/50">{t("companyHeading")}</p>
             <ul className="mt-6 space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
+              {companyLinks.map((link) => (
+                <li key={link.key}>
                   <Link href={link.href} className="text-sm text-white/65 transition-colors duration-300 hover:text-accent">
                     {link.label}
                   </Link>
@@ -59,7 +78,7 @@ export default async function Footer() {
           </div>
 
           <div className="lg:col-span-3">
-            <p className="text-eyebrow text-white/50">Contact</p>
+            <p className="text-eyebrow text-white/50">{t("contactHeading")}</p>
             <ul className="mt-6 space-y-3 text-sm text-white/65">
               <li>
                 <a href={`mailto:${settings.email}`} className="transition-colors duration-300 hover:text-accent">
@@ -77,15 +96,15 @@ export default async function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 sm:flex-row">
-          <p className="text-xs text-white/45">© {new Date().getFullYear()} {settings.storeName}. All rights reserved.</p>
+          <p className="text-xs text-white/45">© {new Date().getFullYear()} {settings.storeName}. {t("copyright")}.</p>
           <div className="flex flex-wrap justify-center gap-6">
             {navLinks.map((link) => (
-              <Link key={link.label} href={link.href} className="text-[10px] tracking-[0.15em] uppercase text-white/45 transition-colors duration-300 hover:text-accent">
-                {link.label}
+              <Link key={link.key} href={link.href} className="text-[10px] tracking-[0.15em] uppercase text-white/45 transition-colors duration-300 hover:text-accent">
+                {tNav(link.key)}
               </Link>
             ))}
-            {footerLinks.legal.map((link) => (
-              <Link key={link.label} href={link.href} className="text-[10px] tracking-[0.15em] uppercase text-white/45 transition-colors duration-300 hover:text-accent">
+            {legalLinks.map((link) => (
+              <Link key={link.key} href={link.href} className="text-[10px] tracking-[0.15em] uppercase text-white/45 transition-colors duration-300 hover:text-accent">
                 {link.label}
               </Link>
             ))}

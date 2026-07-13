@@ -20,6 +20,362 @@
     "privacy": "Məxfilik siyasəti",
     "terms": "İstifadəçi şərtləri",
     "returns": "Qaytarılma siyasəti",
-    "copyright": "Bütün hüquqlar qorunur"
+    "copyright": "Bütün hüquqlar qorunur",
+    "shopHeading": "Mağaza",
+    "companyHeading": "Şirkət",
+    "contactHeading": "Əlaqə",
+    "shopLinks": {
+      "allProducts": "Bütün Məhsullar",
+      "newCollection": "Yeni Kolleksiya",
+      "cart": "Səbət"
+    },
+    "companyLinks": {
+      "about": "Haqqımızda",
+      "contact": "Əlaqə",
+      "stores": "Mağazalar"
+    }
+  },
+  "StoreLayout": {
+    "skipToContent": "Əsas məzmuna keç"
+  },
+  "Home": {
+    "bestSellers": "Ən Çox Satılanlar",
+    "newArrivals": "Yeni Gələnlər",
+    "shopAllCta": "Hamısına Bax",
+    "viewAllCta": "Hamısına Bax"
+  },
+  "AccountLayout": {
+    "profile": "Profil",
+    "orders": "Sifarişlər"
+  },
+  "Account": {
+    "metaTitle": "Hesabım",
+    "eyebrow": "Hesab",
+    "title": "Hesabım",
+    "description": "Şəxsi məlumatlarınızı və sifarişlərinizi idarə edin",
+    "profileHeading": "Profil Məlumatları",
+    "nameLabel": "Ad",
+    "emailLabel": "E-poçt",
+    "roleLabel": "Rol",
+    "ordersHeading": "Sifarişlər",
+    "ordersDescription": "Sifariş tarixçənizi və fakturaları görüntüləyin.",
+    "myOrders": "Sifarişlərim",
+    "sessionHeading": "Sessiya",
+    "sessionDescription": "Hesabınızdan təhlükəsiz çıxış edin."
+  },
+  "AccountOrders": {
+    "metaTitle": "Sifariş Tarixçəsi",
+    "eyebrow": "Hesab",
+    "title": "Sifariş Tarixçəsi",
+    "description": "Keçmiş sifarişlərinizi izləyin",
+    "empty": "Hələ sifarişiniz yoxdur.",
+    "browseShop": "Mağazaya keç",
+    "details": "Detallar"
+  },
+  "AccountOrderDetail": {
+    "eyebrow": "Sifariş",
+    "statusLabel": "Status",
+    "backToOrders": "Sifarişlər"
+  },
+  "About": {
+    "metaDescription": "Yapinci haqqında — Azərbaycan mədəniyyətindən ilham alan premium geyim brendi.",
+    "eyebrow": "Haqqımızda",
+    "title": "Yapinci Haqqında",
+    "paragraph1": "Yapinci — Azərbaycanın zəngin mədəni irsinə hörmət edən, müasir dünyanın tələblərinə cavab verən premium geyim brendidir. Hər kolleksiya ənənəvi naxışlar, təbii parçalar və minimalist estetikanın harmoniyasını əks etdirir.",
+    "paragraph2": "Biz inanırıq ki, geyim yalnız funksional deyil — o, kimliyin və mədəniyyətin ifadəsidir. Hər parça diqqətlə seçilmiş parçalar, əl işi detallar və davamlı istehsal prinsipləri ilə hazırlanır.",
+    "paragraph3": "Yapinci Commerce platforması brendimizin rəqəmsal üzüdür — burada kolleksiyalarımızı kəşf edə, sifariş verə və premium alış-veriş təcrübəsindən həzz ala bilərsiniz.",
+    "officialInfoLabel": "Rəsmi Məlumatlar",
+    "legalStatusLabel": "Hüquqi status",
+    "legalStatusValue": "Fərdi Sahibkar",
+    "voenLabel": "VÖEN",
+    "addressLabel": "Ünvan",
+    "addressFull": "Bakı şəhəri, Suraxanı rayonu, Yeni Suraxanı qəsəbəsi, 14 iyul küçəsi 6",
+    "addressShort": "Bakı ş., Suraxanı r., Yeni Suraxanı q., 14 iyul küç. 6",
+    "ctaShop": "Kolleksiyaya Bax",
+    "valuesEyebrow": "Dəyərlərimiz",
+    "valuesTitle": "Nə Üçün Yapinci",
+    "values": [
+      {
+        "title": "Keyfiyyət",
+        "description": "Hər parça ən yüksək standartlarda, təbii parçalardan və əl işi detallarla hazırlanır."
+      },
+      {
+        "title": "Mədəniyyət",
+        "description": "Azərbaycanın zəngin mədəni irsi müasir dizayn dilində yenidən yorumlanır."
+      },
+      {
+        "title": "Davamlılıq",
+        "description": "Uzunömürlü geyim yaradırıq — trendlərdən kənar, zamansız parçalar."
+      }
+    ]
+  },
+  "Cart": {
+    "metaDescription": "Yapinci alış-veriş səbəti.",
+    "eyebrow": "Səbət",
+    "title": "Alış-veriş Səbəti",
+    "empty": "Səbətiniz boşdur.",
+    "browseShop": "Mağazaya Keç",
+    "decreaseAria": "Azalt",
+    "increaseAria": "Artır",
+    "remove": "Sil",
+    "summaryHeading": "Xülasə",
+    "checkoutCta": "Ödənişə Keç"
+  },
+  "Category": {
+    "notFoundTitle": "Kateqoriya tapılmadı",
+    "metaDescription": "{name} — Yapinci premium kolleksiya",
+    "productCount": "{count} məhsul bu kateqoriyada"
+  },
+  "CheckoutConfirmation": {
+    "metaTitle": "Sifariş Təsdiqi",
+    "metaDescription": "Sifarişiniz uğurla qeydə alındı.",
+    "eyebrow": "Sifariş Təsdiqləndi",
+    "heading": "Təşəkkür edirik!",
+    "message": "Sifarişiniz <strong>{orderNumber}</strong> qeydə alındı. Status: <strong>{status}</strong>.",
+    "totalLine": "Cəmi: {amount}",
+    "paymentNotice": "Ödəniş PASHA Bank inteqrasiyası aktiv olduqda bu addımda ödəniş səhifəsinə yönləndiriləcəksiniz.",
+    "viewOrderCta": "Sifariş Detalları"
+  },
+  "Checkout": {
+    "metaTitle": "Ödəniş",
+    "metaDescription": "Yapinci sifarişinizi tamamlayın.",
+    "eyebrow": "Ödəniş",
+    "title": "Sifarişin Tamamlanması",
+    "description": "4 addımlı təhlükəsiz sifariş prosesi"
+  },
+  "CheckoutWizard": {
+    "stepCustomerInfo": "Müştəri Məlumatları",
+    "stepShippingAddress": "Çatdırılma Ünvanı",
+    "stepShippingMethod": "Çatdırılma Üsulu",
+    "stepOrderSummary": "Sifariş Xülasəsi",
+    "firstNameLabel": "Ad",
+    "lastNameLabel": "Soyad",
+    "emailLabel": "E-poçt",
+    "phoneLabel": "Telefon",
+    "continueCta": "Davam et",
+    "countryLabel": "Ölkə",
+    "cityLabel": "Şəhər",
+    "regionLabel": "Region",
+    "postalCodeLabel": "Poçt indeksi",
+    "addressLabel": "Ünvan",
+    "backCta": "Geri",
+    "couponPlaceholder": "Kupon kodu",
+    "applyCouponCta": "Tətbiq et",
+    "couponApplied": "Kupon tətbiq edildi: {code}",
+    "paymentNotice": "Ödəniş PASHA Bank inteqrasiyası ilə tamamlanacaq. Sifarişiniz hazırda \"Awaiting Payment\" statusunda yaradılacaq.",
+    "placeOrderCta": "Sifarişi Tamamla",
+    "orderError": "Sifariş yaradıla bilmədi"
+  },
+  "Contact": {
+    "metaDescription": "Yapinci ilə əlaqə saxlayın — suallar, təkliflər və əməkdaşlıq.",
+    "eyebrow": "Əlaqə",
+    "title": "Bizimlə Əlaqə",
+    "description": "Suallarınız, təklifləriniz və ya əməkdaşlıq üçün bizimlə əlaqə saxlayın.",
+    "emailLabel": "E-poçt",
+    "phoneLabel": "Telefon",
+    "addressLabel": "Ünvan",
+    "hoursHeading": "İş Saatları",
+    "hoursWeekday": "Bazar ertəsi – Cümə: 10:00 – 19:00",
+    "hoursSaturday": "Şənbə: 11:00 – 17:00",
+    "formHeading": "Mesaj Göndərin",
+    "nameFieldLabel": "Ad, Soyad",
+    "namePlaceholder": "Adınızı daxil edin",
+    "messageFieldLabel": "Mesaj",
+    "messagePlaceholder": "Mesajınızı yazın...",
+    "submitCta": "Göndər"
+  },
+  "Privacy": {
+    "metaTitle": "Məxfilik Siyasəti",
+    "metaDescription": "Yapinci saytında istifadəçi məlumatlarının qorunması siyasəti.",
+    "eyebrow": "Hüquqi",
+    "title": "Məxfilik Siyasəti",
+    "lastUpdated": "Son yenilənmə: [tarix]",
+    "intro": "Yapinci olaraq müştərilərimizin şəxsi məlumatlarının qorunmasına böyük önəm veririk. Bu sənəd hansı məlumatların toplandığını və necə istifadə olunduğunu izah edir.",
+    "sections": [
+      {
+        "title": "1. Toplanan məlumatlar",
+        "body": "Sifariş prosesi zamanı aşağıdakı məlumatlar toplanır:",
+        "list": ["Ad və soyad", "Elektron poçt ünvanı", "Əlaqə telefon nömrəsi (çatdırılma üçün)", "Çatdırılma ünvanı"]
+      },
+      {
+        "title": "2. Kart məlumatları",
+        "highlight": true,
+        "body": "Bank kartı məlumatları (kart nömrəsi, son istifadə tarixi, CVV kodu) heç bir halda saytımızın serverlərində saxlanılmır. Ödənişlər lisenziyalı ödəniş provayderinin təhlükəsiz sistemi vasitəsilə birbaşa emal olunur və Yapinci bu məlumatlara çıxış əldə etmir və saxlamır."
+      },
+      {
+        "title": "3. Məlumatların istifadəsi",
+        "body": "Toplanan məlumatlar yalnız aşağıdakı məqsədlər üçün istifadə olunur:",
+        "list": ["Sifarişin icrası və çatdırılması", "Müştəri ilə əlaqə saxlanılması", "Sifariş statusu haqqında bildirişlərin göndərilməsi"]
+      },
+      {
+        "title": "4. Məlumatların üçüncü tərəflərlə paylaşılması",
+        "body": "Müştəri məlumatları, çatdırılma prosesini həyata keçirən kuryer xidməti istisna olmaqla, üçüncü tərəflərlə paylaşılmır və ya satılmır."
+      },
+      {
+        "title": "5. Məlumatların qorunması",
+        "body": "Toplanan bütün şəxsi məlumatlar müvafiq texniki tədbirlərlə qorunur və yalnız məqsədəuyğun müddət ərzində saxlanılır."
+      },
+      {
+        "title": "6. İstifadəçinin hüquqları",
+        "body": "İstənilən müştəri öz şəxsi məlumatlarının silinməsini və ya düzəldilməsini info@yapinci.az ünvanına müraciət edərək tələb edə bilər."
+      }
+    ]
+  },
+  "Terms": {
+    "metaTitle": "İstifadəçi Şərtləri",
+    "metaDescription": "Yapinci saytının istifadə şərtləri və qaydaları.",
+    "eyebrow": "Hüquqi",
+    "title": "İstifadəçi Şərtləri və Qaydaları",
+    "lastUpdated": "Son yenilənmə: [tarix]",
+    "intro": "Bu şərtlər \"Yapinci\" (Fərdi Sahibkar, VÖEN: 6701935972) tərəfindən idarə olunan saytdan istifadə edən bütün müştərilərə şamil edilir. Saytdan istifadə etməklə siz aşağıdakı şərtləri qəbul etmiş sayılırsınız.",
+    "sections": [
+      {
+        "title": "1. Məhsulun əldə olunması",
+        "body": "Saytımızda təqdim olunan bütün məhsullar (geyim və aksesuarlar) onlayn sifariş formu vasitəsilə əldə edilə bilər. Sifariş vermək üçün istifadəçi məhsulu səbətə əlavə edir, çatdırılma məlumatlarını daxil edir və ödənişi tamamlayır. Sifariş təsdiqləndikdən sonra müştəriyə e-mail vasitəsilə təsdiq bildirişi göndərilir."
+      },
+      {
+        "title": "2. Çatdırılma şərtləri",
+        "list": [
+          "Çatdırılma kuryer xidməti vasitəsilə həyata keçirilir.",
+          "Çatdırılma müddəti sifarişin təsdiqindən etibarən 1-3 iş günüdür.",
+          "Bakı şəhəri daxilində çatdırılma haqqı 3 AZN-dir.",
+          "100 AZN və ondan yuxarı məbləğli sifarişlərdə çatdırılma pulsuzdur.",
+          "Çatdırılma vaxtı bölgədən və ya xüsusi hallardan asılı olaraq dəyişə bilər."
+        ]
+      },
+      {
+        "title": "3. Ödəniş",
+        "body": "Ödənişlər sayt üzərindən bank kartı vasitəsilə və ya digər mövcud ödəniş üsulları ilə həyata keçirilir. Bütün ödənişlər təhlükəsiz ödəniş sistemi vasitəsilə emal olunur."
+      },
+      {
+        "title": "4. Qiymətlər",
+        "body": "Saytda göstərilən bütün qiymətlər Azərbaycan manatı (AZN) ilədir və mövcud vergiləri əhatə edir. Qiymətlər əvvəlcədən xəbərdarlıq edilmədən dəyişdirilə bilər."
+      },
+      {
+        "title": "5. Məsuliyyətin məhdudlaşdırılması",
+        "body": "Yapinci texniki nasazlıqlar, üçüncü tərəf xidmətlərindəki fasilələr və ya istifadəçinin öz səhvlərindən yaranan itkilərə görə məsuliyyət daşımır."
+      }
+    ]
+  },
+  "Return": {
+    "metaTitle": "Qaytarılma və Ləğv Şərtləri",
+    "metaDescription": "Yapinci məhsullarının qaytarılması və sifarişin ləğvi şərtləri.",
+    "eyebrow": "Hüquqi",
+    "title": "Qaytarılma və Ləğv Şərtləri",
+    "lastUpdated": "Son yenilənmə: [tarix]",
+    "sections": [
+      {
+        "title": "1. Qaytarılma şərtləri",
+        "list": [
+          "Məhsul, çatdırılma tarixindən etibarən 14 gün ərzində geri qaytarıla bilər.",
+          "Qaytarılan məhsul istifadə olunmamış, orijinal etiket və qablaşdırmada, satış zamanı olduğu vəziyyətdə olmalıdır.",
+          "Qaytarılma üçün müştəri info@yapinci.az və ya +994 50 869 47 74 nömrəsi ilə əlaqə saxlamalıdır."
+        ]
+      },
+      {
+        "title": "2. Qaytarılma prosesi",
+        "body": "Müraciət təsdiqləndikdən sonra məhsul müştəri tərəfindən geri göndərilir və ya kuryer vasitəsilə geri götürülür. Məhsul yoxlanıldıqdan sonra ödəniş 5-7 iş günü ərzində geri qaytarılır."
+      },
+      {
+        "title": "3. Sifarişin ləğvi",
+        "body": "Sifariş, kuryerə təhvil verilənə qədər (yəni çatdırılma prosesi başlamazdan əvvəl) müştəri tərəfindən ləğv edilə bilər. Sifariş artıq kuryerə təhvil verilibsə, ləğv əməliyyatı aparıla bilmir və məhsul yalnız qaytarılma qaydaları əsasında geri qaytarıla bilər."
+      },
+      {
+        "title": "4. İstisnalar",
+        "body": "Fərdi sifariş (endirim, xüsusi sifariş) əsasında hazırlanmış məhsullar, gigiyenik səbəblərdən istifadə olunmuş məhsullar qaytarılma hüququna tabe deyil."
+      }
+    ]
+  },
+  "Product": {
+    "notFoundTitle": "Məhsul tapılmadı"
+  },
+  "ProductDetail": {
+    "outOfStock": "Bu variant hazırda stokda deyil.",
+    "addedToCart": "Məhsul səbətə əlavə edildi.",
+    "removedFromWishlist": "Wishlist-dən silindi.",
+    "addedToWishlist": "Wishlist-ə əlavə edildi.",
+    "reviewsCount": "({count} rəy)",
+    "sizeLabel": "Ölçü",
+    "sizeAria": "Ölçü {size}",
+    "colorLabel": "Rəng",
+    "colorAria": "Rəng {color}",
+    "quantityLabel": "Miqdar",
+    "decreaseAria": "Miqdarı azalt",
+    "increaseAria": "Miqdarı artır",
+    "availableCount": "{count} ədəd mövcuddur",
+    "addToCartCta": "Səbətə Əlavə Et",
+    "wishlistAddCta": "Wishlist-ə Əlavə Et",
+    "wishlistAdded": "Wishlist-də",
+    "brandLabel": "Brend",
+    "collectionLabel": "Kolleksiya",
+    "aboutHeading": "Məhsul Haqqında",
+    "shippingInfoHeading": "Çatdırılma Məlumatı",
+    "shippingBaku": "Bakı daxilində 1-2 iş günü",
+    "shippingCountry": "Azərbaycan üzrə 3-5 iş günü",
+    "freeShippingNote": "100 AZN üzərində pulsuz çatdırılma",
+    "returnWindow": "14 gün ərzində geri qaytarma",
+    "reviewsHeading": "Rəylər",
+    "relatedHeading": "Əlaqəli Məhsullar"
+  },
+  "ProductGallery": {
+    "thumbnailAria": "Şəkil {index}"
+  },
+  "RecentlyViewed": {
+    "eyebrow": "Tarixçə",
+    "title": "Son Baxılanlar"
+  },
+  "Search": {
+    "metaDescription": "Yapinci məhsul axtarışı",
+    "resultsForQuery": "\"{query}\" üçün nəticələr",
+    "resultsTitle": "Axtarış Nəticələri",
+    "resultsCount": "{count} məhsul tapıldı",
+    "prompt": "Axtarmaq istədiyiniz məhsulu daxil edin"
+  },
+  "Shop": {
+    "metaDescription": "Yapinci premium geyim kolleksiyası — bütün məhsullar."
+  },
+  "ShopExperience": {
+    "defaultTitle": "Bütün Kolleksiya",
+    "defaultDescription": "Premium keyfiyyət, minimalist dizayn və Azərbaycan mədəniyyətindən ilham.",
+    "eyebrow": "Mağaza",
+    "searchHeading": "Axtarış",
+    "searchPlaceholder": "Məhsul axtar...",
+    "categoryHeading": "Kateqoriya",
+    "all": "Hamısı",
+    "priceHeading": "Qiymət",
+    "minPlaceholder": "Min",
+    "maxPlaceholder": "Max",
+    "colorHeading": "Rəng",
+    "sizeHeading": "Ölçü",
+    "materialHeading": "Material",
+    "inStockOnly": "Yalnız stokda olanlar",
+    "sortNewest": "Ən yeni",
+    "sortPriceAsc": "Qiymət: Aşağıdan yuxarı",
+    "sortPriceDesc": "Qiymət: Yuxarıdan aşağı",
+    "sortName": "Ad",
+    "viewGrid": "Şəbəkə",
+    "viewList": "Siyahı",
+    "resultsCount": "{count} məhsul",
+    "updating": "Yenilənir...",
+    "noResults": "Uyğun məhsul tapılmadı.",
+    "clearFilters": "Filtrləri təmizlə",
+    "viewCta": "Bax"
+  },
+  "NavbarAuth": {
+    "login": "Daxil Ol",
+    "account": "Hesab",
+    "admin": "Admin"
+  },
+  "OrderSummary": {
+    "productsHeading": "Məhsullar",
+    "invoiceHeading": "Faktura",
+    "subtotal": "Ara cəm",
+    "discount": "Endirim",
+    "shipping": "Çatdırılma",
+    "tax": "Vergi",
+    "total": "Cəmi",
+    "free": "Pulsuz",
+    "tracking": "İzləmə nömrəsi: {number}",
+    "downloadInvoice": "Fakturanı Yüklə (PDF)"
   }
 }

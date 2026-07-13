@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Spinner from "@/components/ui/Spinner";
 import ShopExperience from "@/components/store/ShopExperience";
@@ -11,10 +12,13 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Shop",
-  description: "Yapinci premium geyim kolleksiyası — bütün məhsullar.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Shop");
+  return {
+    title: "Shop",
+    description: t("metaDescription"),
+  };
+}
 
 type ShopPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Spinner from "@/components/ui/Spinner";
 import ShopExperience from "@/components/store/ShopExperience";
@@ -11,10 +12,13 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Search",
-  description: "Yapinci məhsul axtarışı",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Search");
+  return {
+    title: "Search",
+    description: t("metaDescription"),
+  };
+}
 
 type SearchPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -24,6 +28,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const query = typeof params.q === "string" ? params.q : "";
   const filters = parseProductFilters(params);
+  const t = await getTranslations("Search");
   const [result, filterOptions] = await Promise.all([
     getStoreProducts(filters),
     getFilterOptions(),
@@ -43,11 +48,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           pagination={result.pagination}
           filterOptions={filterOptions}
           basePath="/search"
-          title={query ? `"${query}" üçün nəticələr` : "Axtarış Nəticələri"}
+          title={query ? t("resultsForQuery", { query }) : t("resultsTitle")}
           description={
             query
-              ? `${result.pagination.total} məhsul tapıldı`
-              : "Axtarmaq istədiyiniz məhsulu daxil edin"
+              ? t("resultsCount", { count: result.pagination.total })
+              : t("prompt")
           }
         />
       </Suspense>

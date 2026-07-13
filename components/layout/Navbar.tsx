@@ -79,7 +79,7 @@ export default function Navbar() {
 
             return (
               <Link
-                key={link.label}
+                key={link.key}
                 href={link.href}
                 className={cn(
                   "relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300",
@@ -92,7 +92,7 @@ export default function Navbar() {
                       : "text-muted hover:text-primary"
                 )}
               >
-                {link.label}
+                {t(link.key)}
                 {isActive && (
                   <span
                     className={cn(
@@ -237,7 +237,7 @@ export default function Navbar() {
 
             return (
               <Link
-                key={link.label}
+                key={link.key}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
@@ -251,7 +251,7 @@ export default function Navbar() {
                       : "text-muted hover:bg-secondary hover:text-primary"
                 )}
               >
-                {link.label}
+                {t(link.key)}
               </Link>
             );
           })}

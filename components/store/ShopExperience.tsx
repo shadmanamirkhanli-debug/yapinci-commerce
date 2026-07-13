@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductGrid from "@/components/ui/ProductGrid";
 import Button from "@/components/ui/Button";
@@ -29,13 +30,16 @@ export default function ShopExperience({
   pagination,
   filterOptions,
   basePath = "/shop",
-  title = "Bütün Kolleksiya",
-  description = "Premium keyfiyyət, minimalist dizayn və Azərbaycan mədəniyyətindən ilham.",
+  title,
+  description,
 }: ShopExperienceProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [view, setView] = useState<"grid" | "list">("grid");
+  const t = useTranslations("ShopExperience");
+  const resolvedTitle = title ?? t("defaultTitle");
+  const resolvedDescription = description ?? t("defaultDescription");
 
   const currentFilters = useMemo(() => {
     const get = (key: string) => searchParams.get(key) ?? "";
@@ -86,7 +90,7 @@ export default function ShopExperience({
       <aside className="space-y-8">
         <div>
           <h2 className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
-            Axtarış
+            {t("searchHeading")}
           </h2>
           <form
             className="mt-3"
@@ -99,12 +103,12 @@ export default function ShopExperience({
             <Input
               name="q"
               defaultValue={currentFilters.q}
-              placeholder="Məhsul axtar..."
+              placeholder={t("searchPlaceholder")}
             />
           </form>
         </div>
 
-        <FilterGroup title="Kateqoriya">
+        <FilterGroup title={t("categoryHeading")}>
           <button
             type="button"
             onClick={() => updateParams({ category: null })}
@@ -115,7 +119,7 @@ export default function ShopExperience({
                 : "text-muted hover:bg-secondary"
             )}
           >
-            Hamısı
+            {t("all")}
           </button>
           {filterOptions.categories.map((category) => (
             <button
@@ -134,11 +138,11 @@ export default function ShopExperience({
           ))}
         </FilterGroup>
 
-        <FilterGroup title="Qiymət">
+        <FilterGroup title={t("priceHeading")}>
           <div className="grid grid-cols-2 gap-2">
             <Input
               type="number"
-              placeholder="Min"
+              placeholder={t("minPlaceholder")}
               defaultValue={currentFilters.minPrice}
               onBlur={(event) =>
                 updateParams({ minPrice: event.target.value || null })
@@ -146,7 +150,7 @@ export default function ShopExperience({
             />
             <Input
               type="number"
-              placeholder="Max"
+              placeholder={t("maxPlaceholder")}
               defaultValue={currentFilters.maxPrice}
               onBlur={(event) =>
                 updateParams({ maxPrice: event.target.value || null })
@@ -156,7 +160,7 @@ export default function ShopExperience({
         </FilterGroup>
 
         {filterOptions.colors.length > 0 && (
-          <FilterGroup title="Rəng">
+          <FilterGroup title={t("colorHeading")}>
             {filterOptions.colors.map((color) => (
               <label key={color} className="flex items-center gap-2 text-sm text-muted">
                 <input
@@ -171,7 +175,7 @@ export default function ShopExperience({
         )}
 
         {filterOptions.sizes.length > 0 && (
-          <FilterGroup title="Ölçü">
+          <FilterGroup title={t("sizeHeading")}>
             <div className="flex flex-wrap gap-2">
               {filterOptions.sizes.map((size) => (
                 <button
@@ -193,7 +197,7 @@ export default function ShopExperience({
         )}
 
         {filterOptions.materials.length > 0 && (
-          <FilterGroup title="Material">
+          <FilterGroup title={t("materialHeading")}>
             {filterOptions.materials.map((material) => (
               <label key={material} className="flex items-center gap-2 text-sm text-muted">
                 <input
@@ -215,7 +219,7 @@ export default function ShopExperience({
               updateParams({ inStock: event.target.checked ? "true" : null })
             }
           />
-          Yalnız stokda olanlar
+          {t("inStockOnly")}
         </label>
       </aside>
 
@@ -223,18 +227,18 @@ export default function ShopExperience({
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-medium tracking-[0.3em] uppercase text-accent">
-              Mağaza
+              {t("eyebrow")}
             </p>
-            <h1 className="mt-2 text-3xl font-light tracking-tight">{title}</h1>
-            <p className="mt-2 text-sm text-muted">{description}</p>
+            <h1 className="mt-2 text-3xl font-light tracking-tight">{resolvedTitle}</h1>
+            <p className="mt-2 text-sm text-muted">{resolvedDescription}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Select
               options={[
-                { value: "newest", label: "Ən yeni" },
-                { value: "price-asc", label: "Qiymət: Aşağıdan yuxarı" },
-                { value: "price-desc", label: "Qiymət: Yuxarıdan aşağı" },
-                { value: "name", label: "Ad" },
+                { value: "newest", label: t("sortNewest") },
+                { value: "price-asc", label: t("sortPriceAsc") },
+                { value: "price-desc", label: t("sortPriceDesc") },
+                { value: "name", label: t("sortName") },
               ]}
               value={currentFilters.sort}
               onChange={(event) => updateParams({ sort: event.target.value })}
@@ -249,7 +253,7 @@ export default function ShopExperience({
                   view === "grid" ? "bg-primary text-white" : "text-muted"
                 )}
               >
-                Grid
+                {t("viewGrid")}
               </button>
               <button
                 type="button"
@@ -259,26 +263,26 @@ export default function ShopExperience({
                   view === "list" ? "bg-primary text-white" : "text-muted"
                 )}
               >
-                List
+                {t("viewList")}
               </button>
             </div>
           </div>
         </div>
 
         <p className="mb-6 text-sm text-muted">
-          {pagination.total} məhsul
-          {isPending && " · Yenilənir..."}
+          {t("resultsCount", { count: pagination.total })}
+          {isPending && ` · ${t("updating")}`}
         </p>
 
         {initialProducts.length === 0 ? (
           <div className="rounded-3xl border border-border bg-secondary px-8 py-16 text-center">
-            <p className="text-sm text-muted">Uyğun məhsul tapılmadı.</p>
+            <p className="text-sm text-muted">{t("noResults")}</p>
             <Button
               className="mt-6"
               variant="secondary"
               onClick={() => router.push(basePath)}
             >
-              Filtrləri təmizlə
+              {t("clearFilters")}
             </Button>
           </div>
         ) : view === "grid" ? (
@@ -317,7 +321,7 @@ export default function ShopExperience({
                   </p>
                 </div>
                 <Button href={`/product/${product.slug}`} size="sm">
-                  Bax
+                  {t("viewCta")}
                 </Button>
               </div>
             ))}

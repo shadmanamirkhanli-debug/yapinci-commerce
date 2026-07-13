@@ -1,91 +1,71 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "Yapinci haqqında — Azərbaycan mədəniyyətindən ilham alan premium geyim brendi.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("About");
 
-const values = [
-  {
-    title: "Keyfiyyət",
-    description:
-      "Hər parça ən yüksək standartlarda, təbii parçalardan və əl işi detallarla hazırlanır.",
-  },
-  {
-    title: "Mədəniyyət",
-    description:
-      "Azərbaycanın zəngin mədəni irsi müasir dizayn dilində yenidən yorumlanır.",
-  },
-  {
-    title: "Davamlılıq",
-    description:
-      "Uzunömürlü geyim yaradırıq — trendlərdən kənar, zamansız parçalar.",
-  },
-];
+  return {
+    title: "About",
+    description: t("metaDescription"),
+  };
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const t = await getTranslations("About");
+  const values = t.raw("values") as { title: string; description: string }[];
+
   return (
     <>
       <Container as="section" className="py-20 lg:py-28">
         <div className="max-w-3xl">
-          <SectionHeader eyebrow="Haqqımızda" title="About Yapinci" />
+          <SectionHeader eyebrow={t("eyebrow")} title={t("title")} />
 
           <div className="mt-10 space-y-6 text-sm leading-relaxed text-muted sm:text-base">
-            <p>
-              Yapinci — Azərbaycanın zəngin mədəni irsinə hörmət edən, müasir
-              dünyanın tələblərinə cavab verən premium geyim brendidir. Hər
-              kolleksiya ənənəvi naxışlar, təbii parçalar və minimalist
-              estetikanın harmoniyasını əks etdirir.
-            </p>
-            <p>
-              Biz inanırıq ki, geyim yalnız funksional deyil — o, kimliyin və
-              mədəniyyətin ifadəsidir. Hər parça diqqətlə seçilmiş parçalar,
-              əl işi detallar və davamlı istehsal prinsipləri ilə hazırlanır.
-            </p>
-            <p>
-              Yapinci Commerce platforması brendimizin rəqəmsal üzüdür — burada
-              kolleksiyalarımızı kəşf edə, sifariş verə və premium alış-veriş
-              təcrübəsindən həzz ala bilərsiniz.
-            </p>
+            <p>{t("paragraph1")}</p>
+            <p>{t("paragraph2")}</p>
+            <p>{t("paragraph3")}</p>
           </div>
 
           <div className="mt-10 rounded-2xl bg-secondary p-6">
             <p className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
-              Rəsmi Məlumatlar
+              {t("officialInfoLabel")}
             </p>
             <ul className="mt-3 space-y-1 text-sm text-primary">
-              <li>Hüquqi status: Fərdi Sahibkar</li>
-              <li>VÖEN: 6701935972</li>
               <li>
-                Ünvan: Bakı şəhəri, Suraxanı rayonu, Yeni Suraxanı
-                qəsəbəsi, 14 iyul küçəsi 6
+                {t("legalStatusLabel")}: {t("legalStatusValue")}
+              </li>
+              <li>
+                {t("voenLabel")}: 6701935972
+              </li>
+              <li>
+                {t("addressLabel")}: {t("addressFull")}
               </li>
             </ul>
           </div>
 
           <Button href="/shop" className="mt-10">
-            Kolleksiyaya Bax
+            {t("ctaShop")}
           </Button>
 
           <div className="mt-14 rounded-2xl bg-secondary p-6 sm:p-8">
             <p className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
-              Rəsmi Məlumatlar
+              {t("officialInfoLabel")}
             </p>
             <dl className="mt-4 space-y-2 text-sm text-primary">
               <div className="flex gap-2">
-                <dt className="text-muted">Hüquqi status:</dt>
-                <dd>Fərdi Sahibkar</dd>
+                <dt className="text-muted">{t("legalStatusLabel")}:</dt>
+                <dd>{t("legalStatusValue")}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="text-muted">VÖEN:</dt>
+                <dt className="text-muted">{t("voenLabel")}:</dt>
                 <dd>6701935972</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="text-muted">Ünvan:</dt>
-                <dd>Bakı ş., Suraxanı r., Yeni Suraxanı q., 14 iyul küç. 6</dd>
+                <dt className="text-muted">{t("addressLabel")}:</dt>
+                <dd>{t("addressShort")}</dd>
               </div>
             </dl>
           </div>
@@ -95,8 +75,8 @@ export default function AboutPage() {
       <section className="border-t border-border bg-secondary">
         <Container as="section" className="py-20 lg:py-28">
           <SectionHeader
-            eyebrow="Dəyərlərimiz"
-            title="Nə Üçün Yapinci"
+            eyebrow={t("valuesEyebrow")}
+            title={t("valuesTitle")}
             align="center"
             className="mb-14"
           />

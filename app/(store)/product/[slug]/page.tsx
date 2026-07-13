@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import ProductDetailView from "@/components/store/ProductDetailView";
 import ProductJsonLd from "@/components/seo/ProductJsonLd";
@@ -22,7 +23,8 @@ export async function generateMetadata({
   const data = await getStoreProductBySlug(slug);
 
   if (!data) {
-    return { title: "Məhsul tapılmadı" };
+    const t = await getTranslations("Product");
+    return { title: t("notFoundTitle") };
   }
 
   const { product } = data;

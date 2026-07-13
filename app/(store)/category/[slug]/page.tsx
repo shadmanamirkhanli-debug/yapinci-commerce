@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Spinner from "@/components/ui/Spinner";
 import ShopExperience from "@/components/store/ShopExperience";
@@ -23,14 +24,15 @@ export async function generateMetadata({
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
   const category = await getStoreCategoryBySlug(slug);
+  const t = await getTranslations("Category");
 
   if (!category) {
-    return { title: "Kateqoriya tapılmadı" };
+    return { title: t("notFoundTitle") };
   }
 
   return {
     title: category.name,
-    description: `${category.name} — Yapinci premium kolleksiya`,
+    description: t("metaDescription", { name: category.name }),
   };
 }
 
@@ -46,6 +48,7 @@ export default async function CategoryPage({
     notFound();
   }
 
+  const t = await getTranslations("Category");
   const filters = parseProductFilters({ ...query, category: slug });
   const [result, filterOptions] = await Promise.all([
     getStoreProducts(filters),
@@ -67,7 +70,7 @@ export default async function CategoryPage({
           filterOptions={filterOptions}
           basePath={`/category/${slug}`}
           title={category.name}
-          description={`${category.productCount} məhsul bu kateqoriyada`}
+          description={t("productCount", { count: category.productCount })}
         />
       </Suspense>
     </Container>

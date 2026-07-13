@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductGrid from "@/components/ui/ProductGrid";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -25,6 +26,7 @@ export function trackRecentlyViewed(slug: string) {
 
 export default function RecentlyViewed({ currentSlug }: RecentlyViewedProps) {
   const [products, setProducts] = useState<StoreProduct[]>([]);
+  const t = useTranslations("RecentlyViewed");
 
   useEffect(() => {
     trackRecentlyViewed(currentSlug);
@@ -53,8 +55,8 @@ export default function RecentlyViewed({ currentSlug }: RecentlyViewedProps) {
   return (
     <section className="border-t border-border py-16 lg:py-20">
       <SectionHeader
-        eyebrow="Son Baxılanlar"
-        title="Recently Viewed"
+        eyebrow={t("eyebrow")}
+        title={t("title")}
         className="mb-10"
       />
       <ProductGrid>

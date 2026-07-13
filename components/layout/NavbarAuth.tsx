@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { ADMIN_ROLES } from "@/lib/auth/roles";
 import { cn } from "@/lib/utils/cn";
 
@@ -11,6 +12,7 @@ type NavbarAuthProps = {
 
 export default function NavbarAuth({ className }: NavbarAuthProps) {
   const { data: session, status } = useSession();
+  const t = useTranslations("NavbarAuth");
 
   if (status === "loading") {
     return (
@@ -29,7 +31,7 @@ export default function NavbarAuth({ className }: NavbarAuthProps) {
           className
         )}
       >
-        Daxil Ol
+        {t("login")}
       </Link>
     );
   }
@@ -42,14 +44,14 @@ export default function NavbarAuth({ className }: NavbarAuthProps) {
         href="/account"
         className="text-xs font-medium tracking-[0.15em] uppercase text-muted transition-colors hover:text-primary"
       >
-        Hesab
+        {t("account")}
       </Link>
       {isAdmin && (
         <Link
           href="/admin"
           className="text-xs font-medium tracking-[0.15em] uppercase text-muted transition-colors hover:text-primary"
         >
-          Admin
+          {t("admin")}
         </Link>
       )}
     </div>

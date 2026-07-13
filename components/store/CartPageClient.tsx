@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { useCart } from "@/components/providers/CartProvider";
@@ -7,16 +8,18 @@ import { formatAmount } from "@/components/ui/Price";
 
 export default function CartPageClient() {
   const { items, subtotal, updateQuantity, removeItem } = useCart();
+  const t = useTranslations("Cart");
+  const tSummary = useTranslations("OrderSummary");
 
   return (
     <>
-      <SectionHeader eyebrow="Səbət" title="Alış-veriş Səbəti" className="mb-12" />
+      <SectionHeader eyebrow={t("eyebrow")} title={t("title")} className="mb-12" />
 
       {items.length === 0 ? (
         <div className="rounded-3xl border border-border bg-secondary p-16 text-center">
-          <p className="text-sm text-muted">Səbətiniz boşdur.</p>
+          <p className="text-sm text-muted">{t("empty")}</p>
           <Button href="/shop" variant="ghost" size="sm" className="mt-6">
-            Mağazaya Keç
+            {t("browseShop")}
           </Button>
         </div>
       ) : (
@@ -58,7 +61,7 @@ export default function CartPageClient() {
                       <button
                         type="button"
                         className="text-sm text-muted transition-colors hover:text-primary"
-                        aria-label="Azalt"
+                        aria-label={t("decreaseAria")}
                         onClick={() =>
                           updateQuantity(item.variantId, item.quantity - 1)
                         }
@@ -69,7 +72,7 @@ export default function CartPageClient() {
                       <button
                         type="button"
                         className="text-sm text-muted transition-colors hover:text-primary"
-                        aria-label="Artır"
+                        aria-label={t("increaseAria")}
                         onClick={() =>
                           updateQuantity(item.variantId, item.quantity + 1)
                         }
@@ -82,7 +85,7 @@ export default function CartPageClient() {
                       className="text-xs tracking-[0.1em] uppercase text-muted transition-colors hover:text-primary"
                       onClick={() => removeItem(item.variantId)}
                     >
-                      Sil
+                      {t("remove")}
                     </button>
                   </div>
                 </div>
@@ -92,28 +95,28 @@ export default function CartPageClient() {
 
           <div className="h-fit rounded-3xl border border-border bg-secondary p-8">
             <h2 className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
-              Xülasə
+              {t("summaryHeading")}
             </h2>
             <div className="mt-6 space-y-4 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted">Ara cəm</span>
+                <span className="text-muted">{tSummary("subtotal")}</span>
                 <span className="text-primary">
                   {formatAmount(subtotal, items[0]?.currency ?? "AZN")}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted">Çatdırılma</span>
-                <span className="text-accent">Pulsuz</span>
+                <span className="text-muted">{tSummary("shipping")}</span>
+                <span className="text-accent">{tSummary("free")}</span>
               </div>
               <div className="flex justify-between border-t border-border pt-4 font-medium text-primary">
-                <span>Cəmi</span>
+                <span>{tSummary("total")}</span>
                 <span>
                   {formatAmount(subtotal, items[0]?.currency ?? "AZN")}
                 </span>
               </div>
             </div>
             <Button href="/checkout" className="mt-8 w-full">
-              Ödənişə Keç
+              {t("checkoutCta")}
             </Button>
           </div>
         </div>

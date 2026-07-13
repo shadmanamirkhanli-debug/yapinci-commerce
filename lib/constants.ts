@@ -94,29 +94,11 @@ export const journalEntries = [
 ] as const;
 
 export const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { key: "home", href: "/" },
+  { key: "shop", href: "/shop" },
+  { key: "about", href: "/about" },
+  { key: "contact", href: "/contact" },
 ] as const;
-
-export const footerLinks = {
-  shop: [
-    { label: "Bütün Məhsullar", href: "/shop" },
-    { label: "Yeni Kolleksiya", href: "/shop" },
-    { label: "Səbət", href: "/cart" },
-  ],
-  company: [
-    { label: "Haqqımızda", href: "/about" },
-    { label: "Əlaqə", href: "/contact" },
-    { label: "Mağazalar", href: "/contact" },
-  ],
-  legal: [
-    { label: "İstifadəçi Şərtləri", href: "/terms" },
-    { label: "Məxfilik Siyasəti", href: "/privacy" },
-    { label: "Qaytarılma və Ləğv", href: "/return" },
-  ],
-} as const;
 
 export const adminNavLinks = [
   { label: "Dashboard", href: "/admin" },

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import ProductGalleryZoom from "@/components/store/ProductGalleryZoom";
 import RecentlyViewed from "@/components/store/RecentlyViewed";
 import Button from "@/components/ui/Button";
@@ -29,6 +30,7 @@ export default function ProductDetailView({
   const { addItem } = useCart();
   const { data: session } = useSession();
   const router = useRouter();
+  const t = useTranslations("ProductDetail");
   const [selectedSize, setSelectedSize] = useState(
     product.variants.find((variant) => variant.size)?.size ?? ""
   );
@@ -82,7 +84,7 @@ export default function ProductDetailView({
 
   const handleAddToCart = () => {
     if (!selectedVariant || selectedVariant.available <= 0) {
-      setMessage("Bu variant hazırda stokda deyil.");
+      setMessage(t("outOfStock"));
       return;
     }
 
@@ -100,7 +102,7 @@ export default function ProductDetailView({
       },
       quantity
     );
-    setMessage("Məhsul səbətə əlavə edildi.");
+    setMessage(t("addedToCart"));
   };
 
   const handleWishlist = async () => {
@@ -117,7 +119,7 @@ export default function ProductDetailView({
 
     if (response.ok) {
       setWishlisted((value) => !value);
-      setMessage(wishlisted ? "Wishlist-dən silindi." : "Wishlist-ə əlavə edildi.");
+      setMessage(wishlisted ? t("removedFromWishlist") : t("addedToWishlist"));
     }
   };
 
@@ -140,7 +142,7 @@ export default function ProductDetailView({
             <div className="mt-4">
               <Rating value={product.averageRating} showValue />
               <span className="ml-2 text-sm text-muted">
-                ({product.reviewCount} rəy)
+                {t("reviewsCount", { count: product.reviewCount })}
               </span>
             </div>
           )}
@@ -161,14 +163,14 @@ export default function ProductDetailView({
           {sizes.length > 0 && (
             <div className="mt-8">
               <p className="mb-3 text-xs font-medium tracking-[0.15em] uppercase text-muted">
-                Ölçü
+                {t("sizeLabel")}
               </p>
               <div className="flex flex-wrap gap-2">
                 {sizes.map((size) => (
                   <button
                     key={size}
                     type="button"
-                    aria-label={`Ölçü ${size}`}
+                    aria-label={t("sizeAria", { size })}
                     aria-pressed={selectedSize === size}
                     onClick={() => setSelectedSize(size)}
                     className={cn(
@@ -188,14 +190,14 @@ export default function ProductDetailView({
           {colors.length > 0 && (
             <div className="mt-6">
               <p className="mb-3 text-xs font-medium tracking-[0.15em] uppercase text-muted">
-                Rəng
+                {t("colorLabel")}
               </p>
               <div className="flex flex-wrap gap-2">
                 {colors.map((color) => (
                   <button
                     key={color}
                     type="button"
-                    aria-label={`Rəng ${color}`}
+                    aria-label={t("colorAria", { color })}
                     aria-pressed={selectedColor === color}
                     onClick={() => setSelectedColor(color)}
                     className={cn(
@@ -214,12 +216,12 @@ export default function ProductDetailView({
 
           <div className="mt-6 flex items-center gap-4">
             <p className="text-xs font-medium tracking-[0.15em] uppercase text-muted">
-              Miqdar
+              {t("quantityLabel")}
             </p>
             <div className="flex items-center rounded-full border border-border">
               <button
                 type="button"
-                aria-label="Miqdarı azalt"
+                aria-label={t("decreaseAria")}
                 className="px-4 py-2 text-sm"
                 onClick={() => setQuantity((value) => Math.max(1, value - 1))}
               >
@@ -230,7 +232,7 @@ export default function ProductDetailView({
               </span>
               <button
                 type="button"
-                aria-label="Miqdarı artır"
+                aria-label={t("increaseAria")}
                 className="px-4 py-2 text-sm"
                 onClick={() => setQuantity((value) => value + 1)}
               >
@@ -238,14 +240,14 @@ export default function ProductDetailView({
               </button>
             </div>
             <span className="text-xs text-muted">
-              {selectedVariant?.available ?? product.available} ədəd mövcuddur
+              {t("availableCount", { count: selectedVariant?.available ?? product.available })}
             </span>
           </div>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button onClick={handleAddToCart}>Səbətə Əlavə Et</Button>
+            <Button onClick={handleAddToCart}>{t("addToCartCta")}</Button>
             <Button variant="secondary" onClick={handleWishlist}>
-              {wishlisted ? "Wishlist-də" : "Wishlist-ə Əlavə Et"}
+              {wishlisted ? t("wishlistAdded") : t("wishlistAddCta")}
             </Button>
           </div>
 
@@ -257,12 +259,12 @@ export default function ProductDetailView({
 
           <dl className="mt-8 grid grid-cols-2 gap-4 text-sm">
             <div>
-              <dt className="text-muted">Brend</dt>
+              <dt className="text-muted">{t("brandLabel")}</dt>
               <dd>{product.brand}</dd>
             </div>
             {product.collection && (
               <div>
-                <dt className="text-muted">Kolleksiya</dt>
+                <dt className="text-muted">{t("collectionLabel")}</dt>
                 <dd>{product.collection}</dd>
               </div>
             )}
@@ -281,7 +283,7 @@ export default function ProductDetailView({
           items={[
             {
               id: "about",
-              title: "Məhsul Haqqında",
+              title: t("aboutHeading"),
               content: (
                 <p className="text-sm leading-relaxed text-muted">
                   {product.description}
@@ -290,13 +292,13 @@ export default function ProductDetailView({
             },
             {
               id: "shipping",
-              title: "Çatdırılma Məlumatı",
+              title: t("shippingInfoHeading"),
               content: (
                 <ul className="space-y-2 text-sm text-muted">
-                  <li>Bakı daxilində 1-2 iş günü</li>
-                  <li>Azərbaycan üzrə 3-5 iş günü</li>
-                  <li>100 AZN üzərində pulsuz çatdırılma</li>
-                  <li>14 gün ərzində geri qaytarma</li>
+                  <li>{t("shippingBaku")}</li>
+                  <li>{t("shippingCountry")}</li>
+                  <li>{t("freeShippingNote")}</li>
+                  <li>{t("returnWindow")}</li>
                 </ul>
               ),
             },
@@ -306,7 +308,7 @@ export default function ProductDetailView({
 
       {reviews.length > 0 && (
         <section className="mt-16 border-t border-border pt-12">
-          <h2 className="text-2xl font-light tracking-tight">Rəylər</h2>
+          <h2 className="text-2xl font-light tracking-tight">{t("reviewsHeading")}</h2>
           <div className="mt-8 space-y-6">
             {reviews.map((review) => (
               <article
@@ -332,7 +334,7 @@ export default function ProductDetailView({
       {relatedProducts.length > 0 && (
         <section className="mt-16 border-t border-border pt-12">
           <h2 className="mb-8 text-2xl font-light tracking-tight">
-            Əlaqəli Məhsullar
+            {t("relatedHeading")}
           </h2>
           <ProductGrid>
             {relatedProducts.map((item) => (

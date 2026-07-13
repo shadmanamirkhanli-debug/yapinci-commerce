@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 import Card from "@/components/ui/Card";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -9,33 +10,36 @@ import { formatAmount } from "@/components/ui/Price";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Order History",
-};
+export async function generateMetadata() {
+  const t = await getTranslations("AccountOrders");
+  return { title: t("metaTitle") };
+}
 
 export default async function AccountOrdersPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login?callbackUrl=/account/orders");
 
   const orders = await getUserOrders(session.user.id);
+  const t = await getTranslations("AccountOrders");
+  const locale = await getLocale();
 
   return (
     <Container as="section" className="py-20 lg:py-28">
       <SectionHeader
-        eyebrow="Hesab"
-        title="Sifariş Tarixçəsi"
-        description="Keçmiş sifarişlərinizi izləyin"
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("description")}
         className="mb-10"
       />
 
       {orders.length === 0 ? (
         <Card variant="filled" padding="lg">
-          <p className="text-sm text-muted">Hələ sifarişiniz yoxdur.</p>
+          <p className="text-sm text-muted">{t("empty")}</p>
           <Link
             href="/shop"
             className="mt-4 inline-block text-sm text-accent hover:underline"
           >
-            Mağazaya keç →
+            {t("browseShop")} →
           </Link>
         </Card>
       ) : (
@@ -46,7 +50,7 @@ export default async function AccountOrdersPage() {
                 <div>
                   <p className="text-sm font-medium">{order.orderNumber}</p>
                   <p className="mt-1 text-xs text-muted">
-                    {new Date(order.createdAt).toLocaleDateString("az-AZ")} ·{" "}
+                    {new Date(order.createdAt).toLocaleDateString(locale)} ·{" "}
                     {order.status}
                   </p>
                 </div>
@@ -58,7 +62,7 @@ export default async function AccountOrdersPage() {
                     href={`/account/orders/${order.orderNumber}`}
                     className="text-xs uppercase tracking-[0.15em] text-accent hover:underline"
                   >
-                    Detallar →
+                    {t("details")} →
                   </Link>
                 </div>
               </div>

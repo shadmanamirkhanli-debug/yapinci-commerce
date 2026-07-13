@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import { getOrderByNumber } from "@/lib/orders/orders";
@@ -10,9 +11,10 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("CheckoutConfirmation");
   return createPageMetadata({
-    title: "Sifariş Təsdiqi",
-    description: "Sifarişiniz uğurla qeydə alındı.",
+    title: t("metaTitle"),
+    description: t("metaDescription"),
     path: "/checkout/confirmation",
     noIndex: true,
   });
@@ -33,32 +35,37 @@ export default async function CheckoutConfirmationPage({
     notFound();
   }
 
+  const t = await getTranslations("CheckoutConfirmation");
+  const tCommon = await getTranslations("Common");
+
   return (
     <Container as="section" className="py-20 lg:py-28">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-xs font-medium tracking-[0.3em] uppercase text-accent">
-          Sifariş Təsdiqləndi
+          {t("eyebrow")}
         </p>
         <h1 className="mt-4 text-3xl font-light tracking-tight">
-          Təşəkkür edirik!
+          {t("heading")}
         </h1>
         <p className="mt-4 text-sm text-muted">
-          Sifarişiniz <strong>{order.orderNumber}</strong> qeydə alındı.
-          Status: <strong>{order.status}</strong>
+          {t.rich("message", {
+            strong: (chunks) => <strong>{chunks}</strong>,
+            orderNumber: order.orderNumber,
+            status: order.status,
+          })}
         </p>
         <p className="mt-2 text-sm text-muted">
-          Cəmi: {formatAmount(order.total, order.currency)}
+          {t("totalLine", { amount: formatAmount(order.total, order.currency) })}
         </p>
         <p className="mt-6 text-sm text-muted">
-          Ödəniş PASHA Bank inteqrasiyası aktiv olduqda bu addımda ödəniş
-          səhifəsinə yönləndiriləcəksiniz.
+          {t("paymentNotice")}
         </p>
         <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
           <Button href={`/account/orders/${order.orderNumber}`}>
-            Sifariş Detalları
+            {t("viewOrderCta")}
           </Button>
           <Button href="/shop" variant="secondary">
-            Alış-verişə Davam Et
+            {tCommon("continueShopping")}
           </Button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import BrandStorySection from "@/components/store/home/BrandStorySection";
 import CollectionSpotlightSection from "@/components/store/home/CollectionSpotlightSection";
 import HeroSection from "@/components/store/home/HeroSection";
@@ -28,6 +29,7 @@ function findProductBySlug(
 
 export default async function HomePage() {
   const { featured, newArrivals, bestSellers } = await getHomePageData();
+  const t = await getTranslations("Home");
 
   const allProducts = [...featured, ...newArrivals, ...bestSellers];
 
@@ -47,18 +49,18 @@ export default async function HomePage() {
       ))}
 
       <ProductShowcaseSection
-        title="Best Sellers"
+        title={t("bestSellers")}
         products={bestSellers}
         ctaHref="/shop"
-        ctaLabel="Shop All"
+        ctaLabel={t("shopAllCta")}
         variant="light"
       />
 
       <ProductShowcaseSection
-        title="New Arrivals"
+        title={t("newArrivals")}
         products={newArrivals}
         ctaHref="/shop?sort=newest"
-        ctaLabel="View All"
+        ctaLabel={t("viewAllCta")}
         variant="muted"
       />
 
