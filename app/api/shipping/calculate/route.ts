@@ -1,5 +1,5 @@
 import { calculateOrderTotals, validateCoupon } from "@/lib/orders/coupons";
-import { getShippingPrice } from "@/lib/orders/shipping";
+import { getShippingPrice, getFreeShippingThreshold } from "@/lib/orders/shipping";
 import { calculateTax } from "@/lib/orders/tax";
 import { apiError, apiSuccess } from "@/lib/api-response";
 import { logger } from "@/lib/logger";
@@ -28,7 +28,11 @@ export async function POST(request: Request) {
       freeShipping = result.freeShipping;
     }
 
-    const shipping = getShippingPrice(shippingMethod, freeShipping);
+    const freeShippingThreshold = await getFreeShippingThreshold();
+    if (!freeShipping && freeShippingThreshold !== null && subtotal >= freeShippingThreshold) {
+      freeShipping = true;
+    }
+    const shipping = await getShippingPrice(shippingMethod, freeShipping);
     const tax = calculateTax(subtotal - discount);
     const totals = calculateOrderTotals({
       subtotal,

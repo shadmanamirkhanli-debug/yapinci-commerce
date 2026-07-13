@@ -4,6 +4,7 @@ import { toNumber } from "@/lib/admin/serialize";
 import { calculateOrderTotals, validateCoupon } from "@/lib/orders/coupons";
 import {
   getShippingPrice,
+  getFreeShippingThreshold,
   type ShippingMethodId,
 } from "@/lib/orders/shipping";
 import { calculateTax } from "@/lib/orders/tax";
@@ -164,7 +165,12 @@ export async function createOrderFromCheckout(
     freeShipping = couponResult.freeShipping;
   }
 
-  const shipping = getShippingPrice(
+  const freeShippingThreshold = await getFreeShippingThreshold();
+  if (!freeShipping && freeShippingThreshold !== null && subtotal >= freeShippingThreshold) {
+    freeShipping = true;
+  }
+
+  const shipping = await getShippingPrice(
     input.shippingMethod as ShippingMethodId,
     freeShipping
   );
