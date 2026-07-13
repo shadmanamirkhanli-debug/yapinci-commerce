@@ -52,9 +52,43 @@ export default function AboutPage() {
             </p>
           </div>
 
+          <div className="mt-10 rounded-2xl bg-secondary p-6">
+            <p className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
+              Rəsmi Məlumatlar
+            </p>
+            <ul className="mt-3 space-y-1 text-sm text-primary">
+              <li>Hüquqi status: Fərdi Sahibkar</li>
+              <li>VÖEN: 6701935972</li>
+              <li>
+                Ünvan: Bakı şəhəri, Suraxanı rayonu, Yeni Suraxanı
+                qəsəbəsi, 14 iyul küçəsi 6
+              </li>
+            </ul>
+          </div>
+
           <Button href="/shop" className="mt-10">
             Kolleksiyaya Bax
           </Button>
+
+          <div className="mt-14 rounded-2xl bg-secondary p-6 sm:p-8">
+            <p className="text-xs font-medium tracking-[0.2em] uppercase text-muted">
+              Rəsmi Məlumatlar
+            </p>
+            <dl className="mt-4 space-y-2 text-sm text-primary">
+              <div className="flex gap-2">
+                <dt className="text-muted">Hüquqi status:</dt>
+                <dd>Fərdi Sahibkar</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-muted">VÖEN:</dt>
+                <dd>6701935972</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-muted">Ünvan:</dt>
+                <dd>Bakı ş., Suraxanı r., Yeni Suraxanı q., 14 iyul küç. 6</dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </Container>
 

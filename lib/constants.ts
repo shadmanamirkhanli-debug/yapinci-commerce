@@ -111,6 +111,11 @@ export const footerLinks = {
     { label: "Əlaqə", href: "/contact" },
     { label: "Mağazalar", href: "/contact" },
   ],
+  legal: [
+    { label: "İstifadəçi Şərtləri", href: "/terms" },
+    { label: "Məxfilik Siyasəti", href: "/privacy" },
+    { label: "Qaytarılma və Ləğv", href: "/return" },
+  ],
 } as const;
 
 export const adminNavLinks = [
@@ -122,5 +127,10 @@ export const adminNavLinks = [
   { label: "Coupons", href: "/admin/coupons" },
   { label: "Reviews", href: "/admin/reviews" },
   { label: "Inventory", href: "/admin/inventory" },
+  { label: "Audit Log", href: "/admin/audit-log" },
+  { label: "Payment Settings", href: "/admin/payment-settings" },
+  { label: "Shipping Settings", href: "/admin/shipping-settings" },
+  { label: "SEO Settings", href: "/admin/seo-settings" },
+  { label: "Email Settings", href: "/admin/email-settings" },
   { label: "Settings", href: "/admin/settings" },
 ] as const;
