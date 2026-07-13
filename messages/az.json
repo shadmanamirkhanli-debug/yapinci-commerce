@@ -1,0 +1,25 @@
+{
+  "Navigation": {
+    "home": "Ana səhifə",
+    "shop": "Mağaza",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə",
+    "search": "Axtarış",
+    "cart": "Səbət",
+    "account": "Hesabım"
+  },
+  "Common": {
+    "language": "Dil",
+    "addToCart": "Səbətə əlavə et",
+    "buyNow": "İndi al",
+    "viewProduct": "Məhsula bax",
+    "continueShopping": "Alış-verişə davam et",
+    "loading": "Yüklənir..."
+  },
+  "Footer": {
+    "privacy": "Məxfilik siyasəti",
+    "terms": "İstifadəçi şərtləri",
+    "returns": "Qaytarılma siyasəti",
+    "copyright": "Bütün hüquqlar qorunur"
+  }
+}

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import SessionProvider from "@/components/providers/SessionProvider";
-import { defaultDescription, siteName } from "@/lib/seo/metadata";
+import { getSeoSettings } from "@/lib/seo/metadata";
+import { getStoreSettings } from "@/lib/settings";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,43 +21,71 @@ const geistMono = Geist_Mono({
 
 const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: {
-    default: siteName,
-    template: `%s | ${siteName}`,
-  },
-  description: defaultDescription,
-  openGraph: {
-    type: "website",
-    locale: "az_AZ",
-    siteName,
-    title: siteName,
-    description: defaultDescription,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteName,
-    description: defaultDescription,
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeoSettings();
 
-export default function RootLayout({
+  return {
+    metadataBase: new URL(baseUrl),
+    title: {
+      default: seo.metaTitle,
+      template: "%s | " + seo.metaTitle,
+    },
+    description: seo.metaDescription,
+    openGraph: {
+      type: "website",
+      locale: "az_AZ",
+      siteName: seo.metaTitle,
+      title: seo.metaTitle,
+      description: seo.metaDescription,
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle,
+      description: seo.metaDescription,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const store = await getStoreSettings();
+  const locale = await getLocale();
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: store.storeName,
+    url: baseUrl,
+    logo: store.logoUrl ? baseUrl + store.logoUrl : undefined,
+    email: store.email,
+    telephone: store.phone,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: store.address,
+    },
+  };
+
   return (
     <html
-      lang="az"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang={locale}
+      className={geistSans.variable + " " + geistMono.variable + " h-full antialiased"}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <SessionProvider>{children}</SessionProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <NextIntlClientProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

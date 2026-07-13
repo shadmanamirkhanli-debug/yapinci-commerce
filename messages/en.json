@@ -1,0 +1,25 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact",
+    "search": "Search",
+    "cart": "Cart",
+    "account": "My Account"
+  },
+  "Common": {
+    "language": "Language",
+    "addToCart": "Add to cart",
+    "buyNow": "Buy now",
+    "viewProduct": "View product",
+    "continueShopping": "Continue shopping",
+    "loading": "Loading..."
+  },
+  "Footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "returns": "Return Policy",
+    "copyright": "All rights reserved"
+  }
+}

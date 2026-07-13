@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { brand, navLinks } from "@/lib/constants";
 import { cn } from "@/lib/utils/cn";
 import YapinciLogo from "@/components/brand/YapinciLogo";
 import NavbarAuth from "@/components/layout/NavbarAuth";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 import { useCart } from "@/components/providers/CartProvider";
 
 function CartIcon() {
@@ -35,6 +37,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const { count: cartCount } = useCart();
+  const t = useTranslations("Navigation");
 
   const isHome = pathname === "/";
   const transparent = isHome && !scrolled && !mobileOpen;
@@ -117,8 +120,8 @@ export default function Navbar() {
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search"
-              aria-label="Search products"
+              placeholder={t("search")}
+              aria-label={t("search")}
               className={cn(
                 "h-10 w-40 rounded-full border px-4 text-xs tracking-wide outline-none transition-colors xl:w-48",
                 transparent
@@ -127,6 +130,10 @@ export default function Navbar() {
               )}
             />
           </form>
+
+          <div className="hidden md:block">
+            <LanguageSwitcher light={transparent} />
+          </div>
 
           <NavbarAuth
             className={cn(
@@ -137,7 +144,7 @@ export default function Navbar() {
 
           <Link
             href="/cart"
-            aria-label="Cart"
+            aria-label={t("cart")}
             className={cn(
               "relative rounded-full p-2 transition-all duration-300",
               transparent
@@ -194,7 +201,7 @@ export default function Navbar() {
         className={cn(
           "overflow-hidden border-t transition-all duration-300 md:hidden",
           transparent ? "border-white/15 bg-primary/95" : "border-border/60 bg-background",
-          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+          mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         )}
         aria-label="Mobile"
       >
@@ -213,13 +220,14 @@ export default function Navbar() {
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search"
-              aria-label="Search products"
+              placeholder={t("search")}
+              aria-label={t("search")}
               className="h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus:border-accent"
             />
           </form>
-          <div className="mb-2 px-4">
+          <div className="mb-2 flex items-center justify-between px-4">
             <NavbarAuth />
+            <LanguageSwitcher light={transparent} />
           </div>
           {navLinks.map((link) => {
             const isActive =
