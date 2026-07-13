@@ -2,6 +2,8 @@ import { randomBytes } from "crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
+import { sendEmail, isNotificationEnabled } from "@/lib/email";
+import { passwordResetEmail } from "@/lib/email-templates";
 
 const RESET_TOKEN_EXPIRY_HOURS = 1;
 
@@ -45,10 +47,17 @@ export async function POST(request: Request) {
     });
 
     const appUrl = process.env.AUTH_URL ?? "http://localhost:3000";
-    const resetUrl = `${appUrl}/reset-password?token=${token}`;
+    const resetUrl = appUrl + "/reset-password?token=" + token;
+
+    const notificationsEnabled = await isNotificationEnabled("passwordResetOn");
+
+    if (notificationsEnabled) {
+      const { subject, html } = passwordResetEmail(resetUrl);
+      await sendEmail({ to: email, subject, html });
+    }
 
     if (process.env.NODE_ENV === "development") {
-      console.log(`[Forgot Password] Reset link for ${email}: ${resetUrl}`);
+      console.log("[Forgot Password] Reset link for " + email + ": " + resetUrl);
     }
 
     return NextResponse.json({

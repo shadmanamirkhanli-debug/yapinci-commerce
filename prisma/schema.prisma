@@ -369,3 +369,79 @@ model Wishlist {
   @@index([userId])
   @@index([productId])
 }
+model StoreSettings {
+  id         Int      @id @default(1)
+  storeName  String   @default("Yapinci")
+  email      String   @default("info@yapinci.az")
+  phone      String   @default("+994 12 345 67 89")
+  address    String   @default("Bakı, Azərbaycan")
+  instagram  String?
+  facebook   String?
+  tiktok     String?
+  whatsapp   String?
+  logoUrl    String?
+  faviconUrl String?
+  updatedAt  DateTime @updatedAt
+}
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @db.Uuid
+  userEmail  String?
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([userEmail])
+  @@index([action])
+}
+
+model PaymentSettings {
+  id            Int      @id @default(1)
+  provider      String   @default("test")
+  testMode      Boolean  @default(true)
+  merchantId    String?
+  apiKey        String?
+  secretKey     String?
+  webhookSecret String?
+  updatedAt     DateTime @updatedAt
+}
+
+model ShippingSettings {
+  id                 Int      @id @default(1)
+  standardPrice      Decimal  @default(10) @db.Decimal(10, 2)
+  standardDays       String   @default("3-5 iş günü")
+  expressPrice       Decimal  @default(25) @db.Decimal(10, 2)
+  expressDays        String   @default("1-2 iş günü")
+  internationalPrice Decimal  @default(50) @db.Decimal(10, 2)
+  internationalDays  String   @default("7-14 iş günü")
+  internationalActive Boolean @default(false)
+  freeShippingThreshold Decimal? @db.Decimal(10, 2)
+  updatedAt          DateTime @updatedAt
+}
+
+model SeoSettings {
+  id               Int      @id @default(1)
+  metaTitle        String   @default("Yapinci")
+  metaDescription  String   @default("Azərbaycanın premium moda və əl işi məhsulları mağazası.")
+  ogImageUrl       String?
+  updatedAt        DateTime @updatedAt
+}
+
+model EmailSettings {
+  id                    Int      @id @default(1)
+  smtpHost              String?
+  smtpPort              Int      @default(587)
+  smtpUser              String?
+  smtpPassword          String?
+  fromEmail             String   @default("no-reply@yapinci.az")
+  fromName              String   @default("Yapinci")
+  orderConfirmationOn   Boolean  @default(true)
+  passwordResetOn       Boolean  @default(true)
+  adminNotificationOn   Boolean  @default(true)
+  adminNotificationEmail String?
+  updatedAt             DateTime @updatedAt
+}

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/admin/require-admin";
+import { requireAdmin, requireAdminAudited } from "@/lib/admin/require-admin";
 import { apiError, apiSuccess } from "@/lib/api-response";
 import { parseListQuery, paginate } from "@/lib/admin/query-params";
 import {
@@ -45,7 +45,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { error } = await requireAdmin();
+  const { error } = await requireAdminAudited(request, {
+    action: "category.create",
+    entityType: "Category",
+  });
   if (error) return error;
 
   try {

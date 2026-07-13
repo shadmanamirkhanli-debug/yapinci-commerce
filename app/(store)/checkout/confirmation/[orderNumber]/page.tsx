@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -8,12 +9,14 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = createPageMetadata({
-  title: "Sifariş Təsdiqi",
-  description: "Sifarişiniz uğurla qeydə alındı.",
-  path: "/checkout/confirmation",
-  noIndex: true,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return createPageMetadata({
+    title: "Sifariş Təsdiqi",
+    description: "Sifarişiniz uğurla qeydə alındı.",
+    path: "/checkout/confirmation",
+    noIndex: true,
+  });
+}
 
 type ConfirmationPageProps = {
   params: Promise<{ orderNumber: string }>;
@@ -24,11 +27,7 @@ export default async function CheckoutConfirmationPage({
 }: ConfirmationPageProps) {
   const session = await auth();
   const { orderNumber } = await params;
-
-  const order = await getOrderByNumber(
-    orderNumber,
-    session?.user?.id
-  );
+  const order = await getOrderByNumber(orderNumber, session?.user?.id);
 
   if (!order) {
     notFound();

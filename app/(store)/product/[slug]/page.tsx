@@ -28,11 +28,11 @@ export async function generateMetadata({
   const { product } = data;
 
   return {
-    ...createPageMetadata({
+    ...(await createPageMetadata({
       title: product.seoTitle || product.name,
       description: product.seoDescription || product.shortDescription,
       path: `/product/${slug}`,
-    }),
+    })),
     openGraph: {
       title: product.seoTitle || product.name,
       description: product.seoDescription || product.shortDescription,

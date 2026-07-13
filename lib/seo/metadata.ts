@@ -1,12 +1,31 @@
 import type { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 
-const siteName = "Yapinci";
-const defaultDescription =
+const fallbackSiteName = "Yapinci";
+const fallbackDescription =
   "Azərbaycanın premium moda və əl işi məhsulları mağazası.";
 
-export function createPageMetadata({
+export async function getSeoSettings() {
+  const settings = await prisma.seoSettings.findUnique({
+    where: { id: 1 },
+  });
+
+  if (settings) {
+    return settings;
+  }
+
+  return {
+    id: 1,
+    metaTitle: fallbackSiteName,
+    metaDescription: fallbackDescription,
+    ogImageUrl: null,
+    updatedAt: new Date(),
+  };
+}
+
+export async function createPageMetadata({
   title,
-  description = defaultDescription,
+  description,
   path,
   noIndex = false,
 }: {
@@ -14,29 +33,33 @@ export function createPageMetadata({
   description?: string;
   path?: string;
   noIndex?: boolean;
-}): Metadata {
+}): Promise<Metadata> {
+  const seo = await getSeoSettings();
   const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
-  const url = path ? `${baseUrl}${path}` : baseUrl;
+  const url = path ? baseUrl + path : baseUrl;
+  const finalDescription = description ?? seo.metaDescription;
 
   return {
     title,
-    description,
+    description: finalDescription,
     robots: noIndex ? { index: false, follow: false } : undefined,
     alternates: path ? { canonical: url } : undefined,
     openGraph: {
       title,
-      description,
+      description: finalDescription,
       url,
-      siteName,
+      siteName: seo.metaTitle,
       locale: "az_AZ",
       type: "website",
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description,
+      description: finalDescription,
     },
   };
 }
 
-export { siteName, defaultDescription };
+export const siteName = fallbackSiteName;
+export const defaultDescription = fallbackDescription;

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/admin/require-admin";
+import { requireAdmin, requireAdminAudited } from "@/lib/admin/require-admin";
 import { apiError, apiSuccess } from "@/lib/api-response";
 import {
   buildProductWriteData,
@@ -33,10 +33,13 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PUT(request: Request, context: RouteContext) {
-  const { error } = await requireAdmin();
-  if (error) return error;
-
   const { id } = await context.params;
+  const { error } = await requireAdminAudited(request, {
+    action: "product.update",
+    entityType: "Product",
+    entityId: id,
+  });
+  if (error) return error;
 
   try {
     const body = await request.json();
@@ -98,10 +101,13 @@ export async function PUT(request: Request, context: RouteContext) {
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
-  const { error } = await requireAdmin();
-  if (error) return error;
-
   const { id } = await context.params;
+  const { error } = await requireAdminAudited(_request, {
+    action: "product.delete",
+    entityType: "Product",
+    entityId: id,
+  });
+  if (error) return error;
 
   try {
     await prisma.product.delete({ where: { id } });
