@@ -6,6 +6,7 @@ import {
 import { toNumber } from "@/lib/admin/serialize";
 import type { Prisma } from "@prisma/client";
 import type { StoreProduct, StoreReview, StoreVariant } from "@/lib/store/types";
+import { translateColor } from "@/lib/store/colors";
 
 export type StoreLocale = "az" | "en" | "ru";
 
@@ -52,7 +53,7 @@ export function formatStoreProduct(
       id: variant.id,
       sku: variant.sku,
       size: variant.size ?? "",
-      color,
+      color: translateColor(color, locale),
       material,
       price: variant.price ? toNumber(variant.price) : undefined,
       quantity,
