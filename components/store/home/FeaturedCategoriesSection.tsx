@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import type { StoreCategory } from "@/lib/store/types";
@@ -10,15 +11,17 @@ type FeaturedCategoriesSectionProps = {
 export default function FeaturedCategoriesSection({
   categories,
 }: FeaturedCategoriesSectionProps) {
+  const t = useTranslations("FeaturedCategories");
+
   if (categories.length === 0) return null;
 
   return (
     <section className="border-t border-border bg-background section-padding">
       <Container as="section">
         <SectionHeader
-          eyebrow="Categories"
-          title="Featured Categories"
-          description="Explore the foundations of the Yapinci wardrobe."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          description={t("description")}
           align="center"
           className="mb-14 lg:mb-16"
         />
@@ -48,7 +51,7 @@ export default function FeaturedCategoriesSection({
                   {category.name}
                 </h3>
                 <p className="mt-1 text-xs text-muted">
-                  {category.productCount} items
+                  {t("itemsCount", { count: category.productCount })}
                 </p>
               </div>
             </Link>

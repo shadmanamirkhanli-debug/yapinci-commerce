@@ -6,7 +6,9 @@
     "contact": "Əlaqə",
     "search": "Axtarış",
     "cart": "Səbət",
-    "account": "Hesabım"
+    "account": "Hesabım",
+    "openMenu": "Menyunu aç",
+    "closeMenu": "Menyunu bağla"
   },
   "Common": {
     "language": "Dil",
@@ -45,6 +47,101 @@
     "newArrivals": "Yeni Gələnlər",
     "shopAllCta": "Hamısına Bax",
     "viewAllCta": "Hamısına Bax"
+  },
+  "Brand": {
+    "description": "Azərbaycan mədəniyyətindən ilham alan premium geyim brendi.",
+    "tagline": "Premium Moda",
+    "hero": {
+      "headline": "Azərbaycanın Hekayəsini Geyin",
+      "cta": "Kolleksiyaya Bax",
+      "imageAlt": "Yapinci kolleksiyası"
+    },
+    "story": {
+      "eyebrow": "İrs",
+      "title": "Hər Simvolun Arxasındakı Hekayə",
+      "paragraphs": [
+        "Yapinci məhsulundakı hər naxış məna daşıyır — qorunma üçün əjdaha pulcuqları, bolluq üçün nar sapları, Qafqaz sənətinin əsrlərindən gələn həndəsi haşiyələr.",
+        "Biz arxivləri araşdırır, ustalarla söhbət edir və simvolizmi geyimlərə çevirərkən onları müasir hiss etdiririk, kostyum kimi deyil. Hər simvol məqsədyönlü seçilir, sonra təmkinlə canlandırılır."
+      ],
+      "cta": "Hekayəmizi Oxu"
+    },
+    "craftsmanship": {
+      "eyebrow": "Ustalıq",
+      "title": "Hər Detal, Diqqətlə Düşünülüb",
+      "paragraphs": [
+        "Naxışdan son tikişə qədər, geyimlərimiz həm irs texnikalarını, həm də müasir konstruksiyanı anlayan ustalarla kiçik partiyalarda hazırlanır.",
+        "Təbii kətan, incə yun və məsuliyyətli şəkildə əldə edilmiş pambıq uzunömürlülük üçün seçilir. İncə naxış və toxuma Azərbaycan sənətinə nümayişsiz istinad edir — səssiz danışan lüks."
+      ],
+      "highlights": [
+        { "label": "Usta İşi", "detail": "Kiçik partiyalarla istehsal" },
+        { "label": "Təbii Liflər", "detail": "Premium, izlənilə bilən materiallar" },
+        { "label": "Zamansız Dizayn", "detail": "Mövsümsüz siluetlər" }
+      ]
+    }
+  },
+  "HomeCollections": {
+    "dragon": {
+      "title": "Əjdaha Kolleksiyası",
+      "description": "Qədim əjdaha motivləri müasir siluetlərdə yenidən təsəvvür edilib — güc, mühafizəçilik və Qafqazın ruhu."
+    },
+    "baku": {
+      "title": "Bakı Kolleksiyası",
+      "description": "Xəzər sahilindən ilham alan şəhər zərifliyi — kətan qatları, yumşaq struktur və şəhərin ritmi."
+    },
+    "heritageSymbols": {
+      "title": "İrs Simvolları",
+      "description": "Premium parçalara toxunmuş zamansız emblemlər — hər parça keçmişlə indi arasında səssiz bir söhbətdir."
+    }
+  },
+  "JournalSection": {
+    "heading": "Jurnal",
+    "readCta": "Oxu",
+    "entries": {
+      "symbolsOfCaucasus": {
+        "title": "Qafqazın Simvolları",
+        "excerpt": "Qədim motivlərin mənasını itirmədən müasir qarderoblarda necə yer aldığı.",
+        "date": "Mart 2026"
+      },
+      "insideAtelier": {
+        "title": "Atelyenin İçində",
+        "excerpt": "Hər Yapinci geyiminin arxasındakı ustalara və texnikalara nəzər.",
+        "date": "Fevral 2026"
+      },
+      "aDayInBaku": {
+        "title": "Bakıda Bir Gün",
+        "excerpt": "Xəzərdə səhər işığı, köhnə şəhərdə axşam — hər iki dünya üçün geyinmək.",
+        "date": "Yanvar 2026"
+      }
+    }
+  },
+  "CollectionSpotlight": {
+    "exploreCta": "Kolleksiyaya Bax"
+  },
+  "InstagramGallery": {
+    "heading": "Instagram Qalereyası",
+    "subtitle": "Emalatxanadan, şəhərdən və Yapinci geyinən dünyadan anlar.",
+    "imageAria": "Qalereya şəkli {index}"
+  },
+  "NewsletterSection": {
+    "eyebrow": "Bülleten",
+    "heading": "Yeni Kolleksiyalardan İlk Xəbərdar Olun",
+    "description": "Eksklüziv ilkin baxışlar, erkən giriş və emalatxanadan hekayələr — məqsədyönlü şəkildə çatdırılır.",
+    "thankYou": "Təşəkkür edirik. Abunə oldunuz.",
+    "emailLabel": "E-poçt",
+    "subscribeCta": "Abunə Ol"
+  },
+  "FeaturedCategories": {
+    "eyebrow": "Kateqoriyalar",
+    "title": "Seçilmiş Kateqoriyalar",
+    "description": "Yapinci qarderobunun əsaslarını kəşf edin.",
+    "itemsCount": "{count} məhsul"
+  },
+  "FeaturedCollections": {
+    "eyebrow": "Kolleksiyalar",
+    "title": "Seçilmiş Kolleksiyalar",
+    "description": "Azərbaycan irsini müasir qarderoblara toxuyan seçilmiş kolleksiyalar.",
+    "collectionLabel": "Kolleksiya",
+    "exploreCta": "Kəşf Et"
   },
   "AccountLayout": {
     "profile": "Profil",

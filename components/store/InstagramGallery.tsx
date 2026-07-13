@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import { brand } from "@/lib/constants";
 import type { StoreCategory } from "@/lib/store/types";
@@ -17,6 +18,7 @@ type InstagramGalleryProps = {
 };
 
 export default function InstagramGallery({ categories = [] }: InstagramGalleryProps) {
+  const t = useTranslations("InstagramGallery");
   const images =
     categories
       .map((category) => category.imageUrl)
@@ -30,10 +32,10 @@ export default function InstagramGallery({ categories = [] }: InstagramGalleryPr
         <div className="mb-12 text-center lg:mb-14">
           <p className="text-eyebrow text-accent">{brand.instagram}</p>
           <h2 className="text-display mt-4 text-2xl text-primary sm:text-3xl">
-            Instagram Gallery
+            {t("heading")}
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm text-muted">
-            Moments from the atelier, the city, and the world wearing Yapinci.
+            {t("subtitle")}
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:gap-4">
@@ -42,7 +44,7 @@ export default function InstagramGallery({ categories = [] }: InstagramGalleryPr
               key={`${src}-${index}`}
               href="/shop"
               className="group relative aspect-square overflow-hidden rounded-2xl bg-secondary"
-              aria-label={`Gallery image ${index + 1}`}
+              aria-label={t("imageAria", { index: index + 1 })}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

@@ -1,7 +1,7 @@
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import YapinciLogo from "@/components/brand/YapinciLogo";
-import { brand } from "@/lib/constants";
 import type { StoreProduct } from "@/lib/store/types";
 
 type HeroSectionProps = {
@@ -10,6 +10,7 @@ type HeroSectionProps = {
 
 export default function HeroSection({ featuredProduct }: HeroSectionProps) {
   const heroImage = featuredProduct?.primaryImage;
+  const t = useTranslations("Brand");
 
   return (
     <section
@@ -20,7 +21,7 @@ export default function HeroSection({ featuredProduct }: HeroSectionProps) {
         {heroImage ? (
           <OptimizedImage
             src={heroImage}
-            alt={featuredProduct?.name ?? "Yapinci collection"}
+            alt={featuredProduct?.name ?? t("hero.imageAlt")}
             fill
             priority
             className="object-cover object-center animate-scale-in opacity-0"
@@ -43,11 +44,11 @@ export default function HeroSection({ featuredProduct }: HeroSectionProps) {
           <YapinciLogo variant="light" size="lg" />
         </div>
         <h1 className="text-display animate-fade-in-up animation-delay-100 mx-auto mt-10 max-w-4xl text-4xl text-white opacity-0 sm:text-5xl lg:text-6xl xl:text-7xl">
-          {brand.hero.headline}
+          {t("hero.headline")}
         </h1>
         <div className="animate-fade-in-up animation-delay-200 mt-12 opacity-0">
           <Button href="/shop" variant="accent" size="lg">
-            {brand.hero.cta}
+            {t("hero.cta")}
           </Button>
         </div>
       </div>

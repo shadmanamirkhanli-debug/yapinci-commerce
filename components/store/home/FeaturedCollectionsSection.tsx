@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import type { StoreProduct } from "@/lib/store/types";
@@ -21,6 +22,8 @@ export default function FeaturedCollectionsSection({
   collections,
   products,
 }: FeaturedCollectionsSectionProps) {
+  const t = useTranslations("FeaturedCollections");
+
   if (collections.length === 0) return null;
 
   const items = collections.slice(0, 3);
@@ -29,9 +32,9 @@ export default function FeaturedCollectionsSection({
     <section className="border-t border-border bg-background section-padding">
       <Container as="section">
         <SectionHeader
-          eyebrow="Collections"
-          title="Featured Collections"
-          description="Curated edits that weave Azerbaijani heritage into contemporary wardrobes."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          description={t("description")}
           className="mb-14 lg:mb-16"
         />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
@@ -64,12 +67,12 @@ export default function FeaturedCollectionsSection({
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent transition-opacity duration-500 group-hover:from-primary/80" />
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
-                  <p className="text-eyebrow text-accent/90">Collection</p>
+                  <p className="text-eyebrow text-accent/90">{t("collectionLabel")}</p>
                   <h3 className="mt-2 text-xl font-light tracking-tight text-white sm:text-2xl">
                     {collection}
                   </h3>
                   <p className="mt-3 text-xs tracking-[0.15em] uppercase text-white/60 transition-colors group-hover:text-white">
-                    Explore →
+                    {t("exploreCta")} →
                   </p>
                 </div>
               </Link>

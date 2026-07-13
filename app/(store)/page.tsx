@@ -39,6 +39,7 @@ export default async function HomePage() {
   const locale = (await getLocale()) as StoreLocale;
   const { featured, newArrivals, bestSellers } = await getHomePageData(locale);
   const t = await getTranslations("Home");
+  const tCollections = await getTranslations("HomeCollections");
 
   const allProducts = [...featured, ...newArrivals, ...bestSellers];
 
@@ -49,8 +50,8 @@ export default async function HomePage() {
       {homeCollections.map((collection, index) => (
         <CollectionSpotlightSection
           key={collection.slug}
-          title={collection.title}
-          description={collection.description}
+          title={tCollections(`${collection.key}.title`)}
+          description={tCollections(`${collection.key}.description`)}
           shopHref={collection.shopHref}
           product={findProductBySlug(allProducts, collection.productSlug)}
           reversed={index % 2 === 1}

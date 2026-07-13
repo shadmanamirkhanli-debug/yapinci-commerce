@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { StoreProduct } from "@/lib/store/types";
@@ -19,6 +20,8 @@ export default function CollectionSpotlightSection({
   product,
   reversed = false,
 }: CollectionSpotlightSectionProps) {
+  const t = useTranslations("CollectionSpotlight");
+
   return (
     <section className="border-t border-border bg-background">
       <Container as="section" className="section-padding">
@@ -60,7 +63,7 @@ export default function CollectionSpotlightSection({
               {description}
             </p>
             <p className="mt-8 text-xs font-medium tracking-[0.2em] uppercase text-primary transition-colors group-hover:text-accent">
-              Explore Collection →
+              {t("exploreCta")} →
             </p>
           </div>
         </Link>

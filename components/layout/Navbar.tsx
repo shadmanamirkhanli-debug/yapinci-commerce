@@ -162,7 +162,7 @@ export default function Navbar() {
 
           <button
             type="button"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-label={mobileOpen ? t("closeMenu") : t("openMenu")}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((prev) => !prev)}
             className={cn(

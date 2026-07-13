@@ -8,6 +8,7 @@ export default async function Footer() {
   const settings = await getStoreSettings();
   const t = await getTranslations("Footer");
   const tNav = await getTranslations("Navigation");
+  const tBrand = await getTranslations("Brand");
 
   const shopLinks = [
     { key: "allProducts", href: "/shop", label: t("shopLinks.allProducts") },
@@ -38,8 +39,8 @@ export default async function Footer() {
         <div className="grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
             <YapinciLogo variant="light" size="md" />
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">{brand.description}</p>
-            <p className="mt-4 text-eyebrow text-accent">{brand.tagline}</p>
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">{tBrand("description")}</p>
+            <p className="mt-4 text-eyebrow text-accent">{tBrand("tagline")}</p>
             {socialLinks.length > 0 && (
               <div className="mt-8 flex flex-wrap gap-3">
                 {socialLinks.map((social) => (
