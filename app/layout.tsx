@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import SessionProvider from "@/components/providers/SessionProvider";
-import { getSeoSettings } from "@/lib/seo/metadata";
+import { getSeoSettings, ogLocaleFor } from "@/lib/seo/metadata";
 import { getStoreSettings } from "@/lib/settings";
 import "./globals.css";
 
@@ -23,6 +23,7 @@ const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoSettings();
+  const locale = await getLocale();
 
   return {
     metadataBase: new URL(baseUrl),
@@ -33,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: seo.metaDescription,
     openGraph: {
       type: "website",
-      locale: "az_AZ",
+      locale: ogLocaleFor(locale),
       siteName: seo.metaTitle,
       title: seo.metaTitle,
       description: seo.metaDescription,

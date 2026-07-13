@@ -30,14 +30,17 @@ export async function generateMetadata({
   }
 
   const { product } = data;
+  const base = await createPageMetadata({
+    title: product.seoTitle || product.name,
+    description: product.seoDescription || product.shortDescription,
+    path: `/product/${slug}`,
+    locale,
+  });
 
   return {
-    ...(await createPageMetadata({
-      title: product.seoTitle || product.name,
-      description: product.seoDescription || product.shortDescription,
-      path: `/product/${slug}`,
-    })),
+    ...base,
     openGraph: {
+      ...base.openGraph,
       title: product.seoTitle || product.name,
       description: product.seoDescription || product.shortDescription,
       images: product.primaryImage ? [{ url: product.primaryImage }] : [],
@@ -64,7 +67,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
-      <ProductJsonLd product={data.product} />
+      <ProductJsonLd product={data.product} locale={locale} />
       <Container as="section" className="py-16 lg:py-24">
         <ProductDetailView
           product={data.product}

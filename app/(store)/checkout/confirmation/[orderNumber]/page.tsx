@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import { getOrderByNumber } from "@/lib/orders/orders";
@@ -12,11 +12,13 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("CheckoutConfirmation");
+  const locale = await getLocale();
   return createPageMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
     path: "/checkout/confirmation",
     noIndex: true,
+    locale,
   });
 }
 

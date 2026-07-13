@@ -23,16 +23,28 @@ export async function getSeoSettings() {
   };
 }
 
+const OG_LOCALES: Record<string, string> = {
+  az: "az_AZ",
+  en: "en_US",
+  ru: "ru_RU",
+};
+
+export function ogLocaleFor(locale: string): string {
+  return OG_LOCALES[locale] ?? OG_LOCALES.az;
+}
+
 export async function createPageMetadata({
   title,
   description,
   path,
   noIndex = false,
+  locale = "az",
 }: {
   title: string;
   description?: string;
   path?: string;
   noIndex?: boolean;
+  locale?: string;
 }): Promise<Metadata> {
   const seo = await getSeoSettings();
   const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
@@ -49,7 +61,7 @@ export async function createPageMetadata({
       description: finalDescription,
       url,
       siteName: seo.metaTitle,
-      locale: "az_AZ",
+      locale: ogLocaleFor(locale),
       type: "website",
       images: seo.ogImageUrl ? [{ url: seo.ogImageUrl }] : undefined,
     },

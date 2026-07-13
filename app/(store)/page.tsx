@@ -9,17 +9,24 @@ import { brand, homeCollections } from "@/lib/constants";
 import { getHomePageData } from "@/lib/store/products";
 import type { StoreProduct } from "@/lib/store/types";
 import type { StoreLocale } from "@/lib/store/format";
+import { ogLocaleFor } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Home",
-  description: brand.description,
-  openGraph: {
-    title: brand.name,
-    description: brand.description,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Home");
+  const locale = await getLocale();
+
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    openGraph: {
+      title: brand.name,
+      description: t("metaDescription"),
+      locale: ogLocaleFor(locale),
+    },
+  };
+}
 
 function findProductBySlug(
   products: StoreProduct[],

@@ -39,6 +39,8 @@
     "skipToContent": "Skip to main content"
   },
   "Home": {
+    "metaTitle": "Home",
+    "metaDescription": "Yapinci — a premium apparel brand inspired by Azerbaijani culture. Discover our collections.",
     "bestSellers": "Best Sellers",
     "newArrivals": "New Arrivals",
     "shopAllCta": "Shop All",
