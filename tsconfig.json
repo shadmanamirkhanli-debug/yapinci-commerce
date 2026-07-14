@@ -31,9 +31,6 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules",
-    "app-backup-before-languages",
-    "app-language-test",
-    "proxy-before-languages.ts"
+    "node_modules"
   ]
 }
