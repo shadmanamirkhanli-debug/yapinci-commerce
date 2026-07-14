@@ -80,7 +80,7 @@ CURRENT_STEP="health check"
 log "Health check: waiting for $HEALTH_URL to return 200"
 healthy=false
 for attempt in $(seq 1 "$HEALTH_RETRIES"); do
-  status="$(curl -s -o /dev/null -w '%{http_code}' "$HEALTH_URL" || echo "000")"
+  status="$(curl -s -o /dev/null -w '%{http_code}' "$HEALTH_URL" 2>/dev/null)" || status="000"
   if [[ "$status" == "200" ]]; then
     healthy=true
     break
