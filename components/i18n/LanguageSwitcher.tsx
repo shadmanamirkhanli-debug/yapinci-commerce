@@ -1,7 +1,8 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { cn } from "@/lib/utils/cn";
 
@@ -14,12 +15,15 @@ const locales = [
 export default function LanguageSwitcher({ light = false }: { light?: boolean }) {
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   function switchTo(code: string) {
-    document.cookie =
-      "NEXT_LOCALE=" + code + "; path=/; max-age=31536000; SameSite=Lax";
-    startTransition(() => router.refresh());
+    const query = searchParams.toString();
+    startTransition(() => {
+      router.replace(query ? `${pathname}?${query}` : pathname, { locale: code });
+    });
   }
 
   return (

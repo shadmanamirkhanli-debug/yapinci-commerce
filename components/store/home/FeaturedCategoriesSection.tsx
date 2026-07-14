@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";

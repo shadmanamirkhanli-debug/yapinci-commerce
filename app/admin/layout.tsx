@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { NextIntlClientProvider } from "next-intl";
 import { auth } from "@/auth";
 import { ADMIN_ROLES } from "@/lib/auth/roles";
 
@@ -22,5 +23,14 @@ export default async function AdminRootLayout({
     }
   }
 
-  return children;
+  // Admin lives outside app/[locale] (it's a single-language, az-only
+  // panel), but shared components like LoginForm still call useTranslations
+  // — give them a fixed-locale provider rather than next-intl's URL-driven one.
+  const messages = (await import("@/messages/az.json")).default;
+
+  return (
+    <NextIntlClientProvider locale="az" messages={messages}>
+      {children}
+    </NextIntlClientProvider>
+  );
 }

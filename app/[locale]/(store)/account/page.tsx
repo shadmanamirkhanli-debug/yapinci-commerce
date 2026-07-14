@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import LogoutButton from "@/components/auth/LogoutButton";
 import Card from "@/components/ui/Card";

@@ -3,14 +3,35 @@ import { ADMIN_ROLES } from "@/lib/auth/roles";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { apiError } from "@/lib/api-response";
 import { NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "@/i18n/routing";
 
-const publicAuthRoutes = [
+const intlMiddleware = createMiddleware(routing);
+
+// Storefront-only auth pages — /admin/login is handled separately since
+// /admin is never locale-prefixed.
+const storefrontAuthRoutes = [
   "/login",
   "/register",
   "/forgot-password",
   "/reset-password",
-  "/admin/login",
 ];
+
+const nonDefaultLocales = routing.locales.filter(
+  (locale) => locale !== routing.defaultLocale
+);
+
+// Strips a leading /en or /ru segment (if present) so the rest of this file
+// can classify routes the same way regardless of which locale is active.
+// /admin and /api are never prefixed, so this is a no-op for them.
+function splitLocale(pathname: string): { locale: string; rest: string } {
+  for (const locale of nonDefaultLocales) {
+    if (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)) {
+      return { locale, rest: pathname.slice(locale.length + 1) || "/" };
+    }
+  }
+  return { locale: routing.defaultLocale, rest: pathname };
+}
 
 type RateRule = {
   prefix: string;
@@ -59,14 +80,18 @@ export default auth((req) => {
     }
   }
 
+  const { locale, rest: unprefixedPathname } = splitLocale(pathname);
+  const localizedPath = (path: string) =>
+    locale === routing.defaultLocale ? path : `/${locale}${path}`;
+
   const isLoggedIn = !!req.auth;
   const userRole = req.auth?.user?.role;
   const isAdminApiRoute = pathname.startsWith("/api/admin");
   const isAdminPageRoute = pathname.startsWith("/admin");
   const isAdminLogin = pathname === "/admin/login";
-  const isAccountRoute = pathname.startsWith("/account");
-  const isPublicAuthRoute = publicAuthRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
+  const isAccountRoute = unprefixedPathname.startsWith("/account");
+  const isStorefrontAuthRoute = storefrontAuthRoutes.some(
+    (route) => unprefixedPathname === route || unprefixedPathname.startsWith(route + "/")
   );
   const isAdmin = !!userRole && ADMIN_ROLES.includes(userRole);
 
@@ -80,17 +105,21 @@ export default auth((req) => {
     return passThrough(req, pathname);
   }
 
-  if (isPublicAuthRoute) {
-    if (isLoggedIn && pathname === "/login") {
-      return NextResponse.redirect(new URL("/account", req.url));
-    }
-    if (isLoggedIn && isAdminLogin && isAdmin) {
+  if (isAdminLogin) {
+    if (isLoggedIn && isAdmin) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
     return passThrough(req, pathname);
   }
 
-  if (isAdminPageRoute && !isAdminLogin) {
+  if (isStorefrontAuthRoute) {
+    if (isLoggedIn && unprefixedPathname === "/login") {
+      return NextResponse.redirect(new URL(localizedPath("/account"), req.url));
+    }
+    return intlMiddleware(req);
+  }
+
+  if (isAdminPageRoute) {
     if (!isLoggedIn) {
       const loginUrl = new URL("/admin/login", req.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
@@ -99,28 +128,26 @@ export default auth((req) => {
     if (!isAdmin) {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
+    return passThrough(req, pathname);
   }
 
-  if (isAccountRoute) {
-    if (!isLoggedIn) {
-      const loginUrl = new URL("/login", req.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+  if (isAccountRoute && !isLoggedIn) {
+    const loginUrl = new URL(localizedPath("/login"), req.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  return passThrough(req, pathname);
+  return intlMiddleware(req);
 });
 
 export const config = {
   matcher: [
+    // Everything except /api, /admin, Next internals, and static files —
+    // needed so next-intl can negotiate/rewrite the locale prefix on every
+    // storefront page (including its /en, /ru, and unprefixed /az variants).
+    "/((?!api|admin|_next|.*\\..*).*)",
     "/admin/:path*",
     "/api/admin/:path*",
-    "/account/:path*",
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/reset-password",
     "/api/auth/:path*",
     "/api/orders/:path*",
     "/api/payments/:path*",

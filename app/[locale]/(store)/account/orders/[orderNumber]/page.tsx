@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { Link, redirect } from "@/i18n/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -19,10 +19,13 @@ export default async function AccountOrderDetailPage({
   params,
 }: OrderDetailPageProps) {
   const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+  const locale = await getLocale();
+  if (!session?.user?.id) redirect({ href: "/login", locale });
 
   const { orderNumber } = await params;
-  const order = await getOrderByNumber(orderNumber, { userId: session.user.id });
+  // next-intl's generic redirect() signature defeats `never`-based control-flow
+  // narrowing here — the guard above always throws before this line runs.
+  const order = await getOrderByNumber(orderNumber, { userId: session!.user!.id });
 
   if (!order) notFound();
 

@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import Card from "@/components/ui/Card";
 import Container from "@/components/ui/Container";
@@ -17,11 +16,15 @@ export async function generateMetadata() {
 
 export default async function AccountOrdersPage() {
   const session = await auth();
-  if (!session?.user?.id) redirect("/login?callbackUrl=/account/orders");
-
-  const orders = await getUserOrders(session.user.id);
-  const t = await getTranslations("AccountOrders");
   const locale = await getLocale();
+  if (!session?.user?.id) {
+    redirect({ href: "/login?callbackUrl=/account/orders", locale });
+  }
+
+  // next-intl's generic redirect() signature defeats `never`-based control-flow
+  // narrowing here — the guard above always throws before this line runs.
+  const orders = await getUserOrders(session!.user!.id);
+  const t = await getTranslations("AccountOrders");
 
   return (
     <Container as="section" className="py-20 lg:py-28">

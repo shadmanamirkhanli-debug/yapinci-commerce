@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import NextLink from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Link as IntlLink } from "@/i18n/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +32,10 @@ export default function LoginForm({
   defaultCallbackUrl = "/account",
 }: LoginFormProps) {
   const t = useTranslations("Auth");
+  // Admin login lives outside app/[locale] (no next-intl context there), so
+  // it must keep plain next/link; the customer login form uses the
+  // locale-aware Link to preserve /en, /ru prefixes on navigation.
+  const Link = loginType === "admin" ? NextLink : IntlLink;
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? defaultCallbackUrl;

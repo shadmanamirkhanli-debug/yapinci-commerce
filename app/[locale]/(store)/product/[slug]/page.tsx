@@ -46,6 +46,12 @@ export async function generateMetadata({
       images: product.primaryImage ? [{ url: product.primaryImage }] : [],
       type: "website",
     },
+    twitter: {
+      ...base.twitter,
+      title: product.seoTitle || product.name,
+      description: product.seoDescription || product.shortDescription,
+      images: product.primaryImage ? [product.primaryImage] : base.twitter?.images,
+    },
   };
 }
 
