@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -29,6 +30,7 @@ export default function LoginForm({
   showForgotPassword = true,
   defaultCallbackUrl = "/account",
 }: LoginFormProps) {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? defaultCallbackUrl;
@@ -53,7 +55,7 @@ export default function LoginForm({
     });
 
     if (result?.error) {
-      setServerError("E-poçt və ya şifrə yanlışdır");
+      setServerError(t("invalidCredentials"));
       return;
     }
 
@@ -75,7 +77,7 @@ export default function LoginForm({
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <Input
-          label="E-poçt"
+          label={t("emailLabel")}
           type="email"
           autoComplete="email"
           error={errors.email?.message}
@@ -83,7 +85,7 @@ export default function LoginForm({
         />
 
         <Input
-          label="Şifrə"
+          label={t("passwordLabel")}
           type="password"
           autoComplete="current-password"
           error={errors.password?.message}
@@ -97,7 +99,7 @@ export default function LoginForm({
         )}
 
         <Button type="submit" fullWidth loading={isSubmitting}>
-          Daxil Ol
+          {t("loginCta")}
         </Button>
       </form>
 
@@ -107,22 +109,22 @@ export default function LoginForm({
             href="/forgot-password"
             className="text-muted transition-colors hover:text-accent"
           >
-            Şifrəni unutmusunuz?
+            {t("forgotPasswordLink")}
           </Link>
         )}
 
         {showRegisterLink && (
           <p className="text-muted">
-            Hesabınız yoxdur?{" "}
+            {t("noAccountText")}{" "}
             <Link href="/register" className="text-foreground hover:text-accent">
-              Qeydiyyatdan keçin
+              {t("registerLink")}
             </Link>
           </p>
         )}
 
         {loginType === "admin" && (
           <Link href="/" className="text-xs tracking-[0.1em] uppercase text-muted hover:text-foreground">
-            ← Mağazaya qayıt
+            {t("backToShop")}
           </Link>
         )}
       </div>

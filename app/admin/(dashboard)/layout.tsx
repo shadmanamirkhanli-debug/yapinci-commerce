@@ -47,7 +47,7 @@ export default async function AdminDashboardLayout({
           >
             ← Storefront
           </Link>
-          <LogoutButton callbackUrl="/admin/login" />
+          <LogoutButton callbackUrl="/admin/login" label="Çıxış" />
         </div>
       </aside>
 
@@ -57,7 +57,7 @@ export default async function AdminDashboardLayout({
             <p className="text-sm font-medium tracking-[0.25em] uppercase">
               Yapinci Admin
             </p>
-            <LogoutButton callbackUrl="/admin/login" />
+            <LogoutButton callbackUrl="/admin/login" label="Çıxış" />
           </div>
           <div className="mt-4">
             <SidebarNav />

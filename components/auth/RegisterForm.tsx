@@ -6,12 +6,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
 
 export default function RegisterForm() {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -35,7 +37,7 @@ export default function RegisterForm() {
     const result = await response.json();
 
     if (!response.ok) {
-      setServerError(result.error ?? "Qeydiyyat zamanı xəta baş verdi");
+      setServerError(result.error ?? t("registerError"));
       return;
     }
 
@@ -62,23 +64,23 @@ export default function RegisterForm() {
           Yapinci
         </p>
         <h1 className="mt-3 text-2xl font-light tracking-tight text-foreground">
-          Qeydiyyat
+          {t("registerTitle")}
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Yeni hesab yaradın və kolleksiyanı kəşf edin
+          {t("registerSubtitle")}
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <Input
-          label="Ad, Soyad"
+          label={t("nameLabel")}
           autoComplete="name"
           error={errors.name?.message}
           {...register("name")}
         />
 
         <Input
-          label="E-poçt"
+          label={t("emailLabel")}
           type="email"
           autoComplete="email"
           error={errors.email?.message}
@@ -86,7 +88,7 @@ export default function RegisterForm() {
         />
 
         <Input
-          label="Şifrə"
+          label={t("passwordLabel")}
           type="password"
           autoComplete="new-password"
           error={errors.password?.message}
@@ -94,7 +96,7 @@ export default function RegisterForm() {
         />
 
         <Input
-          label="Şifrəni təsdiqləyin"
+          label={t("confirmPasswordLabel")}
           type="password"
           autoComplete="new-password"
           error={errors.confirmPassword?.message}
@@ -108,14 +110,14 @@ export default function RegisterForm() {
         )}
 
         <Button type="submit" fullWidth loading={isSubmitting}>
-          Qeydiyyatdan Keç
+          {t("registerCta")}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
-        Artıq hesabınız var?{" "}
+        {t("haveAccountText")}{" "}
         <Link href="/login" className="text-foreground hover:text-accent">
-          Daxil olun
+          {t("loginLink")}
         </Link>
       </p>
     </Card>

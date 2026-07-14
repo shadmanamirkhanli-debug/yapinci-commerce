@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -13,6 +14,7 @@ import {
 } from "@/lib/validations/auth";
 
 export default function ForgotPasswordForm() {
+  const t = useTranslations("Auth");
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [devResetUrl, setDevResetUrl] = useState<string | null>(null);
@@ -39,7 +41,7 @@ export default function ForgotPasswordForm() {
     const result = await response.json();
 
     if (!response.ok) {
-      setServerError(result.error ?? "Sorğu zamanı xəta baş verdi");
+      setServerError(result.error ?? t("forgotPasswordError"));
       return;
     }
 
@@ -56,16 +58,16 @@ export default function ForgotPasswordForm() {
           Yapinci
         </p>
         <h1 className="mt-3 text-2xl font-light tracking-tight text-foreground">
-          Şifrəni Bərpa Et
+          {t("forgotPasswordTitle")}
         </h1>
         <p className="mt-2 text-sm text-muted">
-          E-poçt ünvanınızı daxil edin, bərpa linki göndərək
+          {t("forgotPasswordSubtitle")}
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <Input
-          label="E-poçt"
+          label={t("emailLabel")}
           type="email"
           autoComplete="email"
           error={errors.email?.message}
@@ -86,7 +88,7 @@ export default function ForgotPasswordForm() {
 
         {devResetUrl && (
           <p className="rounded-xl bg-secondary px-4 py-3 text-xs text-muted break-all">
-            Dev link:{" "}
+            {t("devLinkLabel")}{" "}
             <Link href={devResetUrl} className="text-accent hover:underline">
               {devResetUrl}
             </Link>
@@ -94,13 +96,13 @@ export default function ForgotPasswordForm() {
         )}
 
         <Button type="submit" fullWidth loading={isSubmitting}>
-          Link Göndər
+          {t("sendLinkCta")}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
         <Link href="/login" className="text-foreground hover:text-accent">
-          ← Girişə qayıt
+          {t("backToLogin")}
         </Link>
       </p>
     </Card>

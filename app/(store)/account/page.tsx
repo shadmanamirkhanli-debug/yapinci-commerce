@@ -72,7 +72,7 @@ export default async function AccountPage() {
             {t("sessionDescription")}
           </p>
           <div className="mt-6">
-            <LogoutButton callbackUrl="/login" />
+            <LogoutButton callbackUrl="/login" label={t("logoutCta")} />
           </div>
         </Card>
       </div>

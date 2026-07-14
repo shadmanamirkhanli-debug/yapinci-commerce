@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 
@@ -21,6 +22,8 @@ export default function Drawer({
   side = "right",
   className,
 }: DrawerProps) {
+  const t = useTranslations("Common");
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -50,7 +53,7 @@ export default function Drawer({
     <div className="fixed inset-0 z-50" role="presentation">
       <button
         type="button"
-        aria-label="Bağla"
+        aria-label={t("close")}
         onClick={onClose}
         className="absolute inset-0 bg-primary/40 backdrop-blur-sm"
       />
@@ -71,7 +74,7 @@ export default function Drawer({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Bağla"
+            aria-label={t("close")}
             className={cn(
               "flex h-10 w-10 items-center justify-center rounded-full text-muted",
               transition,

@@ -38,7 +38,7 @@ export default function NewsletterSection() {
               <Input
                 type="email"
                 label={t("emailLabel")}
-                placeholder="your@email.com"
+                placeholder={t("emailPlaceholder")}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 className="flex-1"

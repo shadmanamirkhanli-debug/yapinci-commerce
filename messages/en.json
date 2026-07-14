@@ -16,7 +16,8 @@
     "buyNow": "Buy now",
     "viewProduct": "View product",
     "continueShopping": "Continue shopping",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "close": "Close"
   },
   "Footer": {
     "privacy": "Privacy Policy",
@@ -52,7 +53,7 @@
     "description": "A premium apparel brand inspired by Azerbaijani culture.",
     "tagline": "Premium Fashion",
     "hero": {
-      "headline": "Wear the Story of Azerbaijan",
+      "headline": "Woven from Azerbaijan",
       "cta": "Explore Collection",
       "imageAlt": "Yapinci collection"
     },
@@ -128,6 +129,7 @@
     "description": "Exclusive previews, early access, and stories from the atelier — delivered with intention.",
     "thankYou": "Thank you. You are subscribed.",
     "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
     "subscribeCta": "Subscribe"
   },
   "FeaturedCategories": {
@@ -160,7 +162,8 @@
     "ordersDescription": "View your order history and invoices.",
     "myOrders": "My Orders",
     "sessionHeading": "Session",
-    "sessionDescription": "Securely sign out of your account."
+    "sessionDescription": "Securely sign out of your account.",
+    "logoutCta": "Log Out"
   },
   "AccountOrders": {
     "metaTitle": "Order History",
@@ -177,6 +180,7 @@
     "backToOrders": "Orders"
   },
   "About": {
+    "metaTitle": "About",
     "metaDescription": "About Yapinci — a premium apparel brand inspired by Azerbaijani culture.",
     "eyebrow": "About",
     "title": "About Yapinci",
@@ -209,6 +213,7 @@
     ]
   },
   "Cart": {
+    "metaTitle": "Cart",
     "metaDescription": "Your Yapinci shopping cart.",
     "eyebrow": "Cart",
     "title": "Shopping Cart",
@@ -266,6 +271,7 @@
     "orderError": "Failed to create the order"
   },
   "Contact": {
+    "metaTitle": "Contact",
     "metaDescription": "Get in touch with Yapinci — questions, suggestions, and partnerships.",
     "eyebrow": "Contact",
     "title": "Contact Us",
@@ -440,6 +446,7 @@
     "title": "Recently Viewed"
   },
   "Search": {
+    "metaTitle": "Search",
     "metaDescription": "Search Yapinci products",
     "resultsForQuery": "Results for \"{query}\"",
     "resultsTitle": "Search Results",
@@ -447,6 +454,7 @@
     "prompt": "Enter the product you're looking for"
   },
   "Shop": {
+    "metaTitle": "Shop",
     "metaDescription": "Yapinci premium apparel collection — all products."
   },
   "ShopExperience": {
@@ -480,6 +488,53 @@
     "login": "Sign In",
     "account": "Account",
     "admin": "Admin"
+  },
+  "Auth": {
+    "loginMetaTitle": "Log In",
+    "loginTitle": "Log In",
+    "loginSubtitle": "Log in to your account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "loginCta": "Log In",
+    "invalidCredentials": "Incorrect email or password",
+    "forgotPasswordLink": "Forgot your password?",
+    "noAccountText": "Don't have an account?",
+    "registerLink": "Sign up",
+    "backToShop": "← Back to store",
+    "registerMetaTitle": "Register",
+    "registerTitle": "Register",
+    "registerSubtitle": "Create a new account and discover the collection",
+    "nameLabel": "Full Name",
+    "confirmPasswordLabel": "Confirm password",
+    "registerCta": "Sign Up",
+    "haveAccountText": "Already have an account?",
+    "loginLink": "Log in",
+    "registerError": "An error occurred during registration",
+    "emailAlreadyRegistered": "This email is already registered",
+    "systemConfigError": "System configuration error",
+    "invalidData": "Invalid data",
+    "forgotPasswordMetaTitle": "Forgot Password",
+    "forgotPasswordTitle": "Reset Password",
+    "forgotPasswordSubtitle": "Enter your email address and we'll send a reset link",
+    "sendLinkCta": "Send Link",
+    "backToLogin": "← Back to login",
+    "forgotPasswordError": "An error occurred while processing your request",
+    "resetLinkSent": "If this email is registered, a password reset link has been sent",
+    "devLinkLabel": "Dev link:",
+    "resetPasswordMetaTitle": "Reset Password",
+    "resetPasswordTitle": "New Password",
+    "resetPasswordSubtitle": "Set your new password",
+    "newPasswordLabel": "New password",
+    "updatePasswordCta": "Update Password",
+    "resetPasswordError": "An error occurred while updating your password",
+    "invalidToken": "Invalid or missing token",
+    "tokenInvalidOrExpired": "Token is invalid or has expired"
+  },
+  "NotFound": {
+    "heading": "Page Not Found",
+    "message": "The page you're looking for doesn't exist or has been moved.",
+    "homeCta": "Home",
+    "shopCta": "Shop"
   },
   "OrderSummary": {
     "productsHeading": "Products",

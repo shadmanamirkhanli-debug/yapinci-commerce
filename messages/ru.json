@@ -16,7 +16,8 @@
     "buyNow": "Купить сейчас",
     "viewProduct": "Смотреть товар",
     "continueShopping": "Продолжить покупки",
-    "loading": "Загрузка..."
+    "loading": "Загрузка...",
+    "close": "Закрыть"
   },
   "Footer": {
     "privacy": "Политика конфиденциальности",
@@ -52,7 +53,7 @@
     "description": "Премиальный бренд одежды, вдохновлённый азербайджанской культурой.",
     "tagline": "Премиальная мода",
     "hero": {
-      "headline": "Носите историю Азербайджана",
+      "headline": "Сотканное Азербайджаном",
       "cta": "Смотреть коллекцию",
       "imageAlt": "Коллекция Yapinci"
     },
@@ -128,6 +129,7 @@
     "description": "Эксклюзивные превью, ранний доступ и истории из ателье — с заботой о деталях.",
     "thankYou": "Спасибо. Вы подписаны.",
     "emailLabel": "Эл. почта",
+    "emailPlaceholder": "ваш@email.com",
     "subscribeCta": "Подписаться"
   },
   "FeaturedCategories": {
@@ -160,7 +162,8 @@
     "ordersDescription": "Просматривайте историю заказов и счета.",
     "myOrders": "Мои заказы",
     "sessionHeading": "Сессия",
-    "sessionDescription": "Безопасно выйдите из аккаунта."
+    "sessionDescription": "Безопасно выйдите из аккаунта.",
+    "logoutCta": "Выйти"
   },
   "AccountOrders": {
     "metaTitle": "История заказов",
@@ -177,6 +180,7 @@
     "backToOrders": "Заказы"
   },
   "About": {
+    "metaTitle": "О нас",
     "metaDescription": "О Yapinci — премиальном бренде одежды, вдохновлённом азербайджанской культурой.",
     "eyebrow": "О нас",
     "title": "О Yapinci",
@@ -209,6 +213,7 @@
     ]
   },
   "Cart": {
+    "metaTitle": "Корзина",
     "metaDescription": "Корзина покупок Yapinci.",
     "eyebrow": "Корзина",
     "title": "Корзина покупок",
@@ -266,6 +271,7 @@
     "orderError": "Не удалось создать заказ"
   },
   "Contact": {
+    "metaTitle": "Контакты",
     "metaDescription": "Свяжитесь с Yapinci — вопросы, предложения и сотрудничество.",
     "eyebrow": "Контакты",
     "title": "Свяжитесь с нами",
@@ -440,6 +446,7 @@
     "title": "Недавно просмотренные"
   },
   "Search": {
+    "metaTitle": "Поиск",
     "metaDescription": "Поиск товаров Yapinci",
     "resultsForQuery": "Результаты по запросу \"{query}\"",
     "resultsTitle": "Результаты поиска",
@@ -447,6 +454,7 @@
     "prompt": "Введите товар, который хотите найти"
   },
   "Shop": {
+    "metaTitle": "Магазин",
     "metaDescription": "Премиальная коллекция одежды Yapinci — все товары."
   },
   "ShopExperience": {
@@ -480,6 +488,53 @@
     "login": "Войти",
     "account": "Аккаунт",
     "admin": "Админ"
+  },
+  "Auth": {
+    "loginMetaTitle": "Войти",
+    "loginTitle": "Войти",
+    "loginSubtitle": "Войдите в свой аккаунт",
+    "emailLabel": "Эл. почта",
+    "passwordLabel": "Пароль",
+    "loginCta": "Войти",
+    "invalidCredentials": "Неверный email или пароль",
+    "forgotPasswordLink": "Забыли пароль?",
+    "noAccountText": "Нет аккаунта?",
+    "registerLink": "Зарегистрироваться",
+    "backToShop": "← Вернуться в магазин",
+    "registerMetaTitle": "Регистрация",
+    "registerTitle": "Регистрация",
+    "registerSubtitle": "Создайте новый аккаунт и откройте для себя коллекцию",
+    "nameLabel": "Имя, фамилия",
+    "confirmPasswordLabel": "Подтвердите пароль",
+    "registerCta": "Зарегистрироваться",
+    "haveAccountText": "Уже есть аккаунт?",
+    "loginLink": "Войти",
+    "registerError": "Произошла ошибка при регистрации",
+    "emailAlreadyRegistered": "Этот email уже зарегистрирован",
+    "systemConfigError": "Ошибка конфигурации системы",
+    "invalidData": "Неверные данные",
+    "forgotPasswordMetaTitle": "Восстановление пароля",
+    "forgotPasswordTitle": "Восстановление пароля",
+    "forgotPasswordSubtitle": "Введите свой email, и мы отправим ссылку для восстановления",
+    "sendLinkCta": "Отправить ссылку",
+    "backToLogin": "← Вернуться ко входу",
+    "forgotPasswordError": "Произошла ошибка при обработке запроса",
+    "resetLinkSent": "Если этот email зарегистрирован, ссылка для восстановления пароля отправлена",
+    "devLinkLabel": "Dev-ссылка:",
+    "resetPasswordMetaTitle": "Новый пароль",
+    "resetPasswordTitle": "Новый пароль",
+    "resetPasswordSubtitle": "Установите новый пароль",
+    "newPasswordLabel": "Новый пароль",
+    "updatePasswordCta": "Обновить пароль",
+    "resetPasswordError": "Произошла ошибка при обновлении пароля",
+    "invalidToken": "Недействительный или отсутствующий токен",
+    "tokenInvalidOrExpired": "Токен недействителен или срок его действия истёк"
+  },
+  "NotFound": {
+    "heading": "Страница не найдена",
+    "message": "Страница, которую вы ищете, не существует или была перемещена.",
+    "homeCta": "Главная",
+    "shopCta": "Магазин"
   },
   "OrderSummary": {
     "productsHeading": "Товары",

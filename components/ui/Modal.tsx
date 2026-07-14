@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 
@@ -29,6 +30,7 @@ export default function Modal({
   size = "md",
   className,
 }: ModalProps) {
+  const t = useTranslations("Common");
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function Modal({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Bağla"
+          aria-label={t("close")}
           className={cn(
             "flex h-10 w-10 items-center justify-center rounded-full text-muted",
             transition,

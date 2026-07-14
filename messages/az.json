@@ -16,7 +16,8 @@
     "buyNow": "İndi al",
     "viewProduct": "Məhsula bax",
     "continueShopping": "Alış-verişə davam et",
-    "loading": "Yüklənir..."
+    "loading": "Yüklənir...",
+    "close": "Bağla"
   },
   "Footer": {
     "privacy": "Məxfilik siyasəti",
@@ -128,6 +129,7 @@
     "description": "Eksklüziv ilkin baxışlar, erkən giriş və emalatxanadan hekayələr — məqsədyönlü şəkildə çatdırılır.",
     "thankYou": "Təşəkkür edirik. Abunə oldunuz.",
     "emailLabel": "E-poçt",
+    "emailPlaceholder": "sizin@email.com",
     "subscribeCta": "Abunə Ol"
   },
   "FeaturedCategories": {
@@ -160,7 +162,8 @@
     "ordersDescription": "Sifariş tarixçənizi və fakturaları görüntüləyin.",
     "myOrders": "Sifarişlərim",
     "sessionHeading": "Sessiya",
-    "sessionDescription": "Hesabınızdan təhlükəsiz çıxış edin."
+    "sessionDescription": "Hesabınızdan təhlükəsiz çıxış edin.",
+    "logoutCta": "Çıxış"
   },
   "AccountOrders": {
     "metaTitle": "Sifariş Tarixçəsi",
@@ -177,6 +180,7 @@
     "backToOrders": "Sifarişlər"
   },
   "About": {
+    "metaTitle": "Haqqımızda",
     "metaDescription": "Yapinci haqqında — Azərbaycan mədəniyyətindən ilham alan premium geyim brendi.",
     "eyebrow": "Haqqımızda",
     "title": "Yapinci Haqqında",
@@ -209,6 +213,7 @@
     ]
   },
   "Cart": {
+    "metaTitle": "Səbət",
     "metaDescription": "Yapinci alış-veriş səbəti.",
     "eyebrow": "Səbət",
     "title": "Alış-veriş Səbəti",
@@ -266,6 +271,7 @@
     "orderError": "Sifariş yaradıla bilmədi"
   },
   "Contact": {
+    "metaTitle": "Əlaqə",
     "metaDescription": "Yapinci ilə əlaqə saxlayın — suallar, təkliflər və əməkdaşlıq.",
     "eyebrow": "Əlaqə",
     "title": "Bizimlə Əlaqə",
@@ -440,6 +446,7 @@
     "title": "Son Baxılanlar"
   },
   "Search": {
+    "metaTitle": "Axtarış",
     "metaDescription": "Yapinci məhsul axtarışı",
     "resultsForQuery": "\"{query}\" üçün nəticələr",
     "resultsTitle": "Axtarış Nəticələri",
@@ -447,6 +454,7 @@
     "prompt": "Axtarmaq istədiyiniz məhsulu daxil edin"
   },
   "Shop": {
+    "metaTitle": "Mağaza",
     "metaDescription": "Yapinci premium geyim kolleksiyası — bütün məhsullar."
   },
   "ShopExperience": {
@@ -480,6 +488,53 @@
     "login": "Daxil Ol",
     "account": "Hesab",
     "admin": "Admin"
+  },
+  "Auth": {
+    "loginMetaTitle": "Daxil Ol",
+    "loginTitle": "Daxil Ol",
+    "loginSubtitle": "Hesabınıza daxil olun",
+    "emailLabel": "E-poçt",
+    "passwordLabel": "Şifrə",
+    "loginCta": "Daxil Ol",
+    "invalidCredentials": "E-poçt və ya şifrə yanlışdır",
+    "forgotPasswordLink": "Şifrəni unutmusunuz?",
+    "noAccountText": "Hesabınız yoxdur?",
+    "registerLink": "Qeydiyyatdan keçin",
+    "backToShop": "← Mağazaya qayıt",
+    "registerMetaTitle": "Qeydiyyat",
+    "registerTitle": "Qeydiyyat",
+    "registerSubtitle": "Yeni hesab yaradın və kolleksiyanı kəşf edin",
+    "nameLabel": "Ad, Soyad",
+    "confirmPasswordLabel": "Şifrəni təsdiqləyin",
+    "registerCta": "Qeydiyyatdan Keç",
+    "haveAccountText": "Artıq hesabınız var?",
+    "loginLink": "Daxil olun",
+    "registerError": "Qeydiyyat zamanı xəta baş verdi",
+    "emailAlreadyRegistered": "Bu e-poçt artıq qeydiyyatdan keçib",
+    "systemConfigError": "Sistem konfiqurasiya xətası",
+    "invalidData": "Yanlış məlumat",
+    "forgotPasswordMetaTitle": "Şifrəni Bərpa Et",
+    "forgotPasswordTitle": "Şifrəni Bərpa Et",
+    "forgotPasswordSubtitle": "E-poçt ünvanınızı daxil edin, bərpa linki göndərək",
+    "sendLinkCta": "Link Göndər",
+    "backToLogin": "← Girişə qayıt",
+    "forgotPasswordError": "Sorğu zamanı xəta baş verdi",
+    "resetLinkSent": "Əgər bu e-poçt qeydiyyatdadırsa, şifrə sıfırlama linki göndərildi",
+    "devLinkLabel": "Dev link:",
+    "resetPasswordMetaTitle": "Yeni Şifrə",
+    "resetPasswordTitle": "Yeni Şifrə",
+    "resetPasswordSubtitle": "Yeni şifrənizi təyin edin",
+    "newPasswordLabel": "Yeni şifrə",
+    "updatePasswordCta": "Şifrəni Yenilə",
+    "resetPasswordError": "Şifrə yenilənərkən xəta baş verdi",
+    "invalidToken": "Etibarsız və ya əskik token",
+    "tokenInvalidOrExpired": "Token etibarsızdır və ya vaxtı keçib"
+  },
+  "NotFound": {
+    "heading": "Səhifə tapılmadı",
+    "message": "Axtardığınız səhifə mövcud deyil və ya köçürülüb.",
+    "homeCta": "Ana səhifə",
+    "shopCta": "Mağaza"
   },
   "OrderSummary": {
     "productsHeading": "Məhsullar",

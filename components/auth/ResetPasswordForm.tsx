@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -18,6 +19,7 @@ type ResetPasswordFormProps = {
 };
 
 export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -42,7 +44,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     const result = await response.json();
 
     if (!response.ok) {
-      setServerError(result.error ?? "Şifrə yenilənərkən xəta baş verdi");
+      setServerError(result.error ?? t("resetPasswordError"));
       return;
     }
 
@@ -56,16 +58,16 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           Yapinci
         </p>
         <h1 className="mt-3 text-2xl font-light tracking-tight text-foreground">
-          Yeni Şifrə
+          {t("resetPasswordTitle")}
         </h1>
-        <p className="mt-2 text-sm text-muted">Yeni şifrənizi təyin edin</p>
+        <p className="mt-2 text-sm text-muted">{t("resetPasswordSubtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <input type="hidden" {...register("token")} />
 
         <Input
-          label="Yeni şifrə"
+          label={t("newPasswordLabel")}
           type="password"
           autoComplete="new-password"
           error={errors.password?.message}
@@ -73,7 +75,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         />
 
         <Input
-          label="Şifrəni təsdiqləyin"
+          label={t("confirmPasswordLabel")}
           type="password"
           autoComplete="new-password"
           error={errors.confirmPassword?.message}
@@ -87,13 +89,13 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         )}
 
         <Button type="submit" fullWidth loading={isSubmitting}>
-          Şifrəni Yenilə
+          {t("updatePasswordCta")}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
         <Link href="/login" className="text-foreground hover:text-accent">
-          ← Girişə qayıt
+          {t("backToLogin")}
         </Link>
       </p>
     </Card>

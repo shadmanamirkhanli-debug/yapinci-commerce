@@ -1,12 +1,16 @@
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import LoginForm from "@/components/auth/LoginForm";
 import Spinner from "@/components/ui/Spinner";
 
-export const metadata = {
-  title: "Login",
-};
+export async function generateMetadata() {
+  const t = await getTranslations("Auth");
+  return { title: t("loginMetaTitle") };
+}
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const t = await getTranslations("Auth");
+
   return (
     <Suspense
       fallback={
@@ -17,8 +21,8 @@ export default function LoginPage() {
     >
       <LoginForm
         loginType="customer"
-        title="Daxil Ol"
-        subtitle="Hesabınıza daxil olun"
+        title={t("loginTitle")}
+        subtitle={t("loginSubtitle")}
         showRegisterLink
       />
     </Suspense>

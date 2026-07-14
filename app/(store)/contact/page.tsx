@@ -10,7 +10,7 @@ import { getStoreSettings } from "@/lib/settings";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Contact");
   return {
-    title: "Contact",
+    title: t("metaTitle"),
     description: t("metaDescription"),
   };
 }

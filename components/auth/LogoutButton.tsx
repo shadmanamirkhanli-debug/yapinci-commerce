@@ -5,13 +5,13 @@ import Button from "@/components/ui/Button";
 
 type LogoutButtonProps = {
   variant?: "primary" | "secondary" | "ghost" | "outline";
-  label?: string;
+  label: string;
   callbackUrl?: string;
 };
 
 export default function LogoutButton({
   variant = "ghost",
-  label = "Çıxış",
+  label,
   callbackUrl = "/",
 }: LogoutButtonProps) {
   return (

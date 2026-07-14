@@ -7,6 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn";
 import { focusRing, transition } from "@/lib/ui/styles";
 
@@ -86,6 +87,8 @@ function ToastViewport({
   toasts: ToastMessage[];
   onDismiss: (id: string) => void;
 }) {
+  const t = useTranslations("Common");
+
   return (
     <div
       aria-live="polite"
@@ -110,7 +113,7 @@ function ToastViewport({
             </div>
             <button
               type="button"
-              aria-label="Bağla"
+              aria-label={t("close")}
               onClick={() => onDismiss(toast.id)}
               className={cn(
                 "rounded-full px-2 py-1 text-xs opacity-70",
@@ -139,6 +142,8 @@ export default function Toast({
   variant?: ToastVariant;
   onDismiss?: () => void;
 }) {
+  const t = useTranslations("Common");
+
   return (
     <div
       role="status"
@@ -157,7 +162,7 @@ export default function Toast({
         {onDismiss && (
           <button
             type="button"
-            aria-label="Bağla"
+            aria-label={t("close")}
             onClick={onDismiss}
             className={cn(
               "rounded-full px-2 py-1 text-xs opacity-70",

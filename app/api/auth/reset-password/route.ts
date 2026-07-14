@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
+import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
 import { resetPasswordSchema } from "@/lib/validations/auth";
 
 export async function POST(request: Request) {
+  const t = await getTranslations("Auth");
+
   try {
     const body = await request.json();
     const parsed = resetPasswordSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.issues[0]?.message ?? "Yanlış məlumat" },
+        { error: parsed.error.issues[0]?.message ?? t("invalidData") },
         { status: 400 }
       );
     }
@@ -22,7 +25,7 @@ export async function POST(request: Request) {
 
     if (!resetToken || resetToken.expiresAt < new Date()) {
       return NextResponse.json(
-        { error: "Token etibarsızdır və ya vaxtı keçib" },
+        { error: t("tokenInvalidOrExpired") },
         { status: 400 }
       );
     }
@@ -39,12 +42,10 @@ export async function POST(request: Request) {
       }),
     ]);
 
-    return NextResponse.json({
-      message: "Şifrəniz uğurla yeniləndi",
-    });
+    return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(
-      { error: "Şifrə yenilənərkən xəta baş verdi" },
+      { error: t("resetPasswordError") },
       { status: 500 }
     );
   }

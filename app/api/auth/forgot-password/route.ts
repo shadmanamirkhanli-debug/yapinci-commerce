@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto";
 import { NextResponse } from "next/server";
+import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
 import { sendEmail, isNotificationEnabled } from "@/lib/email";
@@ -8,13 +9,15 @@ import { passwordResetEmail } from "@/lib/email-templates";
 const RESET_TOKEN_EXPIRY_HOURS = 1;
 
 export async function POST(request: Request) {
+  const t = await getTranslations("Auth");
+
   try {
     const body = await request.json();
     const parsed = forgotPasswordSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.issues[0]?.message ?? "Yanlış məlumat" },
+        { error: parsed.error.issues[0]?.message ?? t("invalidData") },
         { status: 400 }
       );
     }
@@ -24,8 +27,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json({
-        message:
-          "Əgər bu e-poçt qeydiyyatdadırsa, şifrə sıfırlama linki göndərildi",
+        message: t("resetLinkSent"),
       });
     }
 
@@ -61,13 +63,12 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      message:
-        "Əgər bu e-poçt qeydiyyatdadırsa, şifrə sıfırlama linki göndərildi",
+      message: t("resetLinkSent"),
       ...(process.env.NODE_ENV === "development" && { resetUrl }),
     });
   } catch {
     return NextResponse.json(
-      { error: "Sorğu zamanı xəta baş verdi" },
+      { error: t("forgotPasswordError") },
       { status: 500 }
     );
   }
