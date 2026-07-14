@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
@@ -16,11 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CheckoutPage() {
   const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login?callbackUrl=/checkout");
-  }
-
   const t = await getTranslations("Checkout");
 
   return (
@@ -31,7 +25,7 @@ export default async function CheckoutPage() {
         description={t("description")}
         className="mb-12"
       />
-      <CheckoutWizard defaultEmail={session.user.email ?? undefined} />
+      <CheckoutWizard defaultEmail={session?.user?.email ?? undefined} />
     </Container>
   );
 }
