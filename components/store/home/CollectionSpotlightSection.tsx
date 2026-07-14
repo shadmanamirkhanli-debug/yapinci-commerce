@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import CarpetPattern from "@/components/ui/CarpetPattern";
 import Container from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { StoreProduct } from "@/lib/store/types";
@@ -21,9 +22,11 @@ export default function CollectionSpotlightSection({
   reversed = false,
 }: CollectionSpotlightSectionProps) {
   const t = useTranslations("CollectionSpotlight");
+  const patternName = `collection-${title.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
-    <section className="border-t border-border bg-background">
+    <section className="relative overflow-hidden border-t border-border bg-background">
+      <CarpetPattern name={patternName} />
       <Container as="section" className="section-padding">
         <div className="mb-10 flex items-center gap-6">
           <span className="h-px flex-1 bg-border" aria-hidden="true" />

@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
+import CarpetPattern from "@/components/ui/CarpetPattern";
 import Container from "@/components/ui/Container";
 
 export default function BrandStorySection() {
@@ -7,7 +8,8 @@ export default function BrandStorySection() {
   const paragraphs = t.raw("story.paragraphs") as string[];
 
   return (
-    <section className="border-t border-border bg-background section-padding">
+    <section className="relative overflow-hidden border-t border-border bg-background section-padding">
+      <CarpetPattern name="brand-story" />
       <Container as="section">
         <div className="mb-12 flex items-center gap-6 lg:mb-14">
           <span className="h-px flex-1 bg-border" aria-hidden="true" />

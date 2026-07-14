@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductGrid from "@/components/ui/ProductGrid";
 import Button from "@/components/ui/Button";
+import CarpetPattern from "@/components/ui/CarpetPattern";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Pagination from "@/components/ui/Pagination";
@@ -224,7 +225,8 @@ export default function ShopExperience({
       </aside>
 
       <div>
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="relative overflow-hidden mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <CarpetPattern name="shop-header" />
           <div>
             <p className="text-xs font-medium tracking-[0.3em] uppercase text-accent">
               {t("eyebrow")}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import CarpetPattern from "@/components/ui/CarpetPattern";
 import Container from "@/components/ui/Container";
 import { journalEntries } from "@/lib/constants";
 
@@ -7,7 +8,8 @@ export default function JournalSection() {
   const t = useTranslations("JournalSection");
 
   return (
-    <section className="border-t border-border bg-secondary section-padding">
+    <section className="relative overflow-hidden border-t border-border bg-secondary section-padding">
+      <CarpetPattern name="journal" />
       <Container as="section">
         <div className="mb-12 flex items-center gap-6 lg:mb-14">
           <span className="h-px flex-1 bg-border" aria-hidden="true" />

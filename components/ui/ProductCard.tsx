@@ -59,7 +59,7 @@ export default function ProductCard({
           />
           <div className="absolute left-4 top-4 flex flex-col gap-2">
             {showFeatured && (
-              <Badge variant="accent" size="sm">
+              <Badge variant="premium" size="sm">
                 {t("featured")}
               </Badge>
             )}

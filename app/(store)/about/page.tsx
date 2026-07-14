@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Button from "@/components/ui/Button";
+import CarpetPattern from "@/components/ui/CarpetPattern";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 
@@ -19,7 +20,8 @@ export default async function AboutPage() {
 
   return (
     <>
-      <Container as="section" className="py-20 lg:py-28">
+      <Container as="section" className="relative overflow-hidden py-20 lg:py-28">
+        <CarpetPattern name="about-intro" />
         <div className="max-w-3xl">
           <SectionHeader eyebrow={t("eyebrow")} title={t("title")} />
 
@@ -87,7 +89,7 @@ export default async function AboutPage() {
                 key={value.title}
                 className="rounded-2xl bg-white p-8 transition-all duration-300 hover:shadow-lg"
               >
-                <div className="mb-4 h-1 w-8 rounded-full bg-accent" />
+                <div className="mb-4 h-1 w-8 rounded-full bg-accent-secondary" />
                 <h3 className="text-sm font-medium uppercase tracking-[0.15em] text-primary">
                   {value.title}
                 </h3>

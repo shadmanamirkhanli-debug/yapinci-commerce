@@ -66,7 +66,7 @@ export default function Rating({
           return (
             <StarIcon
               key={star}
-              className={cn(sizes[size], filled ? "text-accent" : "text-border")}
+              className={cn(sizes[size], filled ? "text-accent-secondary" : "text-border")}
               filled={filled}
             />
           );

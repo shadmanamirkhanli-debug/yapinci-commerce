@@ -1,4 +1,5 @@
 import Button from "@/components/ui/Button";
+import CarpetPattern from "@/components/ui/CarpetPattern";
 import Container from "@/components/ui/Container";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductGrid from "@/components/ui/ProductGrid";
@@ -25,10 +26,11 @@ export default function ProductShowcaseSection({
   return (
     <section
       className={cn(
-        "border-t border-border section-padding",
+        "relative overflow-hidden border-t border-border section-padding",
         variant === "muted" ? "bg-secondary" : "bg-background"
       )}
     >
+      <CarpetPattern name={`showcase-${variant}`} />
       <Container as="section">
         <div className="mb-12 flex flex-col items-center gap-6 lg:mb-14">
           <div className="flex w-full items-center gap-6">

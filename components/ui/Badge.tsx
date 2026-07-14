@@ -4,6 +4,9 @@ import { transition } from "@/lib/ui/styles";
 const variants = {
   default: "bg-secondary text-foreground",
   accent: "bg-accent/15 text-accent",
+  // Decorative/merit label (e.g. "Featured"). Gold is ornament only, so the
+  // text stays in --foreground for readability — never text-accent-secondary.
+  premium: "border border-accent-secondary/40 bg-accent-secondary/10 text-foreground",
   primary: "bg-primary text-background",
   outline: "border border-border bg-background text-foreground",
   success: "bg-success/10 text-success",
