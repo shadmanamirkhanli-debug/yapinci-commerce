@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import type { Prisma } from "@prisma/client";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
 import { toNumber } from "@/lib/admin/serialize";
@@ -68,7 +69,9 @@ export function formatOrder(order: OrderWithRelations) {
       unitPrice: toNumber(item.unitPrice),
       total: toNumber(item.total),
     })),
-    customer: order.user,
+    customer: order.user
+      ? { name: order.user.name, email: order.user.email }
+      : { name: null, email: order.customerEmail },
     createdAt: order.createdAt.toISOString(),
     updatedAt: order.updatedAt.toISOString(),
   };
@@ -100,7 +103,7 @@ async function generateOrderNumber() {
 }
 
 export async function createOrderFromCheckout(
-  userId: string,
+  userId: string | null,
   input: CheckoutOrderInput
 ) {
   const variants = await prisma.productVariant.findMany({
@@ -179,6 +182,7 @@ export async function createOrderFromCheckout(
 
   const fullName = `${input.customer.firstName} ${input.customer.lastName}`.trim();
   const orderNumber = await generateOrderNumber();
+  const guestToken = userId ? null : randomBytes(32).toString("hex");
 
   const order = await prisma.$transaction(async (tx) => {
     const address = await tx.address.create({
@@ -202,6 +206,7 @@ export async function createOrderFromCheckout(
         userId,
         couponId,
         shippingAddressId: address.id,
+        guestToken,
         status: OrderStatus.AWAITING_PAYMENT,
         subtotal: totals.subtotal,
         discount: totals.discount,
@@ -255,14 +260,23 @@ export async function createOrderFromCheckout(
     return createdOrder;
   });
 
-  return formatOrder(order);
+  return { order: formatOrder(order), guestToken };
 }
 
-export async function getOrderByNumber(orderNumber: string, userId?: string) {
+export async function getOrderByNumber(
+  orderNumber: string,
+  identity: { userId?: string; guestToken?: string } = {}
+) {
+  const { userId, guestToken } = identity;
+
+  if (!userId && !guestToken) {
+    return null;
+  }
+
   const order = await prisma.order.findFirst({
     where: {
       orderNumber,
-      ...(userId ? { userId } : {}),
+      ...(userId ? { userId } : { guestToken }),
     },
     include: orderInclude,
   });

@@ -24,14 +24,22 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type ConfirmationPageProps = {
   params: Promise<{ orderNumber: string }>;
+  searchParams: Promise<{ token?: string }>;
 };
 
 export default async function CheckoutConfirmationPage({
   params,
+  searchParams,
 }: ConfirmationPageProps) {
   const session = await auth();
   const { orderNumber } = await params;
-  const order = await getOrderByNumber(orderNumber, session?.user?.id);
+  const { token } = await searchParams;
+  const identity = session?.user?.id
+    ? { userId: session.user.id }
+    : token
+      ? { guestToken: token }
+      : {};
+  const order = await getOrderByNumber(orderNumber, identity);
 
   if (!order) {
     notFound();
@@ -63,9 +71,11 @@ export default async function CheckoutConfirmationPage({
           {t("paymentNotice")}
         </p>
         <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-          <Button href={`/account/orders/${order.orderNumber}`}>
-            {t("viewOrderCta")}
-          </Button>
+          {session?.user?.id && (
+            <Button href={`/account/orders/${order.orderNumber}`}>
+              {t("viewOrderCta")}
+            </Button>
+          )}
           <Button href="/shop" variant="secondary">
             {tCommon("continueShopping")}
           </Button>

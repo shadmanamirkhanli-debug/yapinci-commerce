@@ -55,7 +55,9 @@ export async function getDashboardStats() {
     recentOrders: recentOrders.map((order) => ({
       id: order.id,
       orderNumber: order.orderNumber,
-      customer: order.user.name ?? order.user.email,
+      customer: order.user
+        ? (order.user.name ?? order.user.email)
+        : (order.customerEmail ?? "Guest"),
       total: toNumber(order.total),
       status: order.status,
       createdAt: order.createdAt.toISOString(),

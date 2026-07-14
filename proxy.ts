@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { ADMIN_ROLES } from "@/lib/auth/roles";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { apiError } from "@/lib/api-response";
 import { NextResponse } from "next/server";
 
 const publicAuthRoutes = [
@@ -30,6 +31,14 @@ function getClientIp(req: Request): string {
   return forwardedFor?.split(",")[0]?.trim() ?? "unknown";
 }
 
+// Server layouts (e.g. app/admin/layout.tsx) can't read the pathname
+// directly, so forward it as a header for route-aware guards there.
+function passThrough(req: Request, pathname: string) {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-pathname", pathname);
+  return NextResponse.next({ request: { headers: requestHeaders } });
+}
+
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
@@ -52,30 +61,42 @@ export default auth((req) => {
 
   const isLoggedIn = !!req.auth;
   const userRole = req.auth?.user?.role;
-  const isAdminRoute = pathname.startsWith("/admin");
+  const isAdminApiRoute = pathname.startsWith("/api/admin");
+  const isAdminPageRoute = pathname.startsWith("/admin");
   const isAdminLogin = pathname === "/admin/login";
   const isAccountRoute = pathname.startsWith("/account");
   const isPublicAuthRoute = publicAuthRoutes.some(
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
+  const isAdmin = !!userRole && ADMIN_ROLES.includes(userRole);
+
+  // Backstop for admin API routes: each handler already calls requireAdmin(),
+  // this just ensures a missing/forgotten check doesn't leave a route exposed.
+  // JSON (not a redirect) since these are called by fetch/XHR, not navigated to.
+  if (isAdminApiRoute) {
+    if (!isLoggedIn || !isAdmin) {
+      return apiError("Unauthorized", 401);
+    }
+    return passThrough(req, pathname);
+  }
 
   if (isPublicAuthRoute) {
     if (isLoggedIn && pathname === "/login") {
       return NextResponse.redirect(new URL("/account", req.url));
     }
-    if (isLoggedIn && isAdminLogin && userRole && ADMIN_ROLES.includes(userRole)) {
+    if (isLoggedIn && isAdminLogin && isAdmin) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
-    return NextResponse.next();
+    return passThrough(req, pathname);
   }
 
-  if (isAdminRoute && !isAdminLogin) {
+  if (isAdminPageRoute && !isAdminLogin) {
     if (!isLoggedIn) {
       const loginUrl = new URL("/admin/login", req.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
     }
-    if (!userRole || !ADMIN_ROLES.includes(userRole)) {
+    if (!isAdmin) {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
   }
@@ -88,12 +109,13 @@ export default auth((req) => {
     }
   }
 
-  return NextResponse.next();
+  return passThrough(req, pathname);
 });
 
 export const config = {
   matcher: [
     "/admin/:path*",
+    "/api/admin/:path*",
     "/account/:path*",
     "/login",
     "/register",

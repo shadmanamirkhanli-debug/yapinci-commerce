@@ -174,7 +174,10 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
     }
 
     clearCart();
-    router.push(`/checkout/confirmation/${result.data.orderNumber}`);
+    const confirmationUrl = result.data.guestToken
+      ? `/checkout/confirmation/${result.data.orderNumber}?token=${result.data.guestToken}`
+      : `/checkout/confirmation/${result.data.orderNumber}`;
+    router.push(confirmationUrl);
     router.refresh();
   };
 

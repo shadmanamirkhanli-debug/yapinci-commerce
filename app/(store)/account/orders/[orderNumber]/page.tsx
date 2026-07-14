@@ -22,7 +22,7 @@ export default async function AccountOrderDetailPage({
   if (!session?.user?.id) redirect("/login");
 
   const { orderNumber } = await params;
-  const order = await getOrderByNumber(orderNumber, session.user.id);
+  const order = await getOrderByNumber(orderNumber, { userId: session.user.id });
 
   if (!order) notFound();
 

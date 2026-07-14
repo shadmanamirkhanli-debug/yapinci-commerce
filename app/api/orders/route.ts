@@ -19,9 +19,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return apiError("Unauthorized", 401);
-  }
+  const userId = session?.user?.id ?? null;
 
   try {
     const body = await request.json();
@@ -31,13 +29,13 @@ export async function POST(request: Request) {
       return apiError(parsed.error.issues[0]?.message ?? "Invalid data", 400);
     }
 
-    const order = await createOrderFromCheckout(session.user.id, parsed.data);
-    return apiSuccess(order, 201);
+    const { order, guestToken } = await createOrderFromCheckout(userId, parsed.data);
+    return apiSuccess({ ...order, guestToken }, 201);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Order creation failed";
     logger.error("Order creation failed", {
-      userId: session.user.id,
+      userId,
       error: message,
     });
     return apiError(message, 400);
