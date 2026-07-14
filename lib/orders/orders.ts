@@ -10,6 +10,7 @@ import {
 } from "@/lib/orders/shipping";
 import { calculateTax } from "@/lib/orders/tax";
 import { prisma } from "@/lib/prisma";
+import { notifyNewOrder } from "@/lib/telegram";
 import type { CheckoutOrderInput } from "@/lib/validations/checkout";
 
 type OrderWithRelations = Prisma.OrderGetPayload<{
@@ -260,7 +261,12 @@ export async function createOrderFromCheckout(
     return createdOrder;
   });
 
-  return { order: formatOrder(order), guestToken };
+  const formattedOrder = formatOrder(order);
+
+  // Fire-and-forget: notification failures must never affect the order response.
+  void notifyNewOrder(formattedOrder);
+
+  return { order: formattedOrder, guestToken };
 }
 
 export async function getOrderByNumber(
