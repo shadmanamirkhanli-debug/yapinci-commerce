@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { ADMIN_ROLES } from "@/lib/auth/roles";

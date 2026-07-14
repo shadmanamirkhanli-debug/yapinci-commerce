@@ -1,24 +1,18 @@
 import type { Metadata } from "next";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Input from "@/components/ui/Input";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Textarea from "@/components/ui/Textarea";
 import { getStoreSettings } from "@/lib/settings";
-import { createPageMetadata } from "@/lib/seo/metadata";
-import type { StoreLocale } from "@/lib/store/format";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Contact");
-  const locale = (await getLocale()) as StoreLocale;
-
-  return createPageMetadata({
+  return {
     title: t("metaTitle"),
     description: t("metaDescription"),
-    path: "/contact",
-    locale,
-  });
+  };
 }
 
 export default async function ContactPage() {

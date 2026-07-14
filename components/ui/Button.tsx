@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import {
   disabledStyles,
@@ -76,18 +76,6 @@ export default function Button({
 
   if ("href" in props && props.href) {
     const { href } = props;
-
-    // API routes (e.g. file downloads) aren't part of next-intl's routing —
-    // the locale-aware Link would incorrectly prefix them (/en/api/... 404s).
-    if (href.startsWith("/api/")) {
-      return (
-        <a href={href} className={classes} aria-disabled={loading}>
-          {loading && <ButtonSpinner />}
-          {children}
-        </a>
-      );
-    }
-
     return (
       <Link href={href} className={classes} aria-disabled={loading}>
         {loading && <ButtonSpinner />}

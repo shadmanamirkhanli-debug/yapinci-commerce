@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import SessionProvider from "@/components/providers/SessionProvider";
-import { getSeoSettings, ogLocaleFor, defaultOgImage } from "@/lib/seo/metadata";
+import { getSeoSettings, ogLocaleFor } from "@/lib/seo/metadata";
 import { getStoreSettings } from "@/lib/settings";
 import "./globals.css";
 
@@ -23,7 +24,6 @@ const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoSettings();
   const locale = await getLocale();
-  const image = seo.ogImageUrl ?? defaultOgImage(baseUrl);
 
   return {
     metadataBase: new URL(baseUrl),
@@ -38,13 +38,12 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: seo.metaTitle,
       title: seo.metaTitle,
       description: seo.metaDescription,
-      images: [{ url: image }],
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: seo.metaTitle,
       description: seo.metaDescription,
-      images: [image],
     },
     robots: {
       index: true,
@@ -85,7 +84,9 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <SessionProvider>{children}</SessionProvider>
+        <NextIntlClientProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

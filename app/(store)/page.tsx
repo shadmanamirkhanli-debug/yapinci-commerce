@@ -5,24 +5,27 @@ import CollectionSpotlightSection from "@/components/store/home/CollectionSpotli
 import HeroSection from "@/components/store/home/HeroSection";
 import JournalSection from "@/components/store/home/JournalSection";
 import ProductShowcaseSection from "@/components/store/home/ProductShowcaseSection";
-import { homeCollections } from "@/lib/constants";
+import { brand, homeCollections } from "@/lib/constants";
 import { getHomePageData } from "@/lib/store/products";
 import type { StoreProduct } from "@/lib/store/types";
 import type { StoreLocale } from "@/lib/store/format";
-import { createPageMetadata } from "@/lib/seo/metadata";
+import { ogLocaleFor } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Home");
-  const locale = (await getLocale()) as StoreLocale;
+  const locale = await getLocale();
 
-  return createPageMetadata({
+  return {
     title: t("metaTitle"),
     description: t("metaDescription"),
-    path: "/",
-    locale,
-  });
+    openGraph: {
+      title: brand.name,
+      description: t("metaDescription"),
+      locale: ogLocaleFor(locale),
+    },
+  };
 }
 
 function findProductBySlug(

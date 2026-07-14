@@ -1,6 +1,7 @@
 "use client";
 
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { brand, navLinks } from "@/lib/constants";
@@ -32,7 +33,6 @@ function CartIcon() {
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
@@ -112,7 +112,7 @@ export default function Navbar() {
             onSubmit={(event) => {
               event.preventDefault();
               if (searchQuery.trim()) {
-                router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
               }
             }}
           >
@@ -211,7 +211,7 @@ export default function Navbar() {
             onSubmit={(event) => {
               event.preventDefault();
               if (searchQuery.trim()) {
-                router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
                 setMobileOpen(false);
               }
             }}

@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "@/i18n/navigation";
-import { useLocale, useTranslations } from "next-intl";
-import { routing } from "@/i18n/routing";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import ProductGalleryZoom from "@/components/store/ProductGalleryZoom";
 import RecentlyViewed from "@/components/store/RecentlyViewed";
 import Button from "@/components/ui/Button";
@@ -31,7 +30,6 @@ export default function ProductDetailView({
   const { addItem } = useCart();
   const { data: session } = useSession();
   const router = useRouter();
-  const locale = useLocale();
   const t = useTranslations("ProductDetail");
   const [selectedSize, setSelectedSize] = useState(
     product.variants.find((variant) => variant.size)?.size ?? ""
@@ -109,14 +107,7 @@ export default function ProductDetailView({
 
   const handleWishlist = async () => {
     if (!session?.user) {
-      // LoginForm's own router.push(callbackUrl) is a plain (non-locale-aware)
-      // router — it's shared with /admin/login — so this value must already
-      // carry whatever prefix the current locale needs.
-      const productPath =
-        locale === routing.defaultLocale
-          ? `/product/${product.slug}`
-          : `/${locale}/product/${product.slug}`;
-      router.push(`/login?callbackUrl=${productPath}`);
+      router.push(`/login?callbackUrl=/product/${product.slug}`);
       return;
     }
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductGrid from "@/components/ui/ProductGrid";

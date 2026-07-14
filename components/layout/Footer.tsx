@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import YapinciLogo from "@/components/brand/YapinciLogo";
 import { brand, navLinks } from "@/lib/constants";

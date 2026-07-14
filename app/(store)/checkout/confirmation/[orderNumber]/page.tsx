@@ -7,13 +7,12 @@ import { getOrderByNumber } from "@/lib/orders/orders";
 import { auth } from "@/auth";
 import { formatAmount } from "@/components/ui/Price";
 import { createPageMetadata } from "@/lib/seo/metadata";
-import type { StoreLocale } from "@/lib/store/format";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("CheckoutConfirmation");
-  const locale = (await getLocale()) as StoreLocale;
+  const locale = await getLocale();
   return createPageMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),

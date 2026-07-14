@@ -1,20 +1,31 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import Container from "@/components/ui/Container";
+import Button from "@/components/ui/Button";
 
-// Fallback for paths outside app/[locale] (e.g. malformed URLs that never
-// reach the locale segment). The localized 404 lives at app/[locale]/not-found.tsx.
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getTranslations("NotFound");
+
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 py-20 text-center">
+    <Container as="section" className="flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
       <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted">
         404
       </p>
-      <h1 className="font-serif text-3xl text-foreground">Page not found</h1>
-      <Link
-        href="/"
-        className="inline-flex h-12 items-center px-6 text-xs font-medium uppercase tracking-[0.15em] text-accent hover:underline"
-      >
-        Back home
-      </Link>
-    </div>
+      <h1 className="mt-4 font-serif text-3xl text-foreground">
+        {t("heading")}
+      </h1>
+      <p className="mt-4 max-w-md text-sm text-muted">
+        {t("message")}
+      </p>
+      <div className="mt-8 flex gap-4">
+        <Button href="/">{t("homeCta")}</Button>
+        <Link
+          href="/shop"
+          className="inline-flex h-12 items-center px-6 text-xs font-medium uppercase tracking-[0.15em] text-accent hover:underline"
+        >
+          {t("shopCta")}
+        </Link>
+      </div>
+    </Container>
   );
 }

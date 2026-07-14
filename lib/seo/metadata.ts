@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import { getPathname } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
 
 const fallbackSiteName = "Yapinci";
 const fallbackDescription =
@@ -35,66 +33,42 @@ export function ogLocaleFor(locale: string): string {
   return OG_LOCALES[locale] ?? OG_LOCALES.az;
 }
 
-export function defaultOgImage(baseUrl: string): string {
-  return baseUrl + "/og-image.png";
-}
-
-type Locale = (typeof routing.locales)[number];
-
 export async function createPageMetadata({
   title,
   description,
   path,
   noIndex = false,
-  locale = routing.defaultLocale,
+  locale = "az",
 }: {
   title: string;
   description?: string;
   path?: string;
   noIndex?: boolean;
-  locale?: Locale;
+  locale?: string;
 }): Promise<Metadata> {
   const seo = await getSeoSettings();
   const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+  const url = path ? baseUrl + path : baseUrl;
   const finalDescription = description ?? seo.metaDescription;
-  const image = seo.ogImageUrl ?? defaultOgImage(baseUrl);
-
-  let alternates: Metadata["alternates"];
-  let canonicalUrl = baseUrl;
-
-  if (path) {
-    const localizedPath = getPathname({ href: path, locale });
-    canonicalUrl = baseUrl + localizedPath;
-
-    const languages: Record<string, string> = {};
-    for (const loc of routing.locales) {
-      languages[loc] = baseUrl + getPathname({ href: path, locale: loc });
-    }
-    languages["x-default"] =
-      baseUrl + getPathname({ href: path, locale: routing.defaultLocale });
-
-    alternates = { canonical: canonicalUrl, languages };
-  }
 
   return {
     title,
     description: finalDescription,
     robots: noIndex ? { index: false, follow: false } : undefined,
-    alternates,
+    alternates: path ? { canonical: url } : undefined,
     openGraph: {
       title,
       description: finalDescription,
-      url: canonicalUrl,
+      url,
       siteName: seo.metaTitle,
       locale: ogLocaleFor(locale),
       type: "website",
-      images: [{ url: image }],
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: finalDescription,
-      images: [image],
     },
   };
 }
