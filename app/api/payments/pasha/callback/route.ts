@@ -61,13 +61,17 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { result, raw } = await getTransactionResult(transId);
+    const { paid, result, resultCode, rrn, approvalCode, error: pashaError, raw } =
+      await getTransactionResult(transId);
 
-    if (result === "OK") {
+    if (paid) {
       await prisma.$transaction([
         prisma.payment.update({
           where: { id: payment.id },
-          data: { status: PaymentStatus.COMPLETED, metadata: { lastResult: raw } },
+          data: {
+            status: PaymentStatus.COMPLETED,
+            metadata: { lastResult: raw, resultCode, rrn, approvalCode },
+          },
         }),
         prisma.order.update({
           where: { id: payment.orderId },
@@ -80,16 +84,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // FAILED, or any other/unknown RESULT (reversal, timeout, etc).
-    // TODO(PASHA CardSuite ECOMM doc): confirm the full RESULT enumeration
-    // beyond OK/FAILED — until then every non-OK result is treated the same:
-    // Payment -> FAILED, Order stays AWAITING_PAYMENT so the customer can retry.
+    // Not paid: RESULT !== "OK", RESULT missing/unrecognized, or an error
+    // field was present. Never inferred from RRN/APPROVAL_CODE, never
+    // defaults to success. Payment -> FAILED, order stays AWAITING_PAYMENT
+    // so the customer can retry.
+    // TODO(PASHA CardSuite ECOMM doc chapter 8): map the full RESULT_CODE
+    // enumeration — not needed to decide paid vs not-paid, but useful detail
+    // for support/debugging.
     await prisma.payment.update({
       where: { id: payment.id },
-      data: { status: PaymentStatus.FAILED, metadata: { lastResult: raw } },
+      data: {
+        status: PaymentStatus.FAILED,
+        metadata: { lastResult: raw, resultCode, rrn, approvalCode, error: pashaError },
+      },
     });
 
-    logger.warn("PASHA transaction did not complete", { transId, result });
+    logger.warn("PASHA transaction did not complete", { transId, result, resultCode, error: pashaError });
 
     return NextResponse.redirect(new URL("/checkout?payment=failed", request.url));
   } catch (error) {
