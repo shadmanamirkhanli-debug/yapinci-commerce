@@ -238,7 +238,12 @@
     "message": "Ваш заказ <strong>{orderNumber}</strong> оформлен. Статус: <strong>{status}</strong>.",
     "totalLine": "Итого: {amount}",
     "paymentNotice": "Когда интеграция с PASHA Bank будет активна, на этом этапе вы будете перенаправлены на страницу оплаты.",
-    "viewOrderCta": "Детали заказа"
+    "viewOrderCta": "Детали заказа",
+    "notCompletedEyebrow": "Оплата не завершена",
+    "notCompletedHeading": "Оплата не прошла",
+    "notCompletedMessage": "Нам не удалось завершить оплату заказа <strong>{orderNumber}</strong>. Ваш заказ сохранён, списание не производилось — вы можете попробовать снова ниже.",
+    "retryCta": "Повторить оплату",
+    "retryError": "Не удалось начать оплату. Пожалуйста, попробуйте снова."
   },
   "Checkout": {
     "metaTitle": "Оформление заказа",
@@ -268,7 +273,11 @@
     "couponApplied": "Купон применён: {code}",
     "paymentNotice": "Оплата будет завершена через интеграцию с PASHA Bank. Ваш заказ будет создан со статусом \"Awaiting Payment\".",
     "placeOrderCta": "Оформить заказ",
-    "orderError": "Не удалось создать заказ"
+    "orderError": "Не удалось создать заказ",
+    "guestSaveLinkHeading": "Сохраните ссылку на заказ",
+    "guestSaveLinkBody": "Перед переходом к оплате сохраните эту ссылку — это единственный способ проверить статус заказа или повторить оплату, если что-то пойдёт не так (мы также отправили её на вашу почту).",
+    "copyLinkCta": "Скопировать ссылку",
+    "continueToPaymentCta": "Перейти к оплате"
   },
   "Contact": {
     "metaTitle": "Контакты",

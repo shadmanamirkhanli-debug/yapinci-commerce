@@ -81,3 +81,72 @@ export async function notifyNewOrder(order: FormattedOrder): Promise<void> {
     });
   }
 }
+
+function buildPaymentReceivedMessage(order: FormattedOrder): string {
+  const adminUrl = `${process.env.AUTH_URL ?? ""}/admin/orders/${order.id}`;
+
+  return [
+    "✅ <b>Ödəniş alındı!</b>",
+    "",
+    `Sifariş №: <b>${order.orderNumber}</b>`,
+    `Cəmi: <b>${order.total} ${order.currency}</b>`,
+    "",
+    `Admin panel: ${adminUrl}`,
+  ].join("\n");
+}
+
+/** Fires once a PASHA payment is confirmed PAID — from either the callback or the reconciliation sweep. */
+export async function notifyOrderPaid(order: FormattedOrder): Promise<void> {
+  try {
+    const sent = await sendTelegramMessage(buildPaymentReceivedMessage(order));
+    if (!sent) {
+      logger.warn("[Telegram] Payment notification not sent", { orderNumber: order.orderNumber });
+    }
+  } catch (error) {
+    logger.error("[Telegram] Payment notification threw unexpectedly", {
+      orderNumber: order.orderNumber,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+/**
+ * Fires when the reconciliation sweep (lib/payments/pasha-reconciliation.ts)
+ * has to settle a payment itself — meaning the bank's callback never resolved
+ * it. That's evidence the callback round trip may be broken (e.g. the ECOMM
+ * back_url configured at the bank is wrong), which is worth knowing about
+ * regardless of whether the payment itself turned out paid or failed.
+ */
+export async function notifyPashaReconciliationGap(params: {
+  orderNumber: string;
+  orderId: string;
+  outcome: "paid" | "failed";
+  resultCode: string | null;
+}): Promise<void> {
+  const adminUrl = `${process.env.AUTH_URL ?? ""}/admin/orders/${params.orderId}`;
+  const outcomeLabel = params.outcome === "paid" ? "ÖDƏNİLDİ" : "UĞURSUZ";
+  const resultCodeSuffix = params.resultCode ? ` (kod ${params.resultCode})` : "";
+
+  const text = [
+    "⚠️ <b>PASHA callback həll etmədi — reconciliation araya girdi</b>",
+    "",
+    `Sifariş №: <b>${params.orderNumber}</b>`,
+    `Nəticə: <b>${outcomeLabel}</b>${resultCodeSuffix}`,
+    "",
+    "Bank callback-i bu sifarişi HEÇ VAXT həll etmədi. PASHA-nın merchant panelində ECOMM back_url konfiqurasiyasını yoxlayın.",
+    "",
+    `Admin panel: ${adminUrl}`,
+  ].join("\n");
+
+  try {
+    const sent = await sendTelegramMessage(text);
+    if (!sent) {
+      logger.warn("[Telegram] Reconciliation gap alert not sent", { orderNumber: params.orderNumber });
+    }
+  } catch (error) {
+    logger.error("[Telegram] Reconciliation gap alert threw unexpectedly", {
+      orderNumber: params.orderNumber,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}

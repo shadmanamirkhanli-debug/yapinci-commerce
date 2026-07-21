@@ -1,16 +1,26 @@
 /**
- * Skeleton only — gated by PASHA_ENABLED, not wired into live checkout.
- *
- * This is the completion page the bank redirects/POSTs the customer back to
- * after 3D-Secure. Per the integration spec: we NEVER trust this redirect by
+ * The completion page the bank redirects/POSTs the customer back to after
+ * 3D-Secure. Per the integration spec: we NEVER trust this redirect by
  * itself — the paid/failed decision always comes from the server-to-server
- * getTransactionResult() (command=c) call below.
+ * settlePashaTransaction() (getTransactionResult / command=c) call below,
+ * shared with the reconciliation sweep (lib/payments/pasha-reconciliation.ts)
+ * so the two can't double-process if they race.
+ *
+ * Both the paid and not-paid outcomes land the customer on the same
+ * confirmation URL — that page renders a different state depending on
+ * order.status, so it doubles as the "payment failed, retry" experience.
+ * This also means the single result URL we show/email guests before they
+ * leave for the bank (see CheckoutWizard / sendGuestPaymentLinkEmail) is
+ * correct no matter how the payment turns out.
  */
 import { NextResponse } from "next/server";
-import { PaymentStatus, OrderStatus } from "@prisma/client";
+import { PaymentStatus } from "@prisma/client";
 import { logger } from "@/lib/logger";
-import { getTransactionResult, isPashaEnabled } from "@/lib/payments/pasha";
+import { getOrderById } from "@/lib/orders/orders";
+import { isPashaEnabled } from "@/lib/payments/pasha";
+import { settlePashaTransaction } from "@/lib/payments/pasha-settlement";
 import { prisma } from "@/lib/prisma";
+import { notifyOrderPaid } from "@/lib/telegram";
 
 function confirmationUrl(request: Request, orderNumber: string, guestToken: string | null) {
   const url = new URL(`/checkout/confirmation/${orderNumber}`, request.url);
@@ -52,60 +62,47 @@ export async function POST(request: Request) {
     return NextResponse.redirect(new URL("/checkout?payment=error", request.url));
   }
 
-  // Idempotent: a repeat hit on an already-completed payment just re-lands
-  // on the confirmation page instead of re-running the completion call.
-  if (payment.status === PaymentStatus.COMPLETED) {
-    return NextResponse.redirect(
-      confirmationUrl(request, payment.order.orderNumber, payment.order.guestToken)
-    );
+  const dest = confirmationUrl(request, payment.order.orderNumber, payment.order.guestToken);
+
+  // Idempotent: already resolved (by an earlier hit on this same callback,
+  // or by the reconciliation sweep) — just land them on the status page,
+  // which reflects whatever the current state is.
+  if (payment.status !== PaymentStatus.PENDING) {
+    return NextResponse.redirect(dest);
   }
 
   try {
-    const { paid, result, resultCode, rrn, approvalCode, error: pashaError, raw } =
-      await getTransactionResult(transId);
+    const settlement = await settlePashaTransaction(payment.id, payment.orderId, transId);
 
-    if (paid) {
-      await prisma.$transaction([
-        prisma.payment.update({
-          where: { id: payment.id },
-          data: {
-            status: PaymentStatus.COMPLETED,
-            metadata: { lastResult: raw, resultCode, rrn, approvalCode },
-          },
-        }),
-        prisma.order.update({
-          where: { id: payment.orderId },
-          data: { status: OrderStatus.PAID },
-        }),
-      ]);
-
-      return NextResponse.redirect(
-        confirmationUrl(request, payment.order.orderNumber, payment.order.guestToken)
-      );
+    if (settlement.outcome === "paid") {
+      const order = await getOrderById(payment.orderId);
+      if (order) void notifyOrderPaid(order);
+    } else if (settlement.outcome === "failed") {
+      // Not paid: RESULT !== "OK", RESULT missing/unrecognized, or an error
+      // field was present. Never inferred from RRN/APPROVAL_CODE, never
+      // defaults to success. Order stays AWAITING_PAYMENT so the customer
+      // can retry from the confirmation page.
+      // TODO(PASHA CardSuite ECOMM doc chapter 8): map the full RESULT_CODE
+      // enumeration — not needed to decide paid vs not-paid, but useful
+      // detail for support/debugging.
+      logger.warn("PASHA transaction did not complete", {
+        transId,
+        resultCode: settlement.resultCode,
+        error: settlement.error,
+      });
     }
+    // "already_resolved": the reconciliation sweep settled this in the tiny
+    // window between our PENDING check above and this write — nothing left
+    // to do, dest already reflects the resolved state.
 
-    // Not paid: RESULT !== "OK", RESULT missing/unrecognized, or an error
-    // field was present. Never inferred from RRN/APPROVAL_CODE, never
-    // defaults to success. Payment -> FAILED, order stays AWAITING_PAYMENT
-    // so the customer can retry.
-    // TODO(PASHA CardSuite ECOMM doc chapter 8): map the full RESULT_CODE
-    // enumeration — not needed to decide paid vs not-paid, but useful detail
-    // for support/debugging.
-    await prisma.payment.update({
-      where: { id: payment.id },
-      data: {
-        status: PaymentStatus.FAILED,
-        metadata: { lastResult: raw, resultCode, rrn, approvalCode, error: pashaError },
-      },
-    });
-
-    logger.warn("PASHA transaction did not complete", { transId, result, resultCode, error: pashaError });
-
-    return NextResponse.redirect(new URL("/checkout?payment=failed", request.url));
+    return NextResponse.redirect(dest);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "PASHA completion check failed";
     logger.error("PASHA getTransactionResult failed", { transId, error: message });
-    return NextResponse.redirect(new URL("/checkout?payment=error", request.url));
+    // Payment stays PENDING (this threw before any write) — send them to the
+    // status page anyway; it offers a retry, and the reconciliation sweep
+    // will pick this up on its own if they never come back.
+    return NextResponse.redirect(dest);
   }
 }

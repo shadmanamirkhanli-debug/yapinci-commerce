@@ -1,6 +1,25 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { deriveTransactionCompletion, parseEcommResponse, toMinorUnits } from "../pasha";
+import type { DetailedPeerCertificate } from "node:tls";
+import {
+  deriveTransactionCompletion,
+  parseEcommResponse,
+  toMinorUnits,
+  verifyPinnedChainRoot,
+} from "../pasha";
+
+// Minimal fakes — verifyPinnedChainRoot only reads fingerprint256 and walks
+// issuerCertificate, so full DetailedPeerCertificate shapes aren't needed.
+function fakeCert(
+  fingerprint256: string,
+  issuerCertificate?: DetailedPeerCertificate
+): DetailedPeerCertificate {
+  const cert = { fingerprint256, issuerCertificate } as unknown as DetailedPeerCertificate;
+  if (!issuerCertificate) {
+    cert.issuerCertificate = cert; // self-signed root: circular reference
+  }
+  return cert;
+}
 
 test("toMinorUnits converts major-unit AZN amounts to integer qəpik", () => {
   assert.equal(toMinorUnits(1.0), 100);
@@ -84,4 +103,31 @@ test("deriveTransactionCompletion: RRN/APPROVAL_CODE presence alone is never the
   // RESULT: OK (e.g. a truncated/corrupted response) must not be paid.
   const raw = parseEcommResponse("RRN: 123456789012\nAPPROVAL_CODE: 654321");
   assert.equal(deriveTransactionCompletion(raw).paid, false);
+});
+
+test("verifyPinnedChainRoot accepts a chain that roots at the pinned certificate", () => {
+  const root = fakeCert("PSROOT_FP");
+  const leaf = fakeCert("LEAF_FP", root);
+
+  assert.equal(verifyPinnedChainRoot(leaf, "PSROOT_FP"), undefined);
+});
+
+test("verifyPinnedChainRoot rejects a chain not signed by the pinned PASHA root", () => {
+  // Simulates a cert trusted by Node's own chain validation (e.g. a public
+  // CA) but not the specific bank root we pin — must still be rejected.
+  const attackerRoot = fakeCert("ATTACKER_ROOT_FP");
+  const leaf = fakeCert("LEAF_FP", attackerRoot);
+
+  const err = verifyPinnedChainRoot(leaf, "PSROOT_FP");
+  assert.ok(err instanceof Error);
+  assert.match(err.message, /does not match pinned PSroot\.pem/);
+});
+
+test("verifyPinnedChainRoot walks a multi-level chain to find the root", () => {
+  const root = fakeCert("PSROOT_FP");
+  const intermediate = fakeCert("INTERMEDIATE_FP", root);
+  const leaf = fakeCert("LEAF_FP", intermediate);
+
+  assert.equal(verifyPinnedChainRoot(leaf, "PSROOT_FP"), undefined);
+  assert.ok(verifyPinnedChainRoot(leaf, "SOME_OTHER_FP") instanceof Error);
 });

@@ -26,6 +26,8 @@
 
 import https from "node:https";
 import fs from "node:fs";
+import crypto from "node:crypto";
+import type { DetailedPeerCertificate } from "node:tls";
 import { logger } from "@/lib/logger";
 
 export function isPashaEnabled(): boolean {
@@ -106,11 +108,45 @@ function getTlsConfig(): PashaTlsConfig {
 let cachedAgent: https.Agent | null = null;
 let cachedAgentKey: string | null = null;
 
+// Walks a peer certificate chain up to its self-signed root (issuerCertificate
+// is circular — points to itself — once at the root).
+function findChainRoot(cert: DetailedPeerCertificate): DetailedPeerCertificate {
+  let node = cert;
+  while (node.issuerCertificate && node.issuerCertificate.fingerprint256 !== node.fingerprint256) {
+    node = node.issuerCertificate;
+  }
+  return node;
+}
+
+// The security-relevant half of the checkServerIdentity override below,
+// pulled out so it's unit-testable without a live TLS connection: given a
+// peer certificate chain and the fingerprint of our pinned PASHA root
+// (PSroot.pem), rejects anything whose chain doesn't root at that exact
+// certificate. Exported for tests only.
+export function verifyPinnedChainRoot(
+  cert: DetailedPeerCertificate,
+  pinnedRootFingerprint256: string
+): Error | undefined {
+  const root = findChainRoot(cert);
+  if (root.fingerprint256 !== pinnedRootFingerprint256) {
+    return new Error(
+      `PASHA ECOMM TLS: peer certificate chain root (${root.fingerprint256}) does not match pinned PSroot.pem (${pinnedRootFingerprint256})`
+    );
+  }
+  return undefined;
+}
+
 function getAgent(tls: PashaTlsConfig): https.Agent {
   const key = `${tls.certPath}:${tls.keyPath}:${tls.caPath}`;
   if (cachedAgent && cachedAgentKey === key) {
     return cachedAgent;
   }
+
+  const caBuffer = fs.readFileSync(tls.caPath);
+  // Fingerprint of our pinned PASHA root (PSroot.pem), used below to verify
+  // the peer chain's root is the same certificate, independent of Node's own
+  // chain validation via the `ca` option.
+  const pinnedRootFingerprint256 = new crypto.X509Certificate(caBuffer).fingerprint256;
 
   // Mutual TLS: client cert/key = the bank-signed certificate (not present yet),
   // ca = the bank's CA so we verify the MerchantHandler endpoint too. Read
@@ -120,8 +156,24 @@ function getAgent(tls: PashaTlsConfig): https.Agent {
   cachedAgent = new https.Agent({
     cert: fs.readFileSync(tls.certPath),
     key: fs.readFileSync(tls.keyPath),
-    ca: fs.readFileSync(tls.caPath),
+    ca: caBuffer,
     minVersion: "TLSv1.2",
+    rejectUnauthorized: true,
+    // WORKAROUND: the bank's ECOMM server certificate is CN=PASHA BANK with
+    // no SAN entry for ecomm.pashabank.az, so Node's default hostname check
+    // rejects it (ERR_TLS_CERT_ALTNAME_INVALID) even though the certificate
+    // chain validates fine against our pinned CA (PSroot.pem, via `ca`
+    // above). checkServerIdentity is only invoked once Node has already
+    // confirmed the chain is trusted per `ca`/rejectUnauthorized, so we are
+    // NOT disabling certificate validation — only the hostname/SAN
+    // comparison, here. As a belt-and-suspenders check (independent of
+    // Node's own chain validation) we also confirm the peer chain's root
+    // matches PSroot.pem's fingerprint before accepting, so a cert signed by
+    // some other trusted-by-Node CA can't slip through this override.
+    // TODO: remove once the bank reissues the ECOMM server cert with a
+    // proper SAN for ecomm.pashabank.az.
+    checkServerIdentity: (_hostname, cert) =>
+      verifyPinnedChainRoot(cert as DetailedPeerCertificate, pinnedRootFingerprint256),
   });
   cachedAgentKey = key;
   return cachedAgent;

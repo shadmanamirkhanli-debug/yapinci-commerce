@@ -27,6 +27,22 @@ export function orderConfirmationEmail(params: {
   return { subject, html };
 }
 
+export function pashaGuestPaymentLinkEmail(params: {
+  orderNumber: string;
+  resultUrl: string;
+}): { subject: string; html: string } {
+  const subject = "Sifariş Linkiniz — " + params.orderNumber;
+  const html =
+    "<div style=\"font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto;\">" +
+    "<h2>Ödənişə yönləndirilirsiniz</h2>" +
+    "<p>Sifariş <strong>" + params.orderNumber + "</strong> üçün ödəniş səhifəsinə yönləndirilirsiniz.</p>" +
+    "<p>Bu linki saxlayın — ödəniş tamamlanmasa belə, sifarişinizin statusunu yoxlamaq və ya ödənişi yenidən cəhd etmək üçün bundan istifadə edə bilərsiniz:</p>" +
+    "<p><a href=\"" + params.resultUrl + "\" style=\"display: inline-block; padding: 12px 24px; background: #111; color: #fff; text-decoration: none; border-radius: 6px;\">Sifarişimə Bax</a></p>" +
+    "<p style=\"color: #666; font-size: 12px;\">" + params.resultUrl + "</p>" +
+    "</div>";
+  return { subject, html };
+}
+
 export function adminNewOrderEmail(params: {
   orderNumber: string;
   total: string;

@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import RetryPaymentButton from "@/components/checkout/RetryPaymentButton";
 import { getOrderByNumber } from "@/lib/orders/orders";
+import { isPashaEnabled } from "@/lib/payments/pasha";
 import { auth } from "@/auth";
 import { formatAmount } from "@/components/ui/Price";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -48,28 +50,59 @@ export default async function CheckoutConfirmationPage({
   const t = await getTranslations("CheckoutConfirmation");
   const tCommon = await getTranslations("Common");
 
+  // Three states this page can land the customer in:
+  //  - PAID: the bank confirmed the payment (or PASHA is disabled and paid
+  //    orders don't happen — this branch only fires once PASHA is live).
+  //  - AWAITING_PAYMENT while PASHA is disabled: today's pre-integration
+  //    state — nothing to retry, payment simply hasn't started yet.
+  //  - AWAITING_PAYMENT while PASHA is enabled: the payment didn't complete
+  //    (bank declined it, or never resolved and the reconciliation sweep
+  //    caught it) — offer a retry. Order is never left in any other state
+  //    by the payment flow, so this covers every non-paid case.
+  const paid = order.status === "PAID";
+  const pashaEnabled = isPashaEnabled();
+
   return (
     <Container as="section" className="py-20 lg:py-28">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-xs font-medium tracking-[0.3em] uppercase text-accent">
-          {t("eyebrow")}
+          {paid || !pashaEnabled ? t("eyebrow") : t("notCompletedEyebrow")}
         </p>
         <h1 className="mt-4 text-3xl font-light tracking-tight">
-          {t("heading")}
+          {paid || !pashaEnabled ? t("heading") : t("notCompletedHeading")}
         </h1>
-        <p className="mt-4 text-sm text-muted">
-          {t.rich("message", {
-            strong: (chunks) => <strong>{chunks}</strong>,
-            orderNumber: order.orderNumber,
-            status: order.status,
-          })}
-        </p>
+
+        {paid || !pashaEnabled ? (
+          <p className="mt-4 text-sm text-muted">
+            {t.rich("message", {
+              strong: (chunks) => <strong>{chunks}</strong>,
+              orderNumber: order.orderNumber,
+              status: order.status,
+            })}
+          </p>
+        ) : (
+          <p className="mt-4 text-sm text-muted">
+            {t.rich("notCompletedMessage", {
+              strong: (chunks) => <strong>{chunks}</strong>,
+              orderNumber: order.orderNumber,
+            })}
+          </p>
+        )}
+
         <p className="mt-2 text-sm text-muted">
           {t("totalLine", { amount: formatAmount(order.total, order.currency) })}
         </p>
-        <p className="mt-6 text-sm text-muted">
-          {t("paymentNotice")}
-        </p>
+
+        {!pashaEnabled && (
+          <p className="mt-6 text-sm text-muted">{t("paymentNotice")}</p>
+        )}
+
+        {pashaEnabled && !paid && (
+          <div className="mt-8">
+            <RetryPaymentButton orderId={order.id} guestToken={token} />
+          </div>
+        )}
+
         <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
           {session?.user?.id && (
             <Button href={`/account/orders/${order.orderNumber}`}>

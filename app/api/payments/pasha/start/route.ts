@@ -1,15 +1,57 @@
 /**
- * Skeleton only — gated by PASHA_ENABLED, not wired into live checkout.
- * See lib/payments/pasha.ts for the outstanding TODOs on exact wire format.
+ * Registers a PASHA transaction and returns the ClientHandler redirect URL.
+ * Gated by PASHA_ENABLED. See lib/payments/pasha.ts for the wire format.
  */
 import { auth } from "@/auth";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
 import { toNumber } from "@/lib/admin/serialize";
 import { apiError, apiSuccess } from "@/lib/api-response";
+import { isNotificationEnabled, sendEmail } from "@/lib/email";
+import { pashaGuestPaymentLinkEmail } from "@/lib/email-templates";
 import { logger } from "@/lib/logger";
 import { buildRedirectUrl, isPashaEnabled, registerTransaction } from "@/lib/payments/pasha";
 import { prisma } from "@/lib/prisma";
 import { pashaStartSchema } from "@/lib/validations/pasha";
+
+// Best-effort belt-and-suspenders for guests: the confirmation/result URL
+// (containing their guestToken) is already shown to them client-side before
+// the browser leaves for the bank, but if their browser never makes it back
+// (closed tab, crash, callback misconfigured at the bank — see
+// lib/payments/pasha-reconciliation.ts) an emailed copy is their only other
+// way back to the order. Silently a no-op if SMTP isn't configured or the
+// order has no email address.
+async function sendGuestPaymentLinkEmail(
+  request: Request,
+  order: { orderNumber: string; guestToken: string | null; customerEmail: string | null }
+): Promise<void> {
+  if (!order.guestToken || !order.customerEmail) return;
+
+  try {
+    const enabled = await isNotificationEnabled("orderConfirmationOn");
+    if (!enabled) return;
+
+    const resultUrl = new URL(
+      `/checkout/confirmation/${order.orderNumber}`,
+      request.url
+    );
+    resultUrl.searchParams.set("token", order.guestToken);
+
+    const { subject, html } = pashaGuestPaymentLinkEmail({
+      orderNumber: order.orderNumber,
+      resultUrl: resultUrl.toString(),
+    });
+
+    const sent = await sendEmail({ to: order.customerEmail, subject, html });
+    if (!sent) {
+      logger.warn("PASHA guest payment-link email not sent", { orderNumber: order.orderNumber });
+    }
+  } catch (error) {
+    logger.error("PASHA guest payment-link email threw unexpectedly", {
+      orderNumber: order.orderNumber,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
 
 export async function POST(request: Request) {
   if (!isPashaEnabled()) {
@@ -67,6 +109,9 @@ export async function POST(request: Request) {
         metadata: { lastRegisterResponse: raw },
       },
     });
+
+    // Fire-and-forget: never block the redirect on email delivery.
+    void sendGuestPaymentLinkEmail(request, order);
 
     return apiSuccess({ redirectUrl: buildRedirectUrl(transactionId) });
   } catch (error) {

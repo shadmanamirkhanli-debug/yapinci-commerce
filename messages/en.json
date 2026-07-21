@@ -238,7 +238,12 @@
     "message": "Your order <strong>{orderNumber}</strong> has been placed. Status: <strong>{status}</strong>.",
     "totalLine": "Total: {amount}",
     "paymentNotice": "Once the PASHA Bank integration is active, you will be redirected to the payment page at this step.",
-    "viewOrderCta": "Order Details"
+    "viewOrderCta": "Order Details",
+    "notCompletedEyebrow": "Payment Not Completed",
+    "notCompletedHeading": "Your payment didn't go through",
+    "notCompletedMessage": "We couldn't complete payment for order <strong>{orderNumber}</strong>. Your order is saved and no charge was made — you can try again below.",
+    "retryCta": "Retry Payment",
+    "retryError": "Couldn't start the payment. Please try again."
   },
   "Checkout": {
     "metaTitle": "Checkout",
@@ -268,7 +273,11 @@
     "couponApplied": "Coupon applied: {code}",
     "paymentNotice": "Payment will be completed via the PASHA Bank integration. Your order will currently be created with the status \"Awaiting Payment\".",
     "placeOrderCta": "Place Order",
-    "orderError": "Failed to create the order"
+    "orderError": "Failed to create the order",
+    "guestSaveLinkHeading": "Save your order link",
+    "guestSaveLinkBody": "Before you continue to payment, save this link — it's the only way to check your order status or retry payment if something goes wrong (we've also emailed it to you).",
+    "copyLinkCta": "Copy Link",
+    "continueToPaymentCta": "Continue to Payment"
   },
   "Contact": {
     "metaTitle": "Contact",

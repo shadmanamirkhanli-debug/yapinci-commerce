@@ -57,6 +57,10 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
   >([]);
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [guestRedirect, setGuestRedirect] = useState<{
+    resultUrl: string;
+    bankRedirectUrl: string;
+  } | null>(null);
 
   const customerForm = useForm<CheckoutCustomerInput>({
     resolver: zodResolver(checkoutCustomerSchema) as Resolver<CheckoutCustomerInput>,
@@ -166,22 +170,101 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
     });
 
     const result = await response.json();
-    setLoading(false);
 
     if (!result.success) {
+      setLoading(false);
       setServerError(result.error ?? t("orderError"));
       return;
     }
 
     clearCart();
-    const confirmationUrl = result.data.guestToken
-      ? `/checkout/confirmation/${result.data.orderNumber}?token=${result.data.guestToken}`
-      : `/checkout/confirmation/${result.data.orderNumber}`;
-    router.push(confirmationUrl);
-    router.refresh();
+
+    const orderId: string = result.data.id;
+    const orderNumber: string = result.data.orderNumber;
+    const guestToken: string | null = result.data.guestToken ?? null;
+    const confirmationPath = guestToken
+      ? `/checkout/confirmation/${orderNumber}?token=${guestToken}`
+      : `/checkout/confirmation/${orderNumber}`;
+
+    // Order is created either way from here on — a payment-start failure
+    // never loses the order, it just sends the customer to the confirmation
+    // page's retry state instead of straight to the bank.
+    const paymentResponse = await fetch("/api/payments/pasha/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId, guestToken: guestToken ?? undefined }),
+    });
+
+    if (paymentResponse.status === 503) {
+      // PASHA not enabled yet — unchanged pre-integration behavior.
+      setLoading(false);
+      router.push(confirmationPath);
+      router.refresh();
+      return;
+    }
+
+    const paymentResult = await paymentResponse.json();
+
+    if (!paymentResult.success) {
+      setLoading(false);
+      router.push(confirmationPath);
+      router.refresh();
+      return;
+    }
+
+    const bankRedirectUrl: string = paymentResult.data.redirectUrl;
+
+    if (guestToken) {
+      // Guests have no session to fall back on — show them their durable
+      // result URL before we send the browser off to the bank, so a
+      // never-returning browser (closed tab, crash, callback misconfigured
+      // at the bank) still leaves them a way back to the order. A copy is
+      // also emailed as a second channel (see sendGuestPaymentLinkEmail in
+      // the start route) if the order has an email and SMTP is configured.
+      setLoading(false);
+      setGuestRedirect({
+        resultUrl: `${window.location.origin}${confirmationPath}`,
+        bankRedirectUrl,
+      });
+      return;
+    }
+
+    window.location.href = bankRedirectUrl;
   };
 
   const currency = items[0]?.currency ?? "AZN";
+
+  if (guestRedirect) {
+    return (
+      <div className="mx-auto max-w-lg rounded-3xl border border-border bg-secondary p-10 text-center">
+        <h2 className="text-sm font-medium uppercase tracking-[0.2em]">
+          {t("guestSaveLinkHeading")}
+        </h2>
+        <p className="mt-4 text-sm text-muted">{t("guestSaveLinkBody")}</p>
+        <div className="mt-6 flex flex-col items-stretch gap-2 sm:flex-row">
+          <code className="flex-1 overflow-x-auto rounded-xl border border-border bg-primary/5 px-4 py-3 text-left text-xs">
+            {guestRedirect.resultUrl}
+          </code>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => void navigator.clipboard.writeText(guestRedirect.resultUrl)}
+          >
+            {t("copyLinkCta")}
+          </Button>
+        </div>
+        <Button
+          type="button"
+          className="mt-8"
+          onClick={() => {
+            window.location.href = guestRedirect.bankRedirectUrl;
+          }}
+        >
+          {t("continueToPaymentCta")}
+        </Button>
+      </div>
+    );
+  }
 
   if (!items.length) {
     return (

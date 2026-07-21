@@ -238,7 +238,12 @@
     "message": "Sifarişiniz <strong>{orderNumber}</strong> qeydə alındı. Status: <strong>{status}</strong>.",
     "totalLine": "Cəmi: {amount}",
     "paymentNotice": "Ödəniş PASHA Bank inteqrasiyası aktiv olduqda bu addımda ödəniş səhifəsinə yönləndiriləcəksiniz.",
-    "viewOrderCta": "Sifariş Detalları"
+    "viewOrderCta": "Sifariş Detalları",
+    "notCompletedEyebrow": "Ödəniş Tamamlanmadı",
+    "notCompletedHeading": "Ödənişiniz tamamlanmadı",
+    "notCompletedMessage": "Sifariş <strong>{orderNumber}</strong> üçün ödənişi tamamlaya bilmədik. Sifarişiniz saxlanılıb və heç bir məbləğ tutulmayıb — aşağıdan yenidən cəhd edə bilərsiniz.",
+    "retryCta": "Yenidən Cəhd Et",
+    "retryError": "Ödəniş başladıla bilmədi. Zəhmət olmasa yenidən cəhd edin."
   },
   "Checkout": {
     "metaTitle": "Ödəniş",
@@ -268,7 +273,11 @@
     "couponApplied": "Kupon tətbiq edildi: {code}",
     "paymentNotice": "Ödəniş PASHA Bank inteqrasiyası ilə tamamlanacaq. Sifarişiniz hazırda \"Awaiting Payment\" statusunda yaradılacaq.",
     "placeOrderCta": "Sifarişi Tamamla",
-    "orderError": "Sifariş yaradıla bilmədi"
+    "orderError": "Sifariş yaradıla bilmədi",
+    "guestSaveLinkHeading": "Sifariş linkinizi saxlayın",
+    "guestSaveLinkBody": "Ödənişə keçməzdən əvvəl bu linki saxlayın — nəsə səhv gedərsə, sifarişinizin statusunu yoxlamaq və ya ödənişi yenidən cəhd etmək üçün yeganə yoldur (bunu e-poçtunuza da göndərdik).",
+    "copyLinkCta": "Linki Kopyala",
+    "continueToPaymentCta": "Ödənişə Davam Et"
   },
   "Contact": {
     "metaTitle": "Əlaqə",
