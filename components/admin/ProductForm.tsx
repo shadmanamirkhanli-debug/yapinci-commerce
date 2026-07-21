@@ -73,6 +73,18 @@ export default function ProductForm({
   const name = useWatch({ control, name: "name" });
   const variants = useWatch({ control, name: "variants" });
 
+  // The General/Pricing cards offer quick SKU + stock fields for simple,
+  // single-variant products so admins don't have to open the Variants
+  // panel below just to set stock — both patch variants[0] in place
+  // instead of overwriting each other's field.
+  const updatePrimaryVariant = (patch: Partial<ProductInput["variants"][number]>) => {
+    const next = [...variants];
+    next[0] = next[0]
+      ? { ...next[0], ...patch }
+      : { sku: "", quantity: 0, reserved: 0, lowStockAt: 5, ...patch };
+    setValue("variants", next);
+  };
+
   useEffect(() => {
     if (!productId && name) {
       setValue("slug", slugify(name));
@@ -158,20 +170,7 @@ export default function ProductForm({
                 helperText="Primary variant SKU"
                 className={adminFieldClass}
                 value={variants[0]?.sku ?? ""}
-                onChange={(event) => {
-                  const next = [...variants];
-                  if (!next[0]) {
-                    next[0] = {
-                      sku: event.target.value,
-                      quantity: 0,
-                      reserved: 0,
-                      lowStockAt: 5,
-                    };
-                  } else {
-                    next[0] = { ...next[0], sku: event.target.value };
-                  }
-                  setValue("variants", next);
-                }}
+                onChange={(event) => updatePrimaryVariant({ sku: event.target.value })}
               />
             </div>
             <div className="mt-4 space-y-4">
@@ -223,6 +222,17 @@ export default function ProductForm({
                 step="0.01"
                 className={adminFieldClass}
                 {...register("discount")}
+              />
+              <Input
+                label="Stock Quantity"
+                type="number"
+                helperText="Sets the primary variant's stock"
+                error={errors.variants?.[0]?.quantity?.message}
+                className={adminFieldClass}
+                value={variants[0]?.quantity ?? 0}
+                onChange={(event) =>
+                  updatePrimaryVariant({ quantity: Number(event.target.value) })
+                }
               />
               <Input
                 label="Low Stock Alert"
