@@ -1,4 +1,5 @@
 import { logger } from "@/lib/logger";
+import { getBaseUrl } from "@/lib/site-url";
 import type { formatOrder } from "@/lib/orders/orders";
 
 type FormattedOrder = ReturnType<typeof formatOrder>;
@@ -41,7 +42,7 @@ export async function sendTelegramMessage(text: string): Promise<boolean> {
 
 function buildOrderMessage(order: FormattedOrder): string {
   const customerName = order.shippingAddress?.fullName ?? order.customer.name ?? "—";
-  const adminUrl = `${process.env.AUTH_URL ?? ""}/admin/orders/${order.id}`;
+  const adminUrl = `${getBaseUrl()}/admin/orders/${order.id}`;
 
   const itemLines = order.items
     .map((item) => {
@@ -83,7 +84,7 @@ export async function notifyNewOrder(order: FormattedOrder): Promise<void> {
 }
 
 function buildPaymentReceivedMessage(order: FormattedOrder): string {
-  const adminUrl = `${process.env.AUTH_URL ?? ""}/admin/orders/${order.id}`;
+  const adminUrl = `${getBaseUrl()}/admin/orders/${order.id}`;
 
   return [
     "✅ <b>Ödəniş alındı!</b>",
@@ -123,7 +124,7 @@ export async function notifyPashaReconciliationGap(params: {
   outcome: "paid" | "failed";
   resultCode: string | null;
 }): Promise<void> {
-  const adminUrl = `${process.env.AUTH_URL ?? ""}/admin/orders/${params.orderId}`;
+  const adminUrl = `${getBaseUrl()}/admin/orders/${params.orderId}`;
   const outcomeLabel = params.outcome === "paid" ? "ÖDƏNİLDİ" : "UĞURSUZ";
   const resultCodeSuffix = params.resultCode ? ` (kod ${params.resultCode})` : "";
 

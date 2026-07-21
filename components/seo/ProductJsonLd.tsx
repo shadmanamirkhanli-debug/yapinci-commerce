@@ -1,5 +1,6 @@
 import type { StoreProduct } from "@/lib/store/types";
 import type { StoreLocale } from "@/lib/store/format";
+import { getBaseUrl } from "@/lib/site-url";
 
 type ProductJsonLdProps = {
   product: StoreProduct;
@@ -7,7 +8,7 @@ type ProductJsonLdProps = {
 };
 
 export default function ProductJsonLd({ product, locale = "az" }: ProductJsonLdProps) {
-  const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+  const baseUrl = getBaseUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",

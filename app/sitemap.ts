@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { getPublishedProductSlugs } from "@/lib/store/products";
+import { getBaseUrl } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+  const baseUrl = getBaseUrl();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "daily", priority: 1 },

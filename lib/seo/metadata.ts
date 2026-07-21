@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/site-url";
 
 const fallbackSiteName = "Yapinci";
 const fallbackDescription =
@@ -47,7 +48,7 @@ export async function createPageMetadata({
   locale?: string;
 }): Promise<Metadata> {
   const seo = await getSeoSettings();
-  const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+  const baseUrl = getBaseUrl();
   const url = path ? baseUrl + path : baseUrl;
   const finalDescription = description ?? seo.metaDescription;
 

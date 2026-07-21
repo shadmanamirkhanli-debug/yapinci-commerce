@@ -11,6 +11,7 @@ import { pashaGuestPaymentLinkEmail } from "@/lib/email-templates";
 import { logger } from "@/lib/logger";
 import { buildRedirectUrl, isPashaEnabled, registerTransaction } from "@/lib/payments/pasha";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/site-url";
 import { pashaStartSchema } from "@/lib/validations/pasha";
 
 // Best-effort belt-and-suspenders for guests: the confirmation/result URL
@@ -21,7 +22,6 @@ import { pashaStartSchema } from "@/lib/validations/pasha";
 // way back to the order. Silently a no-op if SMTP isn't configured or the
 // order has no email address.
 async function sendGuestPaymentLinkEmail(
-  request: Request,
   order: { orderNumber: string; guestToken: string | null; customerEmail: string | null }
 ): Promise<void> {
   if (!order.guestToken || !order.customerEmail) return;
@@ -32,7 +32,7 @@ async function sendGuestPaymentLinkEmail(
 
     const resultUrl = new URL(
       `/checkout/confirmation/${order.orderNumber}`,
-      request.url
+      getBaseUrl()
     );
     resultUrl.searchParams.set("token", order.guestToken);
 
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
     });
 
     // Fire-and-forget: never block the redirect on email delivery.
-    void sendGuestPaymentLinkEmail(request, order);
+    void sendGuestPaymentLinkEmail(order);
 
     return apiSuccess({ redirectUrl: buildRedirectUrl(transactionId) });
   } catch (error) {

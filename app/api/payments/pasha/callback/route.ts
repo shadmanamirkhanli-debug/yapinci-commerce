@@ -20,10 +20,15 @@ import { getOrderById } from "@/lib/orders/orders";
 import { isPashaEnabled } from "@/lib/payments/pasha";
 import { settlePashaTransaction } from "@/lib/payments/pasha-settlement";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/site-url";
 import { notifyOrderPaid } from "@/lib/telegram";
 
-function confirmationUrl(request: Request, orderNumber: string, guestToken: string | null) {
-  const url = new URL(`/checkout/confirmation/${orderNumber}`, request.url);
+// Built from AUTH_URL, never from `request.url` — self-hosted behind nginx,
+// Next.js only trusts the incoming Host header when
+// `experimental.trustHostHeader` is set (it isn't here), so `request.url`
+// resolves to the server's own bind address instead of the public host.
+function confirmationUrl(orderNumber: string, guestToken: string | null) {
+  const url = new URL(`/checkout/confirmation/${orderNumber}`, getBaseUrl());
   if (guestToken) {
     url.searchParams.set("token", guestToken);
   }
@@ -32,7 +37,7 @@ function confirmationUrl(request: Request, orderNumber: string, guestToken: stri
 
 export async function POST(request: Request) {
   if (!isPashaEnabled()) {
-    return NextResponse.redirect(new URL("/checkout", request.url));
+    return NextResponse.redirect(new URL("/checkout", getBaseUrl()));
   }
 
   // TODO(PASHA CardSuite ECOMM doc, completion-redirect chapter): confirm the
@@ -49,7 +54,7 @@ export async function POST(request: Request) {
 
   if (!transId) {
     logger.error("PASHA callback missing trans_id", {});
-    return NextResponse.redirect(new URL("/checkout?payment=error", request.url));
+    return NextResponse.redirect(new URL("/checkout?payment=error", getBaseUrl()));
   }
 
   const payment = await prisma.payment.findUnique({
@@ -59,10 +64,10 @@ export async function POST(request: Request) {
 
   if (!payment) {
     logger.error("PASHA callback: no payment found for trans_id", { transId });
-    return NextResponse.redirect(new URL("/checkout?payment=error", request.url));
+    return NextResponse.redirect(new URL("/checkout?payment=error", getBaseUrl()));
   }
 
-  const dest = confirmationUrl(request, payment.order.orderNumber, payment.order.guestToken);
+  const dest = confirmationUrl(payment.order.orderNumber, payment.order.guestToken);
 
   // Idempotent: already resolved (by an earlier hit on this same callback,
   // or by the reconciliation sweep) — just land them on the status page,

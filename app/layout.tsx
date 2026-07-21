@@ -5,6 +5,7 @@ import { getLocale } from "next-intl/server";
 import SessionProvider from "@/components/providers/SessionProvider";
 import { getSeoSettings, ogLocaleFor } from "@/lib/seo/metadata";
 import { getStoreSettings } from "@/lib/settings";
+import { getBaseUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,7 +20,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+const baseUrl = getBaseUrl();
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoSettings();

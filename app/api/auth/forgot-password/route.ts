@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
 import { sendEmail, isNotificationEnabled } from "@/lib/email";
 import { passwordResetEmail } from "@/lib/email-templates";
+import { getBaseUrl } from "@/lib/site-url";
 
 const RESET_TOKEN_EXPIRY_HOURS = 1;
 
@@ -48,8 +49,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const appUrl = process.env.AUTH_URL ?? "http://localhost:3000";
-    const resetUrl = appUrl + "/reset-password?token=" + token;
+    const resetUrl = getBaseUrl() + "/reset-password?token=" + token;
 
     const notificationsEnabled = await isNotificationEnabled("passwordResetOn");
 
