@@ -295,9 +295,8 @@ export default function ProductDetailView({
               title: t("shippingInfoHeading"),
               content: (
                 <ul className="space-y-2 text-sm text-muted">
-                  <li>{t("shippingBaku")}</li>
-                  <li>{t("shippingCountry")}</li>
-                  <li>{t("freeShippingNote")}</li>
+                  <li>{t("shippingStandard")}</li>
+                  <li>{t("shippingExpress")}</li>
                   <li>{t("returnWindow")}</li>
                 </ul>
               ),

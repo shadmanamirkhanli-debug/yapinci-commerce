@@ -13,25 +13,15 @@ export async function GET() {
 
   if (!settings) {
     return apiSuccess({
-      standardPrice: 10,
-      standardDays: "3-5 iş günü",
-      expressPrice: 25,
-      expressDays: "1-2 iş günü",
-      internationalPrice: 50,
-      internationalDays: "7-14 iş günü",
-      internationalActive: false,
+      standardPrice: 0,
+      expressPrice: 5,
       freeShippingThreshold: null,
     });
   }
 
   return apiSuccess({
     standardPrice: Number(settings.standardPrice),
-    standardDays: settings.standardDays,
     expressPrice: Number(settings.expressPrice),
-    expressDays: settings.expressDays,
-    internationalPrice: Number(settings.internationalPrice),
-    internationalDays: settings.internationalDays,
-    internationalActive: settings.internationalActive,
     freeShippingThreshold: settings.freeShippingThreshold
       ? Number(settings.freeShippingThreshold)
       : null,
@@ -60,23 +50,13 @@ export async function PUT(request: Request) {
       where: { id: 1 },
       update: {
         standardPrice: data.standardPrice,
-        standardDays: data.standardDays,
         expressPrice: data.expressPrice,
-        expressDays: data.expressDays,
-        internationalPrice: data.internationalPrice,
-        internationalDays: data.internationalDays,
-        internationalActive: data.internationalActive,
         freeShippingThreshold: data.freeShippingThreshold,
       },
       create: {
         id: 1,
         standardPrice: data.standardPrice,
-        standardDays: data.standardDays,
         expressPrice: data.expressPrice,
-        expressDays: data.expressDays,
-        internationalPrice: data.internationalPrice,
-        internationalDays: data.internationalDays,
-        internationalActive: data.internationalActive,
         freeShippingThreshold: data.freeShippingThreshold,
       },
     });

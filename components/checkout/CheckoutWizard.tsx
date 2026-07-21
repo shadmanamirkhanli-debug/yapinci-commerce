@@ -344,6 +344,9 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
             <h2 className="text-sm font-medium uppercase tracking-[0.2em]">
               {t("stepShippingAddress")}
             </h2>
+            <p className="rounded-xl bg-secondary px-4 py-3 text-xs text-muted">
+              {t("bakuOnlyNotice")}
+            </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input
                 label={t("countryLabel")}
@@ -491,7 +494,7 @@ export default function CheckoutWizard({ defaultEmail }: CheckoutWizardProps) {
           <div className="flex justify-between">
             <dt className="text-muted">{tSummary("shipping")}</dt>
             <dd>
-              {totals?.freeShipping
+              {totals?.freeShipping || totals?.shipping === 0
                 ? tSummary("free")
                 : formatAmount(totals?.shipping ?? 0, currency)}
             </dd>

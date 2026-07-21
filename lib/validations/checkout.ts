@@ -7,9 +7,18 @@ export const checkoutCustomerSchema = z.object({
   phone: z.string().min(7, "Telefon tələb olunur"),
 });
 
+// Delivery is currently Baku-only — accept common spellings/casing of the
+// city name so a straightforward "Bakı"/"Baku"/"Baki" entry isn't rejected.
+const BAKU_CITY_NAMES = ["bakı", "baki", "baku"];
+
 export const checkoutAddressSchema = z.object({
   country: z.string().min(1, "Ölkə tələb olunur"),
-  city: z.string().min(1, "Şəhər tələb olunur"),
+  city: z
+    .string()
+    .min(1, "Şəhər tələb olunur")
+    .refine((value) => BAKU_CITY_NAMES.includes(value.trim().toLowerCase()), {
+      message: "Hazırda yalnız Bakı şəhərinə çatdırılma edirik",
+    }),
   region: z.string().optional(),
   postalCode: z.string().optional(),
   address: z.string().min(1, "Ünvan tələb olunur"),

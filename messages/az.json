@@ -277,7 +277,8 @@
     "guestSaveLinkHeading": "Sifariş linkinizi saxlayın",
     "guestSaveLinkBody": "Ödənişə keçməzdən əvvəl bu linki saxlayın — nəsə səhv gedərsə, sifarişinizin statusunu yoxlamaq və ya ödənişi yenidən cəhd etmək üçün yeganə yoldur (bunu e-poçtunuza da göndərdik).",
     "copyLinkCta": "Linki Kopyala",
-    "continueToPaymentCta": "Ödənişə Davam Et"
+    "continueToPaymentCta": "Ödənişə Davam Et",
+    "bakuOnlyNotice": "Hazırda çatdırılma yalnız Bakı şəhəri daxilində mümkündür. Zəhmət olmasa Bakıdan kənar ünvan daxil etməyin — belə sifarişi yerinə yetirə bilmərik."
   },
   "Contact": {
     "metaTitle": "Əlaqə",
@@ -350,11 +351,10 @@
       {
         "title": "2. Çatdırılma şərtləri",
         "list": [
-          "Çatdırılma kuryer xidməti vasitəsilə həyata keçirilir.",
-          "Çatdırılma müddəti sifarişin təsdiqindən etibarən 1-3 iş günüdür.",
-          "Bakı şəhəri daxilində çatdırılma haqqı 3 AZN-dir.",
-          "100 AZN və ondan yuxarı məbləğli sifarişlərdə çatdırılma pulsuzdur.",
-          "Çatdırılma vaxtı bölgədən və ya xüsusi hallardan asılı olaraq dəyişə bilər."
+          "Hazırda çatdırılma yalnız Bakı şəhəri ərazisində həyata keçirilir, regional çatdırılma mövcud deyil.",
+          "Standart çatdırılma bütün sifarişlər üçün pulsuzdur və 2-3 iş günü ərzində həyata keçirilir.",
+          "Sürətli çatdırılma 5 AZN-dir: saat 14:00-a qədər verilən sifarişlər elə həmin gün, sonra verilənlər isə növbəti iş günü çatdırılır.",
+          "Çatdırılma vaxtı xüsusi hallardan asılı olaraq dəyişə bilər."
         ]
       },
       {
@@ -424,9 +424,8 @@
     "collectionLabel": "Kolleksiya",
     "aboutHeading": "Məhsul Haqqında",
     "shippingInfoHeading": "Çatdırılma Məlumatı",
-    "shippingBaku": "Bakı daxilində 1-2 iş günü",
-    "shippingCountry": "Azərbaycan üzrə 3-5 iş günü",
-    "freeShippingNote": "100 AZN üzərində pulsuz çatdırılma",
+    "shippingStandard": "Bakı daxilində standart çatdırılma — pulsuz, 2-3 iş günü",
+    "shippingExpress": "Sürətli çatdırılma — 5 AZN, saat 14:00-a qədər sifariş edilərsə elə həmin gün",
     "returnWindow": "14 gün ərzində geri qaytarma",
     "reviewsHeading": "Rəylər",
     "relatedHeading": "Əlaqəli Məhsullar"
@@ -556,5 +555,11 @@
     "free": "Pulsuz",
     "tracking": "İzləmə nömrəsi: {number}",
     "downloadInvoice": "Fakturanı Yüklə (PDF)"
+  },
+  "ShippingMethods": {
+    "standardLabel": "Standart Çatdırılma",
+    "standardDescription": "Bakı şəhəri daxilində, 2-3 iş günü",
+    "expressLabel": "Sürətli Çatdırılma",
+    "expressDescription": "Bakı şəhəri daxilində — saat 14:00-a qədər sifariş edin, elə həmin gün çatdırılsın, əks halda növbəti iş günü"
   }
 }

@@ -277,7 +277,8 @@
     "guestSaveLinkHeading": "Save your order link",
     "guestSaveLinkBody": "Before you continue to payment, save this link — it's the only way to check your order status or retry payment if something goes wrong (we've also emailed it to you).",
     "copyLinkCta": "Copy Link",
-    "continueToPaymentCta": "Continue to Payment"
+    "continueToPaymentCta": "Continue to Payment",
+    "bakuOnlyNotice": "Delivery is currently available in Baku city only. Please don't enter an address outside Baku — we won't be able to fulfil that order."
   },
   "Contact": {
     "metaTitle": "Contact",
@@ -350,11 +351,10 @@
       {
         "title": "2. Delivery Terms",
         "list": [
-          "Delivery is carried out via courier service.",
-          "Delivery time is 1-3 business days from order confirmation.",
-          "Delivery within Baku city costs 3 AZN.",
-          "Delivery is free for orders of 100 AZN or more.",
-          "Delivery time may vary depending on region or special circumstances."
+          "Delivery is currently available in Baku city only — regional delivery is not offered.",
+          "Standard delivery is free for all orders and takes 2-3 business days.",
+          "Express delivery costs 5 AZN: orders placed before 14:00 are delivered the same day, otherwise the next business day.",
+          "Delivery time may vary depending on special circumstances."
         ]
       },
       {
@@ -424,9 +424,8 @@
     "collectionLabel": "Collection",
     "aboutHeading": "About the Product",
     "shippingInfoHeading": "Shipping Information",
-    "shippingBaku": "1-2 business days within Baku",
-    "shippingCountry": "3-5 business days across Azerbaijan",
-    "freeShippingNote": "Free shipping on orders over 100 AZN",
+    "shippingStandard": "Standard delivery within Baku — free, 2-3 business days",
+    "shippingExpress": "Express delivery — 5 AZN, same-day if ordered before 14:00",
     "returnWindow": "Returns accepted within 14 days",
     "reviewsHeading": "Reviews",
     "relatedHeading": "Related Products"
@@ -556,5 +555,11 @@
     "free": "Free",
     "tracking": "Tracking number: {number}",
     "downloadInvoice": "Download Invoice (PDF)"
+  },
+  "ShippingMethods": {
+    "standardLabel": "Standard Delivery",
+    "standardDescription": "Baku city only, 2-3 business days",
+    "expressLabel": "Express Delivery",
+    "expressDescription": "Baku city only — order before 14:00 for same-day delivery, otherwise next business day"
   }
 }
