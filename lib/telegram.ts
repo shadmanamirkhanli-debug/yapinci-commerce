@@ -118,6 +118,40 @@ export async function notifyOrderPaid(order: FormattedOrder): Promise<void> {
  * back_url configured at the bank is wrong), which is worth knowing about
  * regardless of whether the payment itself turned out paid or failed.
  */
+/**
+ * Fires whenever a transactional email fails to send — email delivery must
+ * never block the order flow (see lib/orders/order-emails.ts), so this is
+ * the only thing that tells anyone email is broken instead of it failing
+ * silently.
+ */
+export async function notifyEmailFailure(params: {
+  context: string;
+  orderNumber?: string;
+  error?: string;
+}): Promise<void> {
+  const text = [
+    "🚨 <b>E-poçt göndərilmədi</b>",
+    "",
+    `Kontekst: ${params.context}`,
+    params.orderNumber ? `Sifariş №: <b>${params.orderNumber}</b>` : null,
+    params.error ? `Xəta: ${params.error}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  try {
+    const sent = await sendTelegramMessage(text);
+    if (!sent) {
+      logger.warn("[Telegram] Email failure alert not sent", { context: params.context });
+    }
+  } catch (error) {
+    logger.error("[Telegram] Email failure alert threw unexpectedly", {
+      context: params.context,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
 export async function notifyPashaReconciliationGap(params: {
   orderNumber: string;
   orderId: string;

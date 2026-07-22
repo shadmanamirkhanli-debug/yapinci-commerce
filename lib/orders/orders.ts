@@ -1,6 +1,8 @@
 import { randomBytes } from "crypto";
+import { cookies } from "next/headers";
 import type { Prisma } from "@prisma/client";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
+import { routing } from "@/i18n/routing";
 import { toNumber } from "@/lib/admin/serialize";
 import { calculateOrderTotals, validateCoupon } from "@/lib/orders/coupons";
 import {
@@ -45,6 +47,7 @@ export function formatOrder(order: OrderWithRelations) {
     shippingMethod: order.shippingMethod,
     customerPhone: order.customerPhone,
     customerEmail: order.customerEmail,
+    locale: order.locale,
     coupon: order.coupon
       ? { code: order.coupon.code, discountType: order.coupon.discountType }
       : null,
@@ -185,6 +188,16 @@ export async function createOrderFromCheckout(
   const orderNumber = await generateOrderNumber();
   const guestToken = userId ? null : randomBytes(32).toString("hex");
 
+  // Captured now, not derived later: post-payment notifications (bank
+  // callback, reconciliation sweep) run without a request-bound cookie, so
+  // this is the only point where we know which locale the customer checked
+  // out in.
+  const cookieStore = await cookies();
+  const localeCandidate = cookieStore.get("NEXT_LOCALE")?.value;
+  const locale = (routing.locales as readonly string[]).includes(localeCandidate ?? "")
+    ? (localeCandidate as (typeof routing.locales)[number])
+    : routing.defaultLocale;
+
   const order = await prisma.$transaction(async (tx) => {
     const address = await tx.address.create({
       data: {
@@ -219,6 +232,7 @@ export async function createOrderFromCheckout(
         shippingMethod: input.shippingMethod,
         customerPhone: input.customer.phone,
         customerEmail: input.customer.email,
+        locale,
         items: {
           create: lineItems.map((line) => ({
             productId: line.productId,

@@ -561,5 +561,17 @@
     "standardDescription": "Только по городу Баку, 2-3 рабочих дня",
     "expressLabel": "Экспресс-доставка",
     "expressDescription": "Только по городу Баку — оформите заказ до 14:00 для доставки в тот же день, иначе на следующий рабочий день"
+  },
+  "OrderConfirmationEmail": {
+    "subject": "Подтверждение заказа — {orderNumber}",
+    "heading": "Спасибо, {name}!",
+    "intro": "Ваш заказ подтверждён, оплата успешно получена.",
+    "orderNumberLabel": "Номер заказа",
+    "itemsHeading": "Товары",
+    "quantityShort": "кол-во",
+    "shippingAddressHeading": "Адрес доставки",
+    "shippingMethodHeading": "Способ доставки",
+    "viewOrderCta": "Посмотреть заказ",
+    "footerNote": "Есть вопросы? Ответьте на это письмо или напишите на info@yapinci.az."
   }
 }

@@ -292,6 +292,7 @@ model Order {
   shippingMethod    String?
   customerPhone     String?
   customerEmail     String?
+  locale            String      @default("az") // captured at checkout so post-payment notifications (bank callback, reconciliation sweep) can localize without a request-bound cookie
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 

@@ -1,6 +1,8 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
-import { decryptValue } from "@/lib/encryption";
+
+const FROM = "Yapinci <info@yapinci.az>";
 
 type SendEmailParams = {
   to: string;
@@ -15,39 +17,47 @@ async function getEmailSettings() {
   return settings;
 }
 
-export async function sendEmail(params: SendEmailParams): Promise<boolean> {
-  const settings = await getEmailSettings();
+let client: Resend | null | undefined;
 
-  if (!settings || !settings.smtpHost || !settings.smtpUser) {
-    console.warn("[Email] SMTP not configured, skipping send to", params.to);
+// Lazy + memoized: reads RESEND_API_KEY once rather than on every send, but
+// still re-checked (via `undefined` vs `null`) instead of evaluated at
+// import time, since that would crash module load in envs where the key
+// isn't set (build, tests).
+function getResendClient(): Resend | null {
+  if (client === undefined) {
+    const apiKey = process.env.RESEND_API_KEY;
+    client = apiKey ? new Resend(apiKey) : null;
+  }
+  return client;
+}
+
+export async function sendEmail(params: SendEmailParams): Promise<boolean> {
+  const resend = getResendClient();
+
+  if (!resend) {
+    logger.warn("[Email] RESEND_API_KEY not set, skipping send", { to: params.to });
     return false;
   }
 
   try {
-    const password = settings.smtpPassword
-      ? decryptValue(settings.smtpPassword)
-      : "";
-
-    const transporter = nodemailer.createTransport({
-      host: settings.smtpHost,
-      port: settings.smtpPort,
-      secure: settings.smtpPort === 465,
-      auth: {
-        user: settings.smtpUser,
-        pass: password,
-      },
-    });
-
-    await transporter.sendMail({
-      from: settings.fromName + " <" + settings.fromEmail + ">",
+    const { error } = await resend.emails.send({
+      from: FROM,
       to: params.to,
       subject: params.subject,
       html: params.html,
     });
 
+    if (error) {
+      logger.error("[Email] Resend send failed", { to: params.to, error: error.message });
+      return false;
+    }
+
     return true;
   } catch (error) {
-    console.error("[Email] Send failed:", error);
+    logger.error("[Email] Send threw unexpectedly", {
+      to: params.to,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return false;
   }
 }

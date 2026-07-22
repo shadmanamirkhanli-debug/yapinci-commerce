@@ -16,6 +16,7 @@
 import { NextResponse } from "next/server";
 import { PaymentStatus } from "@prisma/client";
 import { logger } from "@/lib/logger";
+import { sendOrderConfirmationEmail } from "@/lib/orders/order-emails";
 import { getOrderById } from "@/lib/orders/orders";
 import { isPashaEnabled } from "@/lib/payments/pasha";
 import { settlePashaTransaction } from "@/lib/payments/pasha-settlement";
@@ -81,7 +82,10 @@ export async function POST(request: Request) {
 
     if (settlement.outcome === "paid") {
       const order = await getOrderById(payment.orderId);
-      if (order) void notifyOrderPaid(order);
+      if (order) {
+        void notifyOrderPaid(order);
+        void sendOrderConfirmationEmail(order, payment.order.guestToken);
+      }
     } else if (settlement.outcome === "failed") {
       // Not paid: RESULT !== "OK", RESULT missing/unrecognized, or an error
       // field was present. Never inferred from RRN/APPROVAL_CODE, never

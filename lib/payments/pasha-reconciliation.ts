@@ -15,6 +15,7 @@
  * sweep, or the callback) gets there first wins and the other is a no-op.
  */
 import { OrderStatus, PaymentStatus } from "@prisma/client";
+import { sendOrderConfirmationEmail } from "@/lib/orders/order-emails";
 import { getOrderById } from "@/lib/orders/orders";
 import { isPashaEnabled } from "@/lib/payments/pasha";
 import { settlePashaTransaction } from "@/lib/payments/pasha-settlement";
@@ -45,7 +46,7 @@ export async function reconcilePendingPashaPayments(
       updatedAt: { lte: staleBefore },
       order: { status: OrderStatus.AWAITING_PAYMENT },
     },
-    include: { order: { select: { id: true, orderNumber: true } } },
+    include: { order: { select: { id: true, orderNumber: true, guestToken: true } } },
   });
 
   let settled = 0;
@@ -82,7 +83,10 @@ export async function reconcilePendingPashaPayments(
 
       if (settlement.outcome === "paid") {
         const order = await getOrderById(payment.orderId);
-        if (order) void notifyOrderPaid(order);
+        if (order) {
+          void notifyOrderPaid(order);
+          void sendOrderConfirmationEmail(order, payment.order.guestToken);
+        }
       }
     } catch (error) {
       logger.error("PASHA reconciliation: failed to resolve stale payment", {

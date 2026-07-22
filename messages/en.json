@@ -561,5 +561,17 @@
     "standardDescription": "Baku city only, 2-3 business days",
     "expressLabel": "Express Delivery",
     "expressDescription": "Baku city only — order before 14:00 for same-day delivery, otherwise next business day"
+  },
+  "OrderConfirmationEmail": {
+    "subject": "Order Confirmation — {orderNumber}",
+    "heading": "Thank you, {name}!",
+    "intro": "Your order has been confirmed and payment was received successfully.",
+    "orderNumberLabel": "Order number",
+    "itemsHeading": "Items",
+    "quantityShort": "qty",
+    "shippingAddressHeading": "Shipping Address",
+    "shippingMethodHeading": "Shipping Method",
+    "viewOrderCta": "View Order",
+    "footerNote": "Questions? Reply to this email or write to info@yapinci.az."
   }
 }

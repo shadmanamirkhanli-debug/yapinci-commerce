@@ -561,5 +561,17 @@
     "standardDescription": "Bakı şəhəri daxilində, 2-3 iş günü",
     "expressLabel": "Sürətli Çatdırılma",
     "expressDescription": "Bakı şəhəri daxilində — saat 14:00-a qədər sifariş edin, elə həmin gün çatdırılsın, əks halda növbəti iş günü"
+  },
+  "OrderConfirmationEmail": {
+    "subject": "Sifariş Təsdiqi — {orderNumber}",
+    "heading": "Təşəkkür edirik, {name}!",
+    "intro": "Sifarişiniz təsdiqləndi və ödəniş uğurla alındı.",
+    "orderNumberLabel": "Sifariş nömrəsi",
+    "itemsHeading": "Məhsullar",
+    "quantityShort": "say",
+    "shippingAddressHeading": "Çatdırılma Ünvanı",
+    "shippingMethodHeading": "Çatdırılma Üsulu",
+    "viewOrderCta": "Sifarişə Bax",
+    "footerNote": "Sualınız varsa, bu e-poçta cavab verin və ya info@yapinci.az ünvanına yazın."
   }
 }
