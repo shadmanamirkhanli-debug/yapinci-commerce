@@ -17,7 +17,10 @@
  *    bank server-to-server for the authoritative result. The doc states the
  *    bank auto-reverses the transaction if command=c isn't requested within
  *    3 minutes of registration.
+ *  - reverseTransaction(): command=r against MerchantHandler — full or
+ *    partial reversal of a registered transaction, before settlement only.
  *
+
  * Responses are newline-separated "KEY: VALUE" lines (see parseEcommResponse).
  * The RESULT_CODE enumeration (doc chapter 8) isn't mapped yet — see the TODO
  * on TransactionCompletionResult.resultCode — but the OK/FAILED decision does
@@ -404,4 +407,50 @@ export function buildRedirectUrl(transactionId: string): string {
   const url = new URL(config.clientUrl);
   url.searchParams.set("trans_id", transactionId);
   return url.toString();
+}
+
+// Confirmed with the bank's integration doc: command=r&trans_id=<id>[&amount=<minor>].
+// amount omitted => full reversal; present => partial (same minor-unit
+// encoding as registerTransaction, i.e. qəpik via toMinorUnits at the caller).
+// No terminal_id in this doc-confirmed field list — don't add one
+// speculatively, same reasoning as merchant_id's omission in registerTransaction.
+// Split out from reverseTransaction so it's unit-testable without mocking HTTP.
+export function buildReversalFields(
+  transId: string,
+  amountMinor?: number
+): Record<string, string> {
+  const fields: Record<string, string> = { command: "r", trans_id: transId };
+  if (amountMinor !== undefined) {
+    fields.amount = String(amountMinor);
+  }
+  return fields;
+}
+
+/**
+ * Reverses a registered transaction (full or partial) before settlement.
+ * Reuses the same mTLS agent, response parsing, and OK/FAILED decision as
+ * getTransactionResult — `paid` on the returned TransactionCompletionResult
+ * is the sole success signal here too.
+ *
+ * TODO(doc): reversal only works before the bank settles the transaction.
+ * Once settlement timing becomes an issue, add a command=k Refund path for
+ * already-settled transactions — not implemented here.
+ */
+export async function reverseTransaction(
+  transId: string,
+  amountMinor?: number
+): Promise<TransactionCompletionResult> {
+  const config = getConfig();
+
+  const body = new URLSearchParams(buildReversalFields(transId, amountMinor)).toString();
+  const { status, body: responseBody } = await postForm(config, body);
+
+  if (status < 200 || status >= 300) {
+    throw new Error(`PASHA ECOMM reversal request failed with HTTP ${status}`);
+  }
+
+  const raw = parseEcommResponse(responseBody);
+  logUnexpectedFields(raw, RESULT_RESPONSE_FIELDS, "reversal");
+
+  return deriveTransactionCompletion(raw);
 }

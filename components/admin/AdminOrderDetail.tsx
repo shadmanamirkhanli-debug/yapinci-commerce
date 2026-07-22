@@ -5,6 +5,7 @@ import Link from "next/link";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Modal from "@/components/ui/Modal";
 import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
 import { adminFieldClass } from "@/lib/admin/styles";
@@ -36,6 +37,12 @@ type OrderDetail = {
     quantity: number;
     total: number;
   }[];
+  payment: {
+    id: string;
+    status: string;
+    provider: string | null;
+    amount: number;
+  } | null;
 };
 
 export default function AdminOrderDetail({ orderId }: { orderId: string }) {
@@ -45,6 +52,12 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
   const [adminNotes, setAdminNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+
+  const [refundOpen, setRefundOpen] = useState(false);
+  const [refundType, setRefundType] = useState<"full" | "partial">("full");
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refunding, setRefunding] = useState(false);
+  const [refundError, setRefundError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +95,51 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
       setMessage("Order updated");
     } else {
       setMessage(result.error ?? "Update failed");
+    }
+  };
+
+  const openRefund = () => {
+    setRefundType("full");
+    setRefundAmount(order ? String(order.payment?.amount ?? "") : "");
+    setRefundError(null);
+    setRefundOpen(true);
+  };
+
+  const submitRefund = async () => {
+    if (!order) return;
+
+    setRefundError(null);
+
+    const body: { amount?: number } = {};
+    if (refundType === "partial") {
+      const parsedAmount = Number(refundAmount);
+      if (!refundAmount || Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+        setRefundError("Enter a valid refund amount");
+        return;
+      }
+      if (order.payment && parsedAmount > order.payment.amount) {
+        setRefundError("Refund amount cannot exceed the amount paid");
+        return;
+      }
+      body.amount = parsedAmount;
+    }
+
+    setRefunding(true);
+    const response = await fetch(`/api/admin/orders/${orderId}/refund`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const result = await response.json();
+    setRefunding(false);
+
+    if (result.success) {
+      setOrder(result.data);
+      setStatus(result.data.status);
+      setRefundOpen(false);
+      setMessage(refundType === "full" ? "Order fully refunded" : "Partial refund processed");
+    } else {
+      setRefundError(result.error ?? "Refund failed");
     }
   };
 
@@ -170,8 +228,85 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
               <p className="mt-3 text-sm text-neutral-400">{message}</p>
             )}
           </div>
+
+          {order.payment?.status === "COMPLETED" && (
+            <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-6">
+              <h2 className="mb-4 text-sm font-medium uppercase tracking-[0.15em]">
+                Payment
+              </h2>
+              <p className="text-sm text-neutral-400">
+                Paid {order.payment.amount} {order.currency}
+                {order.payment.provider ? ` via ${order.payment.provider}` : ""}
+              </p>
+              <Button
+                type="button"
+                variant="danger"
+                className="mt-4 w-full"
+                onClick={openRefund}
+              >
+                Refund
+              </Button>
+            </div>
+          )}
         </div>
       </div>
+
+      <Modal
+        open={refundOpen}
+        onClose={() => (refunding ? undefined : setRefundOpen(false))}
+        title="Refund payment"
+        description={`Order ${order.orderNumber} · paid ${order.payment?.amount ?? 0} ${order.currency}`}
+      >
+        <div className="space-y-4">
+          <Select
+            label="Refund type"
+            options={[
+              { value: "full", label: "Full refund" },
+              { value: "partial", label: "Partial refund" },
+            ]}
+            value={refundType}
+            onChange={(e) => {
+              const value = e.target.value as "full" | "partial";
+              setRefundType(value);
+              if (value === "full") {
+                setRefundAmount(String(order.payment?.amount ?? ""));
+              }
+            }}
+            className={adminFieldClass}
+          />
+          {refundType === "partial" && (
+            <Input
+              label={`Amount (${order.currency})`}
+              type="number"
+              min={0}
+              max={order.payment?.amount}
+              step="0.01"
+              value={refundAmount}
+              onChange={(e) => setRefundAmount(e.target.value)}
+              className={adminFieldClass}
+            />
+          )}
+          <p className="text-sm text-neutral-400">
+            {refundType === "full"
+              ? `This will fully refund ${order.payment?.amount} ${order.currency} and restock the order's inventory.`
+              : `This will refund ${refundAmount || "0"} ${order.currency}. Inventory will not be restocked for a partial refund.`}
+          </p>
+          {refundError && (
+            <p className="text-sm text-red-400" role="alert">
+              {refundError}
+            </p>
+          )}
+          <Button
+            type="button"
+            variant="danger"
+            className="w-full"
+            loading={refunding}
+            onClick={submitRefund}
+          >
+            Confirm Refund
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

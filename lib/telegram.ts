@@ -152,6 +152,67 @@ export async function notifyEmailFailure(params: {
   }
 }
 
+export async function notifyOrderRefunded(
+  order: FormattedOrder,
+  params: { amount: number; partial: boolean; actorEmail: string }
+): Promise<void> {
+  const adminUrl = `${getBaseUrl()}/admin/orders/${order.id}`;
+  const kindLabel = params.partial ? "Qismən geri qaytarma" : "Tam geri qaytarma";
+
+  const text = [
+    "↩️ <b>Ödəniş geri qaytarıldı</b>",
+    "",
+    `Sifariş №: <b>${order.orderNumber}</b>`,
+    `Növ: <b>${kindLabel}</b>`,
+    `Məbləğ: <b>${params.amount} ${order.currency}</b>`,
+    `Kim etdi: ${params.actorEmail}`,
+    "",
+    `Admin panel: ${adminUrl}`,
+  ].join("\n");
+
+  try {
+    const sent = await sendTelegramMessage(text);
+    if (!sent) {
+      logger.warn("[Telegram] Refund notification not sent", { orderNumber: order.orderNumber });
+    }
+  } catch (error) {
+    logger.error("[Telegram] Refund notification threw unexpectedly", {
+      orderNumber: order.orderNumber,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+export async function notifyOrderRefundFailed(
+  order: FormattedOrder,
+  params: { error: string | null; resultCode: string | null; actorEmail: string }
+): Promise<void> {
+  const adminUrl = `${getBaseUrl()}/admin/orders/${order.id}`;
+  const resultCodeSuffix = params.resultCode ? ` (kod ${params.resultCode})` : "";
+
+  const text = [
+    "🚨 <b>Geri qaytarma uğursuz oldu</b>",
+    "",
+    `Sifariş №: <b>${order.orderNumber}</b>`,
+    `Xəta: ${params.error ?? "naməlum"}${resultCodeSuffix}`,
+    `Kim cəhd etdi: ${params.actorEmail}`,
+    "",
+    `Admin panel: ${adminUrl}`,
+  ].join("\n");
+
+  try {
+    const sent = await sendTelegramMessage(text);
+    if (!sent) {
+      logger.warn("[Telegram] Refund failure alert not sent", { orderNumber: order.orderNumber });
+    }
+  } catch (error) {
+    logger.error("[Telegram] Refund failure alert threw unexpectedly", {
+      orderNumber: order.orderNumber,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
 export async function notifyPashaReconciliationGap(params: {
   orderNumber: string;
   orderId: string;

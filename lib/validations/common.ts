@@ -40,3 +40,8 @@ export const orderStatusUpdateSchema = z.object({
   trackingNumber: z.string().max(100).optional(),
   adminNotes: z.string().max(2000).optional(),
 });
+
+export const orderRefundSchema = z.object({
+  // Major currency units (e.g. 12.34 AZN). Omitted => full refund.
+  amount: z.coerce.number().positive().optional(),
+});

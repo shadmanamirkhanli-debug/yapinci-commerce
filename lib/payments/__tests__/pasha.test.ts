@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import type { DetailedPeerCertificate } from "node:tls";
 import {
+  buildReversalFields,
   deriveTransactionCompletion,
   parseEcommResponse,
   toMinorUnits,
@@ -130,4 +131,31 @@ test("verifyPinnedChainRoot walks a multi-level chain to find the root", () => {
 
   assert.equal(verifyPinnedChainRoot(leaf, "PSROOT_FP"), undefined);
   assert.ok(verifyPinnedChainRoot(leaf, "SOME_OTHER_FP") instanceof Error);
+});
+
+test("buildReversalFields: full reversal (no amount) omits the amount field entirely", () => {
+  const fields = buildReversalFields("TX123");
+  assert.deepEqual(fields, { command: "r", trans_id: "TX123" });
+  assert.equal("amount" in fields, false);
+});
+
+test("buildReversalFields: partial reversal includes amount as an integer string", () => {
+  const fields = buildReversalFields("TX123", 1050);
+  assert.deepEqual(fields, { command: "r", trans_id: "TX123", amount: "1050" });
+});
+
+test("buildReversalFields: amount is passed through as-is, in minor units already converted by the caller", () => {
+  // e.g. 10.50 AZN -> toMinorUnits -> 1050 -> buildReversalFields
+  const amountMinor = toMinorUnits(10.5);
+  assert.equal(amountMinor, 1050);
+  assert.deepEqual(buildReversalFields("TX123", amountMinor), {
+    command: "r",
+    trans_id: "TX123",
+    amount: "1050",
+  });
+});
+
+test("buildReversalFields: amount of 0 is still included (falsy but explicit)", () => {
+  const fields = buildReversalFields("TX123", 0);
+  assert.deepEqual(fields, { command: "r", trans_id: "TX123", amount: "0" });
 });
