@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Button from "@/components/ui/Button";
 import CarpetPattern from "@/components/ui/CarpetPattern";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
+import { createPageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("About");
+  const locale = await getLocale();
 
-  return {
+  return createPageMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
-  };
+    path: "/about",
+    locale,
+  });
 }
 
 export default async function AboutPage() {

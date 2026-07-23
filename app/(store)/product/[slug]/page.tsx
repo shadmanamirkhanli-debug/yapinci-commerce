@@ -37,14 +37,22 @@ export async function generateMetadata({
     locale,
   });
 
+  const productImage = product.primaryImage
+    ? [{ url: product.primaryImage }]
+    : base.openGraph?.images;
+
   return {
     ...base,
     openGraph: {
       ...base.openGraph,
       title: product.seoTitle || product.name,
       description: product.seoDescription || product.shortDescription,
-      images: product.primaryImage ? [{ url: product.primaryImage }] : [],
+      images: productImage,
       type: "website",
+    },
+    twitter: {
+      ...base.twitter,
+      images: product.primaryImage ? [product.primaryImage] : base.twitter?.images,
     },
   };
 }

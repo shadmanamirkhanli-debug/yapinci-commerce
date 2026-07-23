@@ -10,15 +10,20 @@ import {
   parseProductFilters,
 } from "@/lib/store/products";
 import type { StoreLocale } from "@/lib/store/format";
+import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Shop");
-  return {
+  const locale = await getLocale();
+
+  return createPageMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
-  };
+    path: "/shop",
+    locale,
+  });
 }
 
 type ShopPageProps = {
