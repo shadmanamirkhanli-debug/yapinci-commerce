@@ -62,6 +62,7 @@ export const adminNavLinks = [
   { label: "Customers", href: "/admin/customers" },
   { label: "Coupons", href: "/admin/coupons" },
   { label: "Reviews", href: "/admin/reviews" },
+  { label: "Design Survey", href: "/admin/survey" },
   { label: "Inventory", href: "/admin/inventory" },
   { label: "Audit Log", href: "/admin/audit-log" },
   { label: "Payment Settings", href: "/admin/payment-settings" },

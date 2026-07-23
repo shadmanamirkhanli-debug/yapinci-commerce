@@ -24,6 +24,7 @@ const rateLimitedApiRoutes: RateRule[] = [
   { prefix: "/api/auth/reset-password", limit: 5, windowMs: 60000 },
   { prefix: "/api/orders", limit: 20, windowMs: 60000 },
   { prefix: "/api/payments", limit: 20, windowMs: 60000 },
+  { prefix: "/api/survey/responses", limit: 30, windowMs: 60000 },
 ];
 
 function getClientIp(req: Request): string {
@@ -124,5 +125,6 @@ export const config = {
     "/api/auth/:path*",
     "/api/orders/:path*",
     "/api/payments/:path*",
+    "/api/survey/:path*",
   ],
 };

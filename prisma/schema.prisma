@@ -450,3 +450,68 @@ model EmailSettings {
   adminNotificationEmail String?
   updatedAt             DateTime @updatedAt
 }
+
+model SurveyDesign {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String
+  titleEn   String?
+  titleRu   String?
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  responses SurveyResponse[]
+
+  @@index([createdAt])
+}
+
+model SurveyResponse {
+  id         String     @id @default(uuid()) @db.Uuid
+  designId   String     @db.Uuid
+  visitorId  String
+  score      Int
+  wouldBuy   Boolean
+  priceBand  PriceBand?
+  suggestion String?    @db.Text
+  createdAt  DateTime   @default(now())
+
+  design SurveyDesign @relation(fields: [designId], references: [id], onDelete: Cascade)
+
+  @@unique([designId, visitorId])
+  @@index([designId])
+  @@index([visitorId])
+}
+
+enum PriceBand {
+  UNDER_25
+  FROM_25_TO_40
+  FROM_40_TO_55
+  FROM_55_TO_70
+  OVER_70
+}
+
+enum AgeBand {
+  UNDER_18
+  AGE_18_24
+  AGE_25_34
+  AGE_35_44
+  AGE_45_PLUS
+  UNSPECIFIED
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+  UNSPECIFIED
+}
+
+// Demographics are collected once per anonymous visitor (not per vote) and
+// stay aggregate-only: age band + gender, never exact age or free text.
+model SurveyVisitor {
+  id        String   @id
+  ageBand   AgeBand?
+  gender    Gender?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
